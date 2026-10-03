@@ -1,0 +1,1454 @@
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap");
+:root {
+  --paper: #f3eddf;
+  --ink: #11110f;
+  --y: #ffcf24;
+  --b: #2437d5;
+  --p: #e6007e;
+  font-family: "Roboto Mono", monospace;
+  color: var(--ink);
+  background: var(--paper);
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+  background-color: var(--paper);
+  background-image: radial-gradient(#1112 0.7px, transparent 0.8px);
+  background-size: 5px 5px;
+}
+button,
+input,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+header {
+  position: fixed;
+  z-index: 50;
+  inset: 0 0 auto;
+  height: 76px;
+  display: grid;
+  grid-template-columns: 220px 1fr 110px;
+  align-items: center;
+  padding: 0 4vw;
+  border-bottom: 2px solid;
+  background: #f3eddff2;
+  backdrop-filter: blur(10px);
+}
+.brand {
+  text-decoration: none;
+  font-family: "Archivo Black";
+  font-size: 13px;
+  line-height: 0.9;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 3vw;
+}
+nav a {
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.try,
+.menu {
+  border: 2px solid;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 11px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.menu {
+  display: none;
+}
+section {
+  position: relative;
+  padding: 100px clamp(20px, 5vw, 78px) 68px;
+  border-bottom: 2px solid;
+}
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(370px, 0.85fr) 1.3fr;
+  align-items: center;
+  padding-top: 125px;
+}
+.issue {
+  position: absolute;
+  top: 94px;
+  left: 5vw;
+  right: 5vw;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  font-weight: 700;
+}
+.heroText {
+  z-index: 2;
+}
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin: 0 0 18px;
+}
+.hero h1,
+h2 {
+  font: normal clamp(56px, 7.5vw, 122px)/0.83 "Archivo Black";
+  letter-spacing: -0.07em;
+  margin: 0;
+  text-transform: uppercase;
+}
+h1 em,
+h2 em {
+  font-style: normal;
+  color: transparent;
+  -webkit-text-stroke: 2px currentColor;
+}
+.hero .lead,
+.detail .lead {
+  font-size: clamp(13px, 1.2vw, 17px);
+  line-height: 1.65;
+  max-width: 650px;
+}
+.hero > img {
+  width: 116%;
+  margin-left: -12%;
+  filter: grayscale(1) contrast(1.1);
+  mix-blend-mode: multiply;
+}
+.tryBig {
+  display: flex;
+  justify-content: space-between;
+  width: 270px;
+  border: 3px solid;
+  background: var(--y);
+  padding: 17px;
+  font: 20px "Archivo Black";
+  box-shadow: 8px 8px var(--ink);
+}
+.no {
+  position: absolute;
+  top: 94px;
+  right: 5vw;
+  border: 1px solid;
+  padding: 4px 8px;
+  font-style: normal;
+  font-size: 9px;
+}
+.head {
+  display: grid;
+  grid-template-columns: 1fr minmax(250px, 0.55fr);
+  gap: 36px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+.head .eyebrow {
+  grid-column: 1/-1;
+}
+.head h2 {
+  font-size: clamp(49px, 7vw, 105px);
+}
+.head > p:last-child {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.viewer {
+  height: min(55vw, 600px);
+  min-height: 420px;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid;
+  background: #d9d1c0;
+}
+.viewer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.15);
+}
+.demo {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--paper);
+  border: 2px solid;
+  padding: 9px;
+  font-size: 9px;
+  font-weight: 700;
+}
+.viewer aside {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  max-width: 380px;
+}
+.viewer aside b {
+  font: 22px "Archivo Black";
+}
+.viewer aside small {
+  margin-top: 5px;
+}
+.layers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 2px solid;
+  border-top: 0;
+}
+.layers button {
+  border: 0;
+  border-right: 1px solid;
+  background: none;
+  padding: 17px;
+  font-size: 9px;
+  font-weight: 700;
+}
+.layers button:last-child {
+  border: 0;
+}
+.layers .active {
+  background: var(--ink);
+  color: var(--paper);
+}
+.layers i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 8px;
+}
+.dark {
+  background: var(--ink);
+  color: var(--paper);
+}
+.dark .no {
+  border-color: var(--paper);
+}
+.data {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  align-items: start;
+  gap: 28px;
+  border: 2px solid;
+  padding: 28px;
+}
+.data > article h3 {
+  font: 24px "Archivo Black";
+  margin: 0;
+}
+.data > article p {
+  font-size: 11px;
+  line-height: 1.6;
+}
+.data > article small {
+  font-size: 8px;
+  line-height: 1.6;
+}
+.research-grid {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid #f3eddf55;
+}
+.research-item {
+  padding: 18px 18px 18px 0;
+  border-bottom: 1px solid #f3eddf55;
+}
+.research-item:nth-child(odd) { border-right: 1px solid #f3eddf55; }
+.research-item:nth-child(even) { padding-left: 18px; }
+.research-item > span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--y);
+  font: 700 8px/1.5 "Roboto Mono", monospace;
+  letter-spacing: .055em;
+}
+.research-item h4 {
+  margin: 0 0 8px;
+  font: 500 21px/1.1 "Bodoni Moda", Georgia, serif;
+}
+.research-item p {
+  margin: 0 0 12px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.research-item .study-number {
+  display: block;
+  margin: 14px 0 6px;
+  color: var(--y);
+  font: 700 27px/1 "Roboto Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+.research-item .study-number small {
+  font-size: 9px;
+  color: var(--paper);
+  text-transform: uppercase;
+}
+.research-item p.study-note,
+.research-item p.measure {
+  padding-top: 9px;
+  border-top: 1px solid #f3eddf55;
+  font-size: 11px;
+}
+.research-item a {
+  display: block;
+  margin-top: 7px;
+  color: var(--paper);
+  font: 700 10px/1.4 "Roboto Mono", monospace;
+  text-decoration: underline;
+  text-decoration-color: var(--p);
+  text-underline-offset: 3px;
+}
+.research-item a:focus-visible {
+  outline: 2px solid var(--y);
+  outline-offset: 3px;
+}
+.research-footnote {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-top: 14px;
+  color: #f3eddf;
+  font-size: 10px;
+  line-height: 1.55;
+}
+.wide {
+  display: block;
+  width: 100%;
+  border: 3px solid;
+  filter: grayscale(1) contrast(1.08);
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 2px solid;
+  border-top: 0;
+}
+.steps article {
+  padding: 22px;
+  border-right: 1px solid;
+}
+.steps article:last-child {
+  border: 0;
+}
+.gesture-visual {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  margin: 14px 0 20px;
+  overflow: hidden;
+  background: #c6b79a;
+}
+.gesture-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) sepia(.62) contrast(1.18) brightness(.97);
+}
+.gesture-photo.cignula-photo {
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+.gesture-switcher[data-set="cignula"] .gesture-photo.cignula-photo { opacity: 1; }
+.gesture-switcher[data-set="cignula"] .gesture-photo.biomass-photo { opacity: 0; }
+.gesture-copy { transition: opacity 350ms ease; }
+.gesture-copy.cignula-copy { display: none; }
+.gesture-switcher[data-set="cignula"] .gesture-copy.biomass-copy { display: none; }
+.gesture-switcher[data-set="cignula"] .gesture-copy.cignula-copy { display: block; }
+.gesture-transform {
+  margin: 0;
+}
+.gesture-transform > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gesture-hint {
+  margin: 10px 0 0;
+  font: 10px/1.5 "Roboto Mono", monospace;
+  opacity: .8;
+}
+.van-lettering {
+  position: absolute;
+  left: 74%;
+  top: 54%;
+  width: 23%;
+  transform: translateY(-50%) rotate(-2deg) skewX(-5deg);
+  color: #221a12;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  text-align: center;
+  text-shadow: 0 0 1px #f4ebd8, 0 0 3px #f4ebd8;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  line-height: .95;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.van-lettering strong {
+  font-size: clamp(7px, .83vw, 12px);
+  letter-spacing: -.045em;
+}
+.van-lettering small {
+  margin-top: 2px;
+  font-size: clamp(4.4px, .49vw, 7px);
+  letter-spacing: .005em;
+}
+.steps h3 {
+  font: clamp(20px, 2vw, 31px) "Archivo Black";
+  margin: 20px 0 10px;
+}
+.steps p {
+  font-size: 10px;
+  line-height: 1.55;
+}
+.launch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.product {
+  position: relative;
+  border: 3px solid;
+  background: #e7dfce;
+  overflow: hidden;
+}
+.product > span {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 12px;
+  background: var(--y);
+  border: 2px solid;
+  padding: 8px;
+  font-size: 9px;
+  font-weight: 700;
+}
+.crop {
+  height: 420px;
+  overflow: hidden;
+  border-bottom: 3px solid;
+}
+.crop img {
+  width: 200%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.1);
+}
+.crop.right img {
+  margin-left: -100%;
+}
+.product > div:last-child {
+  padding: 25px;
+}
+.product small {
+  font-size: 9px;
+  font-weight: 700;
+}
+.product h3 {
+  font: clamp(33px, 4vw, 60px)/0.9 "Archivo Black";
+  letter-spacing: -0.05em;
+  margin: 16px 0;
+}
+.product h3 em {
+  font-style: normal;
+  color: var(--p);
+}
+.product p {
+  font-size: 11px;
+  line-height: 1.55;
+  max-width: 520px;
+}
+.product button,
+.product a,
+.detail button,
+form button {
+  display: inline-block;
+  border: 2px solid;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 13px 17px;
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.future {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  margin-top: 38px;
+  border-top: 3px solid;
+}
+.future h3 {
+  font: 35px/0.9 "Archivo Black";
+  padding: 20px;
+}
+.future button {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  border: 0;
+  border-bottom: 1px solid;
+  background: none;
+  padding: 18px;
+  text-align: left;
+}
+.future button:hover {
+  background: var(--y);
+}
+.future span,
+.future em {
+  font-size: 9px;
+  font-style: normal;
+}
+.note {
+  border: 2px solid;
+  background: var(--y);
+  padding: 17px;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+.detail h2 {
+  font-size: clamp(48px, 6.6vw, 104px);
+}
+.detail dl {
+  margin: 35px 0;
+}
+.detail dl div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  padding: 12px 0;
+  border-top: 1px solid #fff5;
+  font-size: 10px;
+}
+.detail dd {
+  margin: 0;
+}
+.detail button {
+  background: var(--y);
+  color: var(--ink);
+}
+.inbruma-gallery { display:grid; grid-template-columns:1fr 1fr; gap:8px; align-self:center; }
+.inbruma-gallery figure { position:relative; margin:0; height:clamp(290px,34vw,430px); overflow:hidden; border:2px solid var(--paper); background:#a99c7c; }
+.inbruma-gallery img { width:100%; height:100%; object-fit:cover; display:block; }
+.inbruma-gallery figure:first-child img { object-position:center 64%; }
+.inbruma-gallery .process { grid-column:1/-1; height:clamp(90px,9vw,125px); }
+.inbruma-gallery .process img { object-position:center; }
+.inbruma-gallery figcaption { position:absolute; left:0; bottom:0; padding:7px 10px; background:var(--ink); color:var(--paper); font:700 9px "Roboto Mono",monospace; letter-spacing:.06em; }
+@media(max-width:640px) { .inbruma-gallery figure { height:240px; } .inbruma-gallery .process { height:90px; } }
+.hero-polaroid {
+  width: min(100%, 640px);
+  justify-self: center;
+  margin: 20px 2% 0 0;
+  padding: 14px 14px 48px;
+  background: #fffdf5;
+  color: var(--ink);
+  border: 1px solid #d4cbb8;
+  box-shadow: 0 18px 32px #18140e35, 0 3px 8px #18140e22;
+  transform: rotate(1.5deg);
+}
+.hero-polaroid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  filter: sepia(.12) saturate(.82) contrast(1.04);
+}
+.hero-polaroid figcaption {
+  padding: 15px 3px 0;
+  font: 700 9px/1.35 "Roboto Mono", monospace;
+  letter-spacing: .08em;
+}
+.tags {
+  border: 2px solid;
+  border-top: 0;
+  padding: 16px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 2;
+}
+.contact {
+  min-height: 650px;
+  background: var(--y);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 65px;
+  align-content: center;
+}
+.contact h2 {
+  font-size: clamp(48px, 6vw, 94px);
+}
+.contact > div > p:last-child {
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 620px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+form label {
+  font-size: 9px;
+  font-weight: 700;
+}
+input,
+textarea {
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid;
+  background: transparent;
+  padding: 10px 3px;
+  border-radius: 0;
+}
+form button {
+  align-self: flex-start;
+}
+.success {
+  border: 2px solid;
+  background: var(--y);
+  padding: 18px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.contact footer {
+  position: absolute;
+  bottom: 20px;
+  left: 5vw;
+  right: 5vw;
+  border-top: 2px solid;
+  padding-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+}
+.contact footer a {
+  text-decoration: none;
+}
+.back {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  background: #111d;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.modal {
+  position: relative;
+  width: min(550px, 100%);
+  background: var(--paper);
+  border: 3px solid;
+  box-shadow: 12px 12px var(--p);
+  padding: 36px;
+}
+.modal h2 {
+  font-size: clamp(30px, 5vw, 52px);
+  margin: 15px 0 25px;
+}
+.x {
+  position: absolute;
+  right: 8px;
+  top: 4px;
+  border: 0;
+  background: none;
+  font-size: 34px;
+}
+.modal > small {
+  display: block;
+  margin-top: 18px;
+}
+.live .hero > img,
+.live .viewer img,
+.live .wide,
+.live .crop img {
+  filter: grayscale(0.1) contrast(1.05);
+}
+.live .no {
+  background: var(--p);
+  color: white;
+}
+.live .try {
+  background: var(--p);
+}
+@media (max-width: 820px) {
+  header {
+    height: 64px;
+    grid-template-columns: 1fr auto;
+  }
+  .try {
+    display: none;
+  }
+  .menu {
+    display: block;
+  }
+  nav {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--paper);
+    border-bottom: 2px solid;
+    padding: 24px;
+  }
+  nav.open {
+    display: flex;
+  }
+  .hero,
+  section {
+    padding: 98px 20px 58px;
+  }
+  .issue,
+  .no {
+    top: 78px;
+  }
+  .hero {
+    display: block;
+    min-height: auto;
+  }
+  .hero h1 {
+    font-size: clamp(52px, 15vw, 80px);
+  }
+  .hero > img {
+    width: 130%;
+    margin: 25px -15% 0;
+  }
+  .head {
+    display: block;
+  }
+  .head h2 {
+    margin-bottom: 22px;
+  }
+  .viewer {
+    height: 65vh;
+  }
+  .layers {
+    grid-template-columns: 1fr 1fr;
+  }
+  .data,
+  .launch,
+  .detail,
+  .contact {
+    grid-template-columns: 1fr;
+  }
+  .data label {
+    grid-column: 1;
+  }
+  .steps {
+    grid-template-columns: 1fr;
+  }
+  .steps article {
+    border-right: 0;
+    border-bottom: 1px solid;
+  }
+  .crop {
+    height: 330px;
+  }
+  .future {
+    grid-template-columns: 1fr;
+  }
+  .future button {
+    grid-column: 1;
+  }
+  .contact {
+    padding-bottom: 120px;
+  }
+  .contact footer {
+    flex-direction: column;
+    gap: 7px;
+  }
+  .modal {
+    padding: 28px 20px;
+  }
+}
+.factual {
+  background: var(--paper) url("/assets/approved-botanical-plate.png")
+    center/cover;
+}
+.territoryFacts {
+  position: absolute;
+  inset: 70px 15% 90px;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  align-content: center;
+  background: #f3eddfe8;
+  border: 2px solid;
+  padding: clamp(20px, 4vw, 55px);
+  z-index: 1;
+}
+.territoryFacts b {
+  font: clamp(32px, 5vw, 76px)/1 "Archivo Black";
+  border-top: 1px solid;
+  padding: 12px 0;
+}
+.territoryFacts span {
+  font-size: 10px;
+  font-weight: 700;
+  border-top: 1px solid;
+  padding: 18px 0;
+}
+.real-photo-gate {
+  min-height: 430px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  border: 3px dashed;
+  padding: 30px;
+  background: url("/assets/approved-botanical-plate.png") center/cover;
+  position: relative;
+}
+.real-photo-gate:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #f3eddfd9;
+}
+.real-photo-gate > * {
+  position: relative;
+}
+.real-photo-gate b {
+  font: clamp(25px, 5vw, 64px) "Archivo Black";
+}
+.real-photo-gate p {
+  max-width: 600px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+@media (max-width: 820px) {
+  .territoryFacts {
+    inset: 65px 12px 90px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .territoryFacts b {
+    font-size: 27px;
+  }
+  .territoryFacts span {
+    font-size: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+dialog {
+  width: min(560px, calc(100% - 32px));
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px solid;
+  padding: 36px;
+  box-shadow: 12px 12px var(--p);
+}
+dialog::backdrop {
+  background: #111d;
+}
+dialog h2 {
+  font-size: clamp(30px, 5vw, 54px);
+  margin: 16px 0 28px;
+}
+.x {
+  position: absolute;
+  right: 8px;
+  top: 4px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-size: 34px;
+}
+.future > div {
+  grid-column: 2;
+}
+.future > div > button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  border: 0;
+  border-bottom: 1px solid;
+  background: none;
+  padding: 18px;
+  text-align: left;
+}
+.future > div > button:hover {
+  background: var(--y);
+}
+.future > div span,
+.future > div em {
+  font-size: 9px;
+  font-style: normal;
+}
+@media (max-width: 820px) {
+  .future > div {
+    grid-column: 1;
+  }
+  .future > div > button {
+    grid-template-columns: 35px 1fr;
+  }
+  .future > div em {
+    grid-column: 2;
+  }
+  dialog {
+    padding: 28px 20px;
+  }
+}
+.brand {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+}
+.hero h1,
+h2,
+.steps h3,
+.product h3,
+.future h3,
+.viewer aside b,
+.data article h3,
+.real-photo-gate b {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.055em;
+}
+.hero h1 em,
+h2 em,
+.product h3 em {
+  font-family: "Bodoni Moda", serif;
+  font-weight: 500;
+  letter-spacing: -0.065em;
+  text-transform: none;
+  -webkit-text-stroke: 0;
+  color: inherit;
+}
+.tryBig {
+  font-family: "Roboto Mono", monospace;
+  font-weight: 700;
+}
+#ecosystem {
+  inset: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: var(--paper);
+}
+#ecosystem::backdrop {
+  background: var(--ink);
+}
+.eco-shell {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+.eco-head {
+  position: static;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding: 12px 4vw;
+  border-bottom: 2px solid;
+  background: var(--paper);
+}
+.eco-head small {
+  font: 11px "Roboto Mono";
+}
+.eco-head h2 {
+  font-size: clamp(30px, 4vw, 58px);
+  margin: 4px 0 0;
+}
+.eco-close {
+  border: 2px solid;
+  background: transparent;
+  font-size: 30px;
+  width: 46px;
+  height: 46px;
+}
+.eco-stage {
+  position: relative;
+  min-height: 0;
+  background: #d8cdb6;
+  overflow: hidden;
+}
+#ecoCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+.eco-readout,
+.basin-meter {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: #f3eddfea;
+  border: 2px solid;
+  padding: 12px 16px;
+}
+.eco-readout {
+  left: 4vw;
+  top: 18px;
+  max-width: 360px;
+}
+.eco-readout span,
+.eco-readout small,
+.basin-meter span,
+.basin-meter small {
+  font: 10px "Roboto Mono";
+}
+.eco-readout strong {
+  font: clamp(18px, 2.5vw, 32px) "Bodoni Moda";
+  margin: 4px 0;
+}
+.basin-meter {
+  left: 4vw;
+  bottom: 18px;
+  width: 210px;
+}
+.basin-meter b {
+  font: 28px "Roboto";
+  margin: 3px 0;
+}
+.basin-meter i {
+  height: 8px;
+  border: 1px solid;
+  margin-bottom: 5px;
+}
+.basin-meter em {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--b);
+  transition: width 0.25s;
+}
+.eco-controls {
+  display: grid;
+  grid-template-columns: 1fr 210px minmax(260px, auto) auto;
+  gap: 12px;
+  align-items: center;
+  border-top: 2px solid;
+  padding: 13px 4vw;
+  background: var(--paper);
+}
+#depositQueue {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+#depositQueue button,
+.eco-controls > button {
+  border: 2px solid;
+  background: transparent;
+  padding: 10px 12px;
+  font: 10px "Roboto Mono";
+}
+#depositQueue button {
+  min-width:145px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:7px 10px;
+  text-align:left;
+  align-items:center;
+}
+#depositQueue button span { line-height:1.2; }
+#depositQueue button b { font-variant-numeric:tabular-nums; }
+#depositQueue button i { grid-column:1 / -1; height:5px; border:1px solid currentColor; }
+#depositQueue button em { display:block; height:100%; width:0; background:currentColor; }
+#depositQueue button.active,
+#water:not(:disabled) {
+  background: var(--ink);
+  color: var(--paper);
+}
+#depositQueue button:disabled {
+  opacity: 0.38;
+}
+#depositQueue button.empty:disabled { opacity:1; background:#dbd2c1; cursor:default; }
+.brush-size {
+  font: 9px "Roboto Mono";
+}
+.brush-size input {
+  padding: 4px 0;
+  accent-color: var(--p);
+}
+#plantEvidence {
+  position: absolute;
+  right: 3vw;
+  top: 18px;
+  width: min(390px, 42vw);
+  background: var(--ink);
+  color: var(--paper);
+  border: 2px solid var(--paper);
+  padding: 22px;
+  transform: translateX(130%);
+  transition: transform 0.25s;
+  z-index: 3;
+}
+#plantEvidence.open {
+  transform: none;
+}
+#plantEvidence h3 {
+  font: 26px "Bodoni Moda";
+  margin: 8px 0;
+}
+#plantEvidence p {
+  font: 10px/1.55 "Roboto Mono";
+}
+#plantEvidence a {
+  color: var(--y);
+  font: 10px "Roboto Mono";
+}
+.evidenceClose {
+  position: absolute;
+  right: 5px;
+  top: 2px;
+  color: var(--paper);
+  background: none;
+  border: 0;
+  font-size: 24px;
+}
+.eco-future #ecoCanvas {
+  cursor: pointer;
+}
+.eco-future .basin-meter {
+  display: none;
+}
+#wateringCan {
+  position: absolute;
+  z-index: 2;
+  width: clamp(120px, 17vw, 245px);
+  transform: translate(-28%, -72%) rotate(-8deg);
+  pointer-events: auto;
+  cursor: context-menu;
+  opacity: 0;
+  visibility: hidden;
+  filter: none;
+  mix-blend-mode: normal;
+  transition:
+    opacity 180ms ease-out,
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+#wateringCan.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-28%, -72%) rotate(12deg);
+}
+#macerationClock {
+  position: absolute;
+  z-index: 3;
+  right: 5vw;
+  top: 34%;
+  width: 220px;
+  aspect-ratio: 1;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: #f3eddfe8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.82);
+  transition:
+    opacity 300ms ease-out,
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+#macerationClock.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+#macerationClock::before,
+#macerationClock::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+}
+#macerationClock::after {
+  inset: 25px;
+  border-style: dashed;
+}
+#macerationClock small,
+#macerationClock span {
+  position: relative;
+  z-index: 1;
+  font: 9px/1.45 "Roboto Mono";
+  max-width: 150px;
+}
+#macerationClock b {
+  position: relative;
+  z-index: 1;
+  font: 58px/1 "Bodoni Moda";
+  color: var(--p);
+  font-variant-numeric: tabular-nums;
+}
+.eco-mixing #ecoCanvas,
+.eco-watering #ecoCanvas {
+  cursor: grab;
+}
+.eco-mixing #ecoCanvas:active,
+.eco-watering #ecoCanvas:active {
+  cursor: grabbing;
+}
+.eco-macerating .eco-controls,
+.eco-sowing .eco-controls {
+  opacity: 0.35;
+  pointer-events: none;
+}
+.eco-sowing .eco-readout {
+  background: var(--y);
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+#plantButtons {
+  position: absolute;
+  z-index: 3;
+  right: 16px;
+  bottom: 16px;
+  display: none;
+  width: min(260px, 38%);
+  padding: 10px;
+  background: #f3eddfee;
+  border: 1px solid var(--ink);
+  pointer-events: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+#plantButtons.visible { display: grid; }
+.fruit-count { display:flex; align-items:center; gap:5px; min-width:0; border-bottom:1px solid #766f63; font:9px/1.1 "Roboto Mono"; }
+.fruit-count svg { width:23px; height:23px; flex:none; }
+.fruit-count span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.fruit-count b { margin-left:auto; font-size:13px; }
+.eco-harvesting #ecoPrompt,
+.eco-harvesting #ecoHint { display:none; }
+.eco-mixing .basin-meter { left: auto; right: 4vw; bottom: auto; top: 18px; }
+.reopen {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 28px;
+  padding: 15px 18px;
+  border: 2px solid;
+  background: var(--paper);
+  text-align: left;
+  font-weight: 700;
+  opacity: 0.62;
+}
+.reopen.ready {
+  opacity: 1;
+  box-shadow: 7px 7px var(--ink);
+}
+.reopen span {
+  font-size: 9px;
+}
+.reopen:hover {
+  background: var(--p);
+  color: white;
+}
+@media (max-width: 820px) {
+  .eco-head {
+    padding: 12px 16px;
+  }
+  .eco-head h2 {
+    font-size: 30px;
+  }
+  .eco-stage {
+    min-height: 48vh;
+  }
+  .eco-controls {
+    grid-template-columns: 1fr 1fr;
+    padding: 10px 14px;
+  }
+  .eco-controls #depositQueue {
+    grid-column: 1/-1;
+  }
+  .eco-controls #water {
+    grid-column: 1/-1;
+  }
+  .eco-controls > button {
+    min-height: 42px;
+  }
+  .basin-meter {
+    left: 14px;
+    bottom: 12px;
+    width: 175px;
+  }
+  .eco-readout {
+    left: 14px;
+    top: 12px;
+  }
+  .eco-readout small {
+    display: none;
+  }
+  #plantEvidence {
+    right: 12px;
+    top: 12px;
+    width: calc(100% - 24px);
+  }
+  .brush-size {
+    align-self: center;
+  }
+  #macerationClock {
+    width: 160px;
+    right: 14px;
+    top: 38%;
+  }
+  #macerationClock b {
+    font-size: 42px;
+  }
+  #wateringCan {
+    width: 135px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #wateringCan,
+  #macerationClock {
+    transition-duration: 1ms;
+  }
+}
+
+#wateringCan.held { transform: rotate(-14deg); cursor: grab; transition:opacity 180ms; }
+#wateringCan.held.pour-ready { transform: rotate(70deg); }
+#canPrompt { position:absolute; z-index:4; transform:translate(38%,-150%); background:var(--ink); color:var(--paper); padding:5px 8px; border:1px solid var(--paper); font:12px "Roboto Mono"; pointer-events:none; opacity:0; white-space:nowrap; }
+#canPrompt.visible { opacity:1; }
+#fieldFact { position:absolute; z-index:4; left:50%; top:50%; transform:translate(-50%,-50%); width:min(450px,calc(100% - 32px)); padding:24px 28px; background:var(--paper); border:3px solid var(--ink); box-shadow:10px 10px var(--y); font:clamp(15px,1.7vw,19px)/1.45 "Roboto"; opacity:0; visibility:hidden; transition:opacity .2s; }
+#fieldFact small { display:block; font:12px "Roboto Mono"; letter-spacing:.13em; margin-bottom:13px; }
+#fieldFact p { margin:0; }
+#fieldFact.visible { opacity:1; visibility:visible; }
+#fieldReturnMessage { font:16px/1.5 "Roboto"; max-width:38rem; margin-top:14px; }
+@media(max-width:820px) { #fieldFact { padding:18px 20px; font-size:15px; } #canPrompt { font-size:11px; } }
+
+#fieldJourneyPrompt { position:fixed; z-index:100; bottom:22px; left:50%; transform:translateX(-50%); width:min(560px,calc(100% - 28px)); padding:18px 22px; background:var(--y); color:var(--ink); border:2px solid var(--ink); box-shadow:7px 7px var(--ink); font:16px/1.45 "Roboto"; }
+#fieldJourneyPrompt[hidden] { display:none; }
+#fieldJourneyPrompt { display:flex; align-items:center; gap:14px; }
+#fieldJourneyPrompt button { margin-left:auto; border:1px solid currentColor; background:transparent; width:34px; height:34px; flex:none; font-size:24px; line-height:1; }
+#fieldReward { width:min(570px,calc(100% - 32px)); box-shadow:12px 12px var(--y); }
+#harvestReward { width:min(570px,calc(100% - 32px)); box-shadow:12px 12px var(--y); }
+#harvestComplete { width:min(620px,calc(100% - 32px)); box-shadow:12px 12px var(--y); }
+#harvestComplete h2 { font-size:clamp(38px,5.5vw,66px); line-height:.94; margin:16px 0; }
+#harvestComplete #harvestCompleteSummary { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:18px 0; }
+#harvestCompleteSummary span { position:relative; display:grid; justify-items:center; gap:4px; padding:8px 3px; border:1px solid var(--ink); }
+#harvestCompleteSummary svg { width:34px; height:34px; }
+#harvestCompleteSummary b { position:absolute; top:2px; right:5px; font:700 14px "Roboto Mono",monospace; }
+#harvestCompleteSummary small { font:8px "Roboto Mono",monospace; }
+#harvestCompleteDiscount { padding:12px; background:#f3eddfee; border:1px solid var(--ink); }
+.harvest-shop-link { display:inline-block; margin:5px 0 14px; padding:13px 16px; border:2px solid var(--ink); background:var(--y); color:var(--ink); font:700 12px "Roboto Mono",monospace; text-decoration:none; }
+#harvestComplete > small { display:block; font:10px/1.4 "Roboto Mono",monospace; }
+#harvestReward h2 { font-size:clamp(43px,6vw,72px); line-height:.9; margin:16px 0 24px; }
+#harvestBins { position:absolute; left:2%; bottom:2%; z-index:3; display:flex; gap:6px; align-items:end; pointer-events:none; }
+#harvestBins[hidden] { display:none; }
+.harvest-bin { width:clamp(58px,6vw,84px); height:77px; position:relative; text-align:center; color:#25241f; font:8px/1.1 "Roboto Mono",monospace; }
+.harvest-bin .vessel { position:absolute; left:6%; right:6%; bottom:11px; height:24px; border:2px solid #25241f; background:repeating-linear-gradient(6deg,#b9a586 0 3px,#51483b 4px,#d4c1a4 5px); box-shadow:2px 2px 0 #e9dfca; }
+.harvest-bin.bag .vessel { border-radius:3px 3px 16px 16px; transform:skew(-5deg); background:repeating-linear-gradient(85deg,#c3b399 0 4px,#6f6354 5px,#d8c8ac 6px); }
+.harvest-bin.crate .vessel { border-radius:2px; background:repeating-linear-gradient(0deg,#b9a586 0 6px,#332d27 7px,#d4c1a4 8px); }
+.harvest-bin.basket .vessel { border-radius:3px 3px 18px 18px; background:repeating-linear-gradient(35deg,#a89679 0 4px,#332d27 5px,#cbb99a 6px); }
+.harvest-bin.tray .vessel { height:13px; border-radius:2px 2px 7px 7px; background:#c4b394; }
+.harvest-bin small { position:absolute; left:0; right:0; bottom:0; background:#eee2cd; }
+@media(max-width:600px) { #harvestBins { left:1%; gap:1px; transform:scale(.8); transform-origin:left bottom; } }
+#fieldReward h2 { font-size:clamp(43px,6vw,72px); line-height:.9; margin:16px 0 24px; }
+#fieldReward > p:not(.eyebrow) { font:16px/1.5 "Roboto",sans-serif; max-width:440px; }
+.reward-actions { display:flex; align-items:stretch; gap:10px; margin:25px 0 18px; }
+.reward-actions code { flex:1; border:2px solid var(--ink); padding:12px 16px; font:700 clamp(19px,4vw,27px) "Roboto Mono",monospace; letter-spacing:.07em; }
+.reward-actions button { border:2px solid var(--ink); background:var(--y); padding:10px 14px; font:700 11px "Roboto Mono",monospace; }
+#rewardFeedback { display:block; line-height:1.5; }
+@media(max-width:520px) { .reward-actions { flex-direction:column; } }
+.form-preview-note { font:14px/1.5 "Roboto", sans-serif; max-width:38rem; }
+.ink-visitor {
+  position:absolute; z-index:2; pointer-events:none; display:block;
+  width:80px; height:74px;
+  background-image:url('/assets/ink-fauna.png');
+  background-size:320px 107px;
+  background-repeat:no-repeat;
+  opacity:.78;
+  filter:grayscale(.35);
+  left:78%; top:22%;
+  animation:visitor-flight 8s ease-in-out infinite alternate;
+}
+.ink-visitor-0 { background-position:0 -14px; }
+.ink-visitor-1 { background-position:-80px -14px; left:11%; top:35%; animation-duration:11s; }
+.ink-visitor-2 { background-position:0 -14px; left:83%; top:68%; animation-duration:10s; }
+@keyframes visitor-flight { to { transform:translate(28px,-18px) rotate(5deg); } }
+@keyframes visitor-walk { to { transform:translateX(32px); } }
+.hero h1 { font-size:clamp(48px,6.1vw,92px); letter-spacing:-.04em; line-height:.9; }
+.hero > img { width:96%; margin-left:8%; }
+#home .heroText { display:flex; flex-direction:column; align-items:flex-start; gap:24px; }
+#home .heroText .eyebrow { margin:0; }
+#territorio .head,#metodo .head,#shop .head { display:block; }
+#territorio .head,#metodo .head { margin-bottom:24px; }
+#shop .head h2 { font-size:clamp(48px,6vw,88px); line-height:1; max-width:1100px; }
+#shop .head p { max-width:70ch; font-size:16px; line-height:1.55; }
+#shop .future { display:block; }
+#shop .future > div { grid-column:auto; }
+.eco-readout span,.eco-readout small,.basin-meter span,.basin-meter small { font-size:12px; line-height:1.4; }
+#depositQueue button,.eco-controls > button { font-size:12px; min-height:42px; }
+.brush-size { font-size:12px; }
+#plantEvidence p,#plantEvidence a { font-size:13px; }
+@media(max-width:820px) {
+  .ink-visitor { width:56px; height:54px; background-size:224px 75px; }
+  .ink-visitor-0 { background-position:0 -9px; }
+  .ink-visitor-1 { background-position:-56px -9px; }
+  .ink-visitor-2 { background-position:0 -9px; }
+  .hero h1 { font-size:clamp(44px,10vw,70px); }
+  .hero > img { width:130%; margin:25px -15% 0; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .ink-visitor { animation:none; }
+}
+
+@media(max-width:820px) {
+  #plantButtons { width: min(205px, 53%); right: 8px; bottom: 8px; padding:6px; gap:4px; }
+  .fruit-count { font-size:8px; gap:3px; }
+  .fruit-count svg { width:19px; height:19px; }
+  .eco-mixing .basin-meter { right: 12px; top: 12px; }
+}
+@media(max-width:820px) {
+  .hero-polaroid { width: min(94%, 640px); margin: 34px auto 12px; }
+  .research-grid { grid-column: 1; }
+}
+@media(max-width:560px) {
+  .research-grid { grid-template-columns: 1fr; }
+  .research-item:nth-child(odd) { border-right: 0; }
+  .research-item:nth-child(even) { padding-left: 0; }
+  .van-lettering { left: 74%; top: 54%; width: 23%; }
+}

@@ -1462,24 +1462,35 @@ h2 em,
 .eco-future #resetEco,
 .eco-future .basin-meter { display: none !important; }
 .eco-future .eco-controls { justify-content: flex-end; min-height: 56px; }
-.eco-postharvest #plantButtons { display: none !important; }
-#soilCycle {
-  margin-left: auto;
-  border: 2px solid var(--ink);
-  background: var(--ink);
-  color: var(--paper);
-  padding: 12px 18px;
+
+.harvest-cart-label {
+  margin: 22px 0 8px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: .04em;
+  letter-spacing: .09em;
 }
-#soilCycle:disabled { opacity: .62; cursor: progress; }
-#startMulching {
-  display: block;
-  width: 100%;
-  margin: 20px 0 12px;
+.harvest-cart {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.harvest-cart button {
+  min-height: 86px;
+  padding: 14px;
   border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  text-align: left;
+}
+.harvest-cart button:hover,
+.harvest-cart button:focus-visible {
   background: var(--ink);
   color: var(--paper);
-  padding: 14px;
-  font-weight: 700;
+}
+.harvest-cart button b,
+.harvest-cart button span { display: block; }
+.harvest-cart button span { margin-top: 7px; font-size: 11px; line-height: 1.35; }
+@media (max-width: 620px) {
+  .harvest-cart { grid-template-columns: 1fr; }
 }

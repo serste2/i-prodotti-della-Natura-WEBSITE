@@ -646,7 +646,7 @@ function updateEco() {
         : ecoMode === "mixing"
           ? Math.round(mixProgress)
           : bagFilled[mix],
-    future = ecoMode === "future";
+    future = ["growing", "future"].includes(ecoMode);
   document.querySelector("#cignulaAmount").textContent = n + "%";
   document.querySelector(".basin-meter em").style.width = n + "%";
   document.querySelector("#water").disabled = !bagsComplete() || ecoMode !== "brush";
@@ -978,6 +978,7 @@ function openFuture() {
   } catch { harvestedPlants = new Set(); }
   ecosystem.showModal();
   sizeEco();
+  updateEco();
   if (!deposits.length) {
     try {
       const saved = JSON.parse(localStorage.getItem("inulaFieldLayout") || "null");

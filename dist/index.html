@@ -338,9 +338,12 @@
       <p id="harvestCompleteCount"></p>
       <div id="harvestCompleteSummary" aria-label="Riepilogo dei frutti raccolti"></div>
       <p id="harvestCompleteDiscount"></p>
-      <button id="startMulching" type="button">PACCIAMA I RESIDUI NEL CAMPO</button>
-      <a class="harvest-shop-link" href="#shop">VAI ALLE OFFERTE ↗</a>
-      <small>I residui restano sul suolo: puoi schiacciarli e completare il ciclo con uno strato sottile di INBRUMA dei Carbonari.</small>
+      <p class="harvest-cart-label">SCEGLI UN PRODOTTO DI LANCIO</p>
+      <div class="harvest-cart" aria-label="Prodotti di lancio">
+        <button type="button" data-harvest-product="CÍGNULA Mini"><b>CÍGNULA MINI</b><span>12 € · spedita in Italia</span></button>
+        <button type="button" data-harvest-product="INBRUMA dei Carbonari"><b>INBRUMA DEI CARBONARI</b><span>oltre 1 kg · 56 € spedizione inclusa</span></button>
+      </div>
+      <small>Lo sconto rivelato viene riportato nella richiesta. Nessun pagamento immediato.</small>
     </dialog>
     <dialog id="ecosystem" aria-labelledby="ecoTitle">
       <div class="eco-shell">
@@ -405,7 +408,6 @@
               max="48"
               value="28" /></label
           ><button id="water" disabled>PREPARA CÍGNULA NEL CATINO ↗</button
-          ><button id="soilCycle" type="button" hidden></button
           ><button id="resetEco">RESET</button>
         </div>
       </div>

@@ -1452,3 +1452,34 @@ h2 em,
   .research-item:nth-child(even) { padding-left: 0; }
   .van-lettering { left: 74%; top: 54%; width: 23%; }
 }
+
+
+/* Reopened field: keep only the current seasonal controls. */
+#harvestBins { display: none !important; }
+.eco-future #depositQueue,
+.eco-future .brush-size,
+.eco-future #water,
+.eco-future #resetEco,
+.eco-future .basin-meter { display: none !important; }
+.eco-future .eco-controls { justify-content: flex-end; min-height: 56px; }
+.eco-postharvest #plantButtons { display: none !important; }
+#soilCycle {
+  margin-left: auto;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 18px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+#soilCycle:disabled { opacity: .62; cursor: progress; }
+#startMulching {
+  display: block;
+  width: 100%;
+  margin: 20px 0 12px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px;
+  font-weight: 700;
+}

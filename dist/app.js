@@ -134,6 +134,8 @@ let deposits = [],
   harvestPrizeAt = 0,
   harvestDiscount = 0,
   harvestCompleteShown = false,
+  mulchProgress = 0,
+  postHarvestStage = null,
   pourAnimations = [],
   mix = "carbonari",
   ecoMode = "brush",
@@ -604,6 +606,26 @@ function paintEco() {
     ex.drawImage(lizardImage, w * .035, h * .48, Math.min(100, w * .075), Math.min(56, h * .07));
     ex.restore();
   }
+  if (["mulching", "topdressing", "resting"].includes(ecoMode)) {
+    const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
+    ex.save();
+    ex.globalAlpha = ecoMode === "mulching" ? .34 : .5;
+    ex.fillStyle = ecoMode === "mulching" ? "#796d4d" : "#51483c";
+    const coverage = ecoMode === "mulching" ? mulchProgress / 100 : 1;
+    for (let i = 0; i < Math.floor(34 * coverage); i++) {
+      const x = w * (.12 + ((i * 37) % 77) / 100);
+      const y = h * (.55 + ((i * 19) % 30) / 100);
+      ex.beginPath();
+      ex.ellipse(x, y, 18 + (i % 4) * 7, 3 + (i % 3), (i % 7) * .34, 0, Math.PI * 2);
+      ex.fill();
+    }
+    if (ecoMode !== "mulching") {
+      ex.globalAlpha = .24;
+      ex.fillStyle = "#332d27";
+      ex.fillRect(w * .08, h * .72, w * .84, Math.max(5, h * .018));
+    }
+    ex.restore();
+  }
   drawFauna(now);
 }
 function animateEco(now) {
@@ -668,12 +690,16 @@ function updateEco() {
     ],
     future: ["RACCOLTA", "", ""],
   };
-  const c = copy[future ? "future" : ecoMode] || copy.brush;
+  copy.mulching = ["DOPO IL RACCOLTO", "SCHIACCIA I RESIDUI", "Tocca o trascina sul terreno per creare una pacciamatura viva."];
+  copy.topdressing = ["COPERTURA INVERNALE", "INBRUMA DEI CARBONARI · MAX 2 CM", "Stendi uno strato sottile: protegge la superficie senza sigillare il suolo."];
+  copy.resting = ["SUOLO COPERTO", "IL CAMPO RIPOSA", "Residui vegetali e INBRUMA dei Carbonari restano attivi fino alla primavera."];
+  const c = copy[ecoMode] || copy[future ? "future" : "brush"];
   document.querySelector("#ecoState").textContent = c[0];
   document.querySelector("#ecoPrompt").textContent = c[1];
   document.querySelector("#ecoHint").textContent = c[2];
   const shell = document.querySelector(".eco-shell");
-  shell.classList.toggle("eco-future", future);
+  shell.classList.toggle("eco-future", ["future", "mulching", "topdressing", "resting"].includes(ecoMode));
+  shell.classList.toggle("eco-postharvest", ["mulching", "topdressing", "resting"].includes(ecoMode));
   shell.classList.toggle("eco-mixing", ecoMode === "mixing");
   shell.classList.toggle("eco-macerating", ecoMode === "macerating");
   shell.classList.toggle("eco-watering", ecoMode === "watering");
@@ -694,6 +720,14 @@ function updateEco() {
   macerationClock.classList.toggle("visible", ecoMode === "macerating");
   plantButtons.classList.toggle("visible", future);
   shell.classList.toggle("eco-harvesting", future);
+  const soilCycle = document.querySelector("#soilCycle");
+  soilCycle.hidden = !["mulching", "topdressing", "resting"].includes(ecoMode);
+  soilCycle.disabled = ecoMode === "mulching" && mulchProgress < 100;
+  soilCycle.textContent = ecoMode === "mulching"
+    ? `PACCIAMATURA ${mulchProgress}%`
+    : ecoMode === "topdressing"
+      ? "STENDI INBRUMA DEI CARBONARI · MAX 2 CM"
+      : "CICLO COMPLETATO";
   positionCan();
 }
 function addDeposit(e) {
@@ -933,6 +967,8 @@ document.querySelector("#water").onclick = () => {
 };
 function openFuture() {
   ecoMode = "growing";
+  postHarvestStage = localStorage.getItem("inulaPostHarvest");
+  mulchProgress = Number(localStorage.getItem("inulaMulchProgress") || 0);
   try {
     const savedHarvest = JSON.parse(localStorage.getItem("inulaHarvest") || "null");
     harvestedPlants = new Set(savedHarvest?.ids || []);
@@ -958,8 +994,14 @@ function openFuture() {
   paintEco();
   if (!harvestPrizeAt && renderedPlants.length) harvestPrizeAt = Math.min(renderedPlants.length,
     3 + Math.floor(Math.random() * Math.max(1, Math.min(7, renderedPlants.length - 2))));
-  document.querySelector("#harvestBins").hidden = false;
+  document.querySelector("#harvestBins").hidden = true;
   updateHarvestBins();
+  if (postHarvestStage && harvestedPlants.size) {
+    ecoMode = postHarvestStage;
+    growth = 1;
+    updateEco(); paintEco(); startEcoAnimation();
+    return;
+  }
   startEcoAnimation();
   const start = performance.now();
   cancelAnimationFrame(anim);
@@ -989,7 +1031,7 @@ const harvestKinds = [
 ];
 function produceDrawing(shape, n) {
   const stroke = 'stroke="#282721" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"';
-  const fill = { amaranth: "#8b615b", lettuce: "#9eac8c", spinach: "#879b81", tomato: "#a67560" }[shape];
+  const fill = { amaranth: "#8b615b", lettuce: "#9eac8c", spinach: "#879b81", tomato: "#d6322f" }[shape];
   const drawing = shape === "amaranth"
     ? `<path d="M11 19Q4 13 9 5Q14 0 17 8Q20 15 11 19Z" fill="${fill}" ${stroke}/><path d="M11 17L14 5M9 12l6 2M11 9l5 1" fill="none" ${stroke}/>`
     : shape === "lettuce"
@@ -1000,9 +1042,8 @@ function produceDrawing(shape, n) {
   return `<svg viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(${(n % 5 - 2) * 9}deg)">${drawing}</svg>`;
 }
 function updateHarvestBins() {
-  document.querySelector("#harvestBins").innerHTML = harvestKinds.map(([shape, vessel, label]) => {
-    return `<div class="harvest-bin ${vessel}" role="img" aria-label="Contenitore per ${label.toLowerCase()}"><div class="vessel"></div><small>${label}</small></div>`;
-  }).join("");
+  document.querySelector("#harvestBins").innerHTML = "";
+  document.querySelector("#harvestBins").hidden = true;
   document.querySelector("#plantButtons").innerHTML = harvestKinds.map(([shape, , label]) => {
     const count = renderedPlants.filter(p => p.shape === shape && harvestedPlants.has(p.id)).length;
     return `<div class="fruit-count" aria-label="${label}: ${count} raccolti">${produceDrawing(shape, count)}<span>${label}</span><b aria-hidden="true">${count}</b></div>`;
@@ -1043,6 +1084,26 @@ function showHarvestComplete() {
 }
 document.querySelector(".harvest-close").onclick = () => document.querySelector("#harvestReward").close();
 document.querySelector(".harvest-complete-close").onclick = () => document.querySelector("#harvestComplete").close();
+document.querySelector("#startMulching").onclick = () => {
+  document.querySelector("#harvestComplete").close();
+  ecoMode = "mulching";
+  postHarvestStage = "mulching";
+  mulchProgress = 0;
+  localStorage.setItem("inulaPostHarvest", "mulching");
+  updateEco(); paintEco(); ecoCanvas.focus();
+};
+document.querySelector("#soilCycle").onclick = () => {
+  if (ecoMode === "mulching" && mulchProgress >= 100) {
+    ecoMode = "topdressing"; postHarvestStage = "topdressing";
+    localStorage.setItem("inulaPostHarvest", "topdressing");
+    announcement.textContent = "Residui schiacciati. Ora stendi fino a 2 cm di INBRUMA dei Carbonari.";
+  } else if (ecoMode === "topdressing") {
+    ecoMode = "resting"; postHarvestStage = "resting";
+    localStorage.setItem("inulaPostHarvest", "resting");
+    announcement.textContent = "Copertura completata: residui vegetali e INBRUMA dei Carbonari proteggono il suolo fino alla primavera.";
+  }
+  updateEco(); paintEco();
+};
 document.querySelector("#harvestComplete .harvest-shop-link").addEventListener("click", () => {
   document.querySelector("#harvestComplete").close();
   ecosystem.close();
@@ -1053,6 +1114,13 @@ document.querySelector("#copyHarvest").onclick = async () => {
   catch { document.querySelector("#harvestFeedback").textContent = `Seleziona e comunica il codice ${code}.`; }
 };
 ecoCanvas.addEventListener("click", (e) => {
+  if (ecoMode === "mulching") {
+    mulchProgress = Math.min(100, mulchProgress + 10);
+    localStorage.setItem("inulaMulchProgress", String(mulchProgress));
+    if (mulchProgress >= 100) announcement.textContent = "Pacciamatura completata. Puoi applicare INBRUMA dei Carbonari.";
+    updateEco(); paintEco();
+    return;
+  }
   if (ecoMode !== "future") return;
   const r = ecoCanvas.getBoundingClientRect(),
     px = e.clientX - r.left, py = e.clientY - r.top,
@@ -1109,6 +1177,7 @@ function resetEco() {
   watered = []; seeded = []; growthSites = []; renderedPlants = []; pourAnimations = [];
   mix = "carbonari";
   ecoMode = "brush";
+  mulchProgress = 0; postHarvestStage = null;
   growth = 0;
   waterTotal = 0;
   waterRemaining = 0;

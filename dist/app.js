@@ -323,6 +323,20 @@ function plant(p, scale = 1, offset = 0) {
     }
     ex.closePath(); ex.clip();
     ex.drawImage(cropsAtlas, type * 511, 0, 511, 768, -width / 2, -height, width, height + buried);
+    if (p.shape === "tomato") {
+      // The atlas carries pale unripe fruit; recolour only the two fruit areas,
+      // preserving the engraved texture, sepals, leaves and dark ink outlines.
+      ex.save();
+      ex.globalCompositeOperation = "color";
+      ex.globalAlpha = .92;
+      ex.fillStyle = "#d52f2f";
+      [[.085, -.315, .052], [.205, -.275, .055]].forEach(([tx, ty, tr]) => {
+        ex.beginPath();
+        ex.arc(width * tx, height * ty, width * tr, 0, Math.PI * 2);
+        ex.fill();
+      });
+      ex.restore();
+    }
     ex.restore(); return;
   }
   const x = p.x * ecoCanvas.clientWidth,

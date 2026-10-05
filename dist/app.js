@@ -1095,8 +1095,7 @@ document.querySelector("#copyHarvest").onclick = async () => {
 ecoCanvas.addEventListener("click", (e) => {
   if (ecoMode !== "future") return;
   const r = ecoCanvas.getBoundingClientRect(),
-    px = e.clientX - r.left, py = e.clientY - r.top,
-    x = px / r.width, y = py / r.height;
+    px = e.clientX - r.left, py = e.clientY - r.top;
   const hit = renderedPlants.filter(p => !harvestedPlants.has(p.id)).map(p => {
     const depth = Math.max(0, Math.min(1, (p.y - .52) / .27));
     const shapeRatio = { lettuce:.55, spinach:.65, tomato:.9, amaranth:1 }[p.shape] || 1;
@@ -1150,7 +1149,7 @@ const seedRects = [[0, 0, 516, 680], [516, 0, 535, 680], [1051, 0, 457, 680], [1
 const seedContainers = document.querySelector("#seedContainers");
 seedContainers.innerHTML = fieldPlants.map((p, i) => {
   const [x, y, w, h] = seedRects[i];
-  return `<button type="button" data-seed="${p.shape}" aria-controls="plantEvidence" aria-label="Scopri i semi di ${seedNames[i].toLowerCase()} e lo studio collegato"><svg viewBox="0 0 ${w} ${h}" aria-hidden="true" focusable="false"><image href="/assets/seed-containers.webp" x="${-x}" y="${-y}" width="2048" height="680" /></svg><b>${seedNames[i]}</b><small>APRI I SEMI ↗</small></button>`;
+  return `<button type="button" data-seed="${p.shape}" aria-controls="plantEvidence" aria-label="Scopri i semi di ${seedNames[i].toLowerCase()} e lo studio collegato"><svg viewBox="0 0 ${w} ${h}" aria-hidden="true" focusable="false"><defs><clipPath id="seed-clip-${i}"><rect width="${w}" height="${h}" /></clipPath></defs><g clip-path="url(#seed-clip-${i})"><image href="/assets/seed-containers.webp" x="${-x}" y="${-y}" width="2048" height="680" /></g></svg><b>${seedNames[i]}</b><small>APRI I SEMI ↗</small></button>`;
 }).join("");
 function updateSeedProgress() {
   const count = discoveredSeeds.size, pct = count / fieldPlants.length * 100;

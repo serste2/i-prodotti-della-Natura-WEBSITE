@@ -244,8 +244,80 @@ function drawForeground() {
 function playablePoint(x, y) {
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   const nx = x / w, ny = y / h;
-  // The seated farmer and stool occupy the right foreground; the basin is left.
-  return nx >= .31 && nx <= .73 && ny >= .53 && ny <= .79;
+  // A broad perspective field, with the basin and seated farmer kept clear.
+  if (ny < .38 || ny > .88) return false;
+  const depth = (ny - .38) / .50;
+  const left = .31 - depth * .12;
+  const right = .75 + depth * .05;
+  const basin = ((nx - .22) / .15) ** 2 + ((ny - .72) / .18) ** 2 < 1;
+  const farmer = nx > .72 && ny > .55;
+  return nx >= left && nx <= right && !basin && !farmer;
+}
+
+function drawBareField() {
+  const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
+  if (w <= 0 || h <= 0) return;
+  ex.save();
+  ex.beginPath();
+  ex.moveTo(w * .31, h * .38);
+  ex.quadraticCurveTo(w * .53, h * .35, w * .75, h * .38);
+  ex.lineTo(w * .80, h * .88);
+  ex.quadraticCurveTo(w * .49, h * .92, w * .19, h * .88);
+  ex.lineTo(w * .31, h * .38);
+  ex.clip();
+
+  const soil = ex.createLinearGradient(0, h * .35, 0, h * .92);
+  soil.addColorStop(0, "rgba(207,193,166,.80)");
+  soil.addColorStop(.55, "rgba(191,172,140,.91)");
+  soil.addColorStop(1, "rgba(169,145,111,.94)");
+  ex.fillStyle = soil;
+  ex.fillRect(w * .16, h * .34, w * .67, h * .60);
+
+  // Shallow tillage marks and compacted passages converge toward the horizon.
+  ex.lineCap = "round";
+  for (let i = 0; i < 15; i++) {
+    const t = i / 14, topX = w * (.325 + t * .41);
+    const bottomX = w * (.20 + t * .59);
+    ex.strokeStyle = i % 3 ? "rgba(91,72,51,.20)" : "rgba(238,226,201,.31)";
+    ex.lineWidth = 1 + t * .55;
+    ex.beginPath();
+    ex.moveTo(topX, h * (.40 + Math.abs(inkHash(i + 61)) * .018));
+    ex.quadraticCurveTo((topX + bottomX) * .5 + inkHash(i + 93) * 14,
+      h * .65, bottomX, h * (.88 + inkHash(i + 127) * .012));
+    ex.stroke();
+  }
+  for (let i = 0; i < 110; i++) {
+    const ny = .40 + Math.abs(inkHash(i + 210)) * .47;
+    const depth = (ny - .38) / .50;
+    const left = .31 - depth * .12, right = .75 + depth * .05;
+    const nx = left + Math.abs(inkHash(i + 410)) * (right - left);
+    const size = .5 + depth * 1.8;
+    ex.fillStyle = i % 4 ? "rgba(80,62,44,.22)" : "rgba(241,229,204,.28)";
+    ex.beginPath();
+    ex.ellipse(nx * w, ny * h, size * 1.8, size * .62,
+      inkHash(i + 510) * .45, 0, Math.PI * 2);
+    ex.fill();
+  }
+
+  // A few first colonisers, sparse enough that the field still reads as bare soil.
+  ex.strokeStyle = "rgba(75,78,54,.58)";
+  ex.lineWidth = 1;
+  for (let i = 0; i < 13; i++) {
+    const ny = .43 + Math.abs(inkHash(i + 710)) * .40;
+    const depth = (ny - .38) / .50;
+    const left = .31 - depth * .12, right = .75 + depth * .05;
+    const x = (left + Math.abs(inkHash(i + 810)) * (right - left)) * w;
+    const y = ny * h, blade = 2 + depth * 5;
+    ex.beginPath();
+    ex.moveTo(x, y);
+    ex.lineTo(x - blade * .55, y - blade);
+    ex.moveTo(x, y);
+    ex.lineTo(x + blade * .45, y - blade * .82);
+    ex.moveTo(x, y);
+    ex.lineTo(x + blade * .08, y - blade * 1.16);
+    ex.stroke();
+  }
+  ex.restore();
 }
 function inkHash(n) { return (Math.sin(n * 127.1 + 19.7) * 43758.5453) % 1; }
 function mound(d) {
@@ -590,7 +662,7 @@ function selectFarmerSowingSites() {
 }
 function paintEco() {
   const now = performance.now();
-  background(); drawClouds(now); drawForeground();
+  background(); drawClouds(now); drawForeground(); drawBareField();
   deposits.forEach(mound);
   watered.forEach(wetMark);
   if (ecoMode === "watering") drawPourAnimations(now);

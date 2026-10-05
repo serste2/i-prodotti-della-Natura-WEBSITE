@@ -107,12 +107,12 @@ const ecoCanvas = document.querySelector("#ecoCanvas"),
   fieldImage = new Image(),
   timerImage = new Image(),
   sowingImage = new Image(),
-  farmerPoses = [1, 2, 3].map(() => new Image()),
+  farmerAtlas = new Image(),
   seatedFarmerImage = new Image();
 fieldImage.src = "/assets/interaction-field-ink.png";
 timerImage.src = "/assets/interaction-field-ink.png";
 sowingImage.src = "/assets/interaction-field-ink.png";
-farmerPoses.forEach((image, index) => { image.src = `/assets/farmer-sowing-frame-${index + 1}.png`; });
+farmerAtlas.src = "/assets/farmer-sowing-clean.webp";
 seatedFarmerImage.src = "/assets/farmer-seated-ink.png";
 const wateringCan = document.querySelector("#wateringCan"),
   plantButtons = document.querySelector("#plantButtons"),
@@ -157,6 +157,7 @@ let deposits = [],
   timerStart = 0,
   farmerSowingSites = [],
   sowingProgress = 0,
+  discoveredSeeds = new Set(),
   canPos = { x: 0.22, y: 0.72 };
 const fieldPlants = [
   { name: "Amaranthus hypochondriacus", x: .36, y: .61, color: "#c0a68d", shape: "amaranth", text: "Uno studio in serra su un macerato microbico di Inula ha osservato crescita e sviluppo radicale di Amaranthus hypochondriacus.", url: "https://wjarr.com/content/biostimulant-derived-fermentation-inula-viscosa-inort-germination-and-growth-amaranthus" },
@@ -181,8 +182,8 @@ const fieldFacts = [
 let factIndex = -1, factInterval, canHeld = false;
 const faunaImage = new Image(), cloudImage = new Image();
 const cropsAtlas = new Image(), biomassAtlas = new Image(), ladleAtlas = new Image(), lizardImage = new Image();
-faunaImage.src = "/assets/ink-fauna.png";
-cloudImage.src = "/assets/ink-clouds-etched.png";
+faunaImage.src = "/assets/ink-fauna-clean.webp";
+cloudImage.src = "/assets/ink-clouds-clean.webp";
 cropsAtlas.src = "/assets/ink-crops-atlas.png";
 biomassAtlas.src = "/assets/inbruma-brush-atlas.png";
 ladleAtlas.src = "/assets/wood-ladle-ripples-atlas.png";
@@ -436,12 +437,13 @@ function drawClouds(now) {
   if (!cloudImage.complete || !cloudImage.naturalWidth) return;
   ex.save();
   ex.beginPath(); ex.rect(0, 0, w, h * .18); ex.clip();
-  const crops = [[0, 125, 875, 420], [875, 125, 680, 420], [1555, 125, 617, 420]];
+  // Complete cloud contours, including wisps; source cells have unequal widths.
+  const crops = [[15, 180, 825, 320], [850, 180, 685, 320], [1535, 180, 510, 320]];
   for (let k = 0; k < 3; k++) {
     const width = w * .14;
     const x = ((w * (k * .37) + cloudTravel) % (w + width)) - width;
     ex.globalAlpha = .46;
-    ex.drawImage(cloudImage, ...crops[k], x, h * (.02 + k % 2 * .018), width, h * .105);
+    ex.drawImage(cloudImage, ...crops[k].map((v, i) => v * (i % 2 ? cloudImage.naturalHeight / 680 : cloudImage.naturalWidth / 2048)), x, h * (.02 + k % 2 * .018), width, width * crops[k][3] / crops[k][2]);
   }
   ex.restore();
 }
@@ -461,8 +463,9 @@ function drawFauna(now) {
     const dx = flies ? Math.sin(t) * w * .018 : Math.sin(t) * w * .004;
     const dy = flies ? Math.cos(t * 1.3) * h * .014 : 0;
     ex.save(); ex.globalAlpha = .86;
-    const aspect = type === 3 ? 1.45 : 1.15;
-    ex.drawImage(faunaImage, type * 543, 35, 543, 560,
+    const cellW = faunaImage.naturalWidth / 2, cellH = faunaImage.naturalHeight / 2;
+    const aspect = cellW / cellH;
+    ex.drawImage(faunaImage, (type % 2) * cellW, Math.floor(type / 2) * cellH, cellW, cellH,
       nx * w + dx - size / 2, ny * h + dy - size / aspect / 2,
       size, size / aspect);
     ex.restore();
@@ -491,14 +494,15 @@ function drawSeatedFarmer() {
 }
 function drawFarmer() {
   const { x, y, frame } = farmerSowingSites[Math.min(2, Math.floor(Math.min(1, sowingProgress) * 3))] || {};
-  const pose = farmerPoses[frame ?? 0];
+  const pose = farmerAtlas;
+  const rect = [[15, 20, 520, 990], [550, 20, 515, 990], [1080, 20, 456, 990]][frame ?? 0];
   const h = ecoCanvas.clientHeight;
   const t = Math.min(1, sowingProgress);
   // Three still poses, each anchored to a real deposit+water overlap. Draw the complete texture.
   if (Number.isFinite(x) && Number.isFinite(y) && pose?.complete && pose.naturalWidth) {
     const height = h * (.27 + Math.max(0, Math.min(1, (y / h - .53) / .26)) * .18);
-    const width = height * pose.naturalWidth / pose.naturalHeight;
-    ex.drawImage(pose, x - width * .5, y - height, width, height);
+    const width = height * rect[2] / rect[3];
+    ex.drawImage(pose, ...rect, x - width * .5, y - height, width, height);
   }
   ex.save(); ex.fillStyle = "#595047";
   for (const seed of seeded) {
@@ -675,6 +679,11 @@ function updateEco() {
       "SVUOTA TUTTO IL MACERATO",
       "Tasto destro sull’annaffiatoio per sollevarlo; sinistro sul campo per annaffiare.",
     ],
+    seeds: [
+      "SEMI / RICERCA",
+      "PRIMA DI SEMINARE, SCOPRI",
+      "Apri i quattro contenitori: ogni seme racconta una connessione con la ricerca sull’Inula.",
+    ],
     sowing: [
       "SEMINA / CAMPO",
       "ORA SI SEMINA",
@@ -692,6 +701,8 @@ function updateEco() {
   shell.classList.toggle("eco-macerating", ecoMode === "macerating");
   shell.classList.toggle("eco-watering", ecoMode === "watering");
   shell.classList.toggle("eco-sowing", ecoMode === "sowing");
+  shell.classList.toggle("eco-seeds", ecoMode === "seeds");
+  document.querySelector("#seedDiscovery").hidden = ecoMode !== "seeds";
   mixButtons.forEach((b) => {
     const filled = bagFilled[b.dataset.mix];
     b.disabled = ecoMode !== "brush" || filled >= 100;
@@ -779,7 +790,7 @@ function pourAt(x, y) {
   if (waterRemaining === 0) {
     announcement.textContent =
       "L’annaffiatoio è vuoto. Tutto il macerato è stato distribuito.";
-    beginSowing();
+    prepareSeedDiscovery();
     return;
   }
   updateEco();
@@ -859,6 +870,10 @@ function startMaceration() {
   anim = requestAnimationFrame(tick);
 }
 function beginSowing() {
+  if (ecoMode !== "seeds" || discoveredSeeds.size !== fieldPlants.length) return;
+  const sowingStart = performance.now();
+  document.querySelector("#plantEvidence").hidden = true;
+  document.querySelector("#plantEvidence").classList.remove("open");
   ecoMode = "sowing";
   sowingProgress = 0;
   seedField();
@@ -996,7 +1011,9 @@ function showEvidence(p) {
   card.querySelector("p").textContent = p.text;
   card.querySelector("a").href = p.url;
 
+  card.hidden = false;
   card.classList.add("open");
+  card.querySelector(".evidenceClose").focus({ preventScroll: true });
 }
 const harvestKinds = [
   ["amaranth", "bag", "AMARANTO"], ["lettuce", "crate", "LATTUGA"],
@@ -1079,8 +1096,7 @@ ecoCanvas.addEventListener("click", (e) => {
   if (ecoMode !== "future") return;
   const r = ecoCanvas.getBoundingClientRect(),
     px = e.clientX - r.left, py = e.clientY - r.top,
-    x = px / r.width, y = py / r.height,
-    site = growthSites.find(q => Math.hypot(q.x / r.width - x, q.y / r.height - y) < .06);
+    x = px / r.width, y = py / r.height;
   const hit = renderedPlants.filter(p => !harvestedPlants.has(p.id)).map(p => {
     const depth = Math.max(0, Math.min(1, (p.y - .52) / .27));
     const shapeRatio = { lettuce:.55, spinach:.65, tomato:.9, amaranth:1 }[p.shape] || 1;
@@ -1089,8 +1105,7 @@ ecoCanvas.addEventListener("click", (e) => {
     return { p, distance:dx + Math.abs(dy + height * .45) * .4, valid:dx < Math.max(18,height*.43) && dy < 9 && dy > -height-12 };
   }).filter(v => v.valid).sort((a,b) => a.distance-b.distance)[0];
   if (hit) { collectPlant(hit.p); return; }
-  const p = site?.species;
-  if (p) showEvidence(p);
+
 });
 ecoCanvas.addEventListener("keydown", (e) => {
   if (ecoMode === "mixing" && (e.key === " " || e.key === "Enter")) {
@@ -1119,8 +1134,61 @@ ecoCanvas.addEventListener("keydown", (e) => {
     pourAt(r.left + canPos.x * r.width, r.top + canPos.y * r.height);
   }
 });
-document.querySelector(".evidenceClose").onclick = () =>
-  document.querySelector("#plantEvidence").classList.remove("open");
+let evidenceTrigger = null;
+function closeEvidence() {
+  const card = document.querySelector("#plantEvidence");
+  card.classList.remove("open");
+  card.hidden = true;
+  evidenceTrigger?.focus({ preventScroll: true });
+}
+document.querySelector(".evidenceClose").onclick = closeEvidence;
+document.querySelector("#plantEvidence").addEventListener("keydown", e => {
+  if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); closeEvidence(); }
+});
+const seedNames = ["AMARANTO", "LATTUGA", "SPINACI", "POMODORO"];
+const seedRects = [[0, 0, 516, 680], [516, 0, 535, 680], [1051, 0, 457, 680], [1508, 0, 540, 680]];
+const seedContainers = document.querySelector("#seedContainers");
+seedContainers.innerHTML = fieldPlants.map((p, i) => {
+  const [x, y, w, h] = seedRects[i];
+  return `<button type="button" data-seed="${p.shape}" aria-controls="plantEvidence" aria-label="Scopri i semi di ${seedNames[i].toLowerCase()} e lo studio collegato"><svg viewBox="0 0 ${w} ${h}" aria-hidden="true" focusable="false"><image href="/assets/seed-containers.webp" x="${-x}" y="${-y}" width="2048" height="680" /></svg><b>${seedNames[i]}</b><small>APRI I SEMI ↗</small></button>`;
+}).join("");
+function updateSeedProgress() {
+  const count = discoveredSeeds.size, pct = count / fieldPlants.length * 100;
+  const button = document.querySelector("#sowField");
+  button.disabled = count < fieldPlants.length;
+  button.querySelector("b").textContent = `${pct}%`;
+  button.querySelector("em").style.width = `${pct}%`;
+  button.querySelector("span").textContent = count === fieldPlants.length ? "SEMINA IL CAMPO ↗" : "SEMINA";
+  button.querySelector("small").textContent = count === fieldPlants.length ? "Hai scoperto tutti i semi. Clicca per iniziare." : `${count} / ${fieldPlants.length} schede scoperte`;
+  button.setAttribute("aria-label", count === fieldPlants.length ? "Semina il campo, tutte le quattro schede scoperte" : `Semina, ${count} di quattro schede scoperte`);
+  seedContainers.querySelectorAll("button").forEach(b => {
+    const seen = discoveredSeeds.has(b.dataset.seed);
+    b.classList.toggle("discovered", seen);
+    b.querySelector("small").textContent = seen ? "SCOPERTA ✓ · RIAPRI" : "APRI I SEMI ↗";
+  });
+}
+function prepareSeedDiscovery() {
+  ecoMode = "seeds";
+  painting = false;
+  canHeld = false;
+  document.querySelector("#fieldFact").classList.remove("visible");
+  clearInterval(factInterval);
+  updateSeedProgress();
+  updateEco();
+  paintEco();
+  announcement.textContent = "Il campo è pronto. Apri i quattro contenitori dei semi per scoprire gli studi e sbloccare la semina.";
+  seedContainers.querySelector("button").focus({ preventScroll: true });
+}
+seedContainers.addEventListener("click", e => {
+  const button = e.target.closest("button[data-seed]");
+  if (!button || ecoMode !== "seeds") return;
+  evidenceTrigger = button;
+  showEvidence(fieldPlants.find(p => p.shape === button.dataset.seed));
+  discoveredSeeds.add(button.dataset.seed);
+  updateSeedProgress();
+  announcement.textContent = `${discoveredSeeds.size} di quattro schede scoperte.${discoveredSeeds.size === 4 ? " La barra semina è pronta: cliccala per iniziare." : ""}`;
+});
+document.querySelector("#sowField").onclick = beginSowing;
 function resetEco() {
   cancelAnimationFrame(anim);
   clearInterval(factInterval);
@@ -1138,6 +1206,10 @@ function resetEco() {
   mixProgress = 0; stirElapsed = 0; stirTurns = 0; stirAngle = -.42; stirLastTime = 0; ladleHeld = false; ladlePos = null; lastStirAt = 0;
   timerStart = 0;
   sowingProgress = 0;
+  discoveredSeeds.clear();
+  updateSeedProgress();
+  evidenceTrigger = null;
+  document.querySelector("#plantEvidence").hidden = true;
   lastMixPoint = null;
   document.querySelector("#clockValue").textContent = "15";
   document.querySelector("#plantEvidence").classList.remove("open");
@@ -1165,7 +1237,7 @@ document.querySelector("#reopenField").onclick = openFuture;
 ecosystem.addEventListener("close", () => {
   if (!["future", "sowing"].includes(ecoMode)) resetEco();
 });
-[fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, ladleAtlas, lizardImage, ...farmerPoses, seatedFarmerImage].forEach((image) => {
+[fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, ladleAtlas, lizardImage, farmerAtlas, seatedFarmerImage].forEach((image) => {
   image.onload = () => ecosystem.open && paintEco();
 });
 addEventListener("resize", () => {

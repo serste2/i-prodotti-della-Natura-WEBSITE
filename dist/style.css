@@ -1494,3 +1494,71 @@ h2 em,
 @media (max-width: 620px) {
   .harvest-cart { grid-template-columns: 1fr; }
 }
+
+/* Research is discovered in the seed vessels before sowing. */
+#seedDiscovery[hidden], #plantEvidence[hidden] { display: none; }
+.eco-seeds .basin-meter,
+.eco-seeds #depositQueue, .eco-seeds .brush-size, .eco-seeds #water { display:none; }
+.eco-seeds .eco-controls { display:flex; justify-content:flex-end; padding-block:8px; }
+.eco-seeds .eco-readout { max-width:390px; }
+#seedDiscovery {
+  position:absolute; left:8%; right:22%; bottom:22px;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+}
+#seedContainers { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; width:100%; }
+#seedContainers button {
+  padding:0 4px 9px; border:0; border-bottom:2px solid transparent;
+  background:transparent; color:var(--ink); cursor:pointer;
+  display:flex; flex-direction:column; align-items:center;
+  font-family:"Roboto Mono",monospace;
+}
+#seedContainers svg { width:100%; height:clamp(100px,14vw,185px); overflow:hidden; transition:transform .2s; }
+#seedContainers b { font-size:13px; letter-spacing:.04em; background:#f3eddfed; padding:3px 8px; }
+#seedContainers small { font-size:10px; background:#f3eddfed; padding:4px 6px; }
+#seedContainers button:hover svg { transform:translateY(-5px); }
+#seedContainers button.discovered { border-bottom-color:var(--ink); }
+#seedContainers button:focus-visible, #sowField:focus-visible { outline:3px solid var(--p); outline-offset:4px; }
+.seed-invitation { margin:0; padding:8px 14px; text-align:center; background:#f3eddfed; font:700 12px/1.5 "Roboto Mono",monospace; }
+.seed-invitation span { font-weight:400; font-size:11px; }
+#sowField {
+  width:min(420px,100%); display:grid; grid-template-columns:1fr auto;
+  gap:6px 14px; padding:12px 18px; border:2px solid var(--ink);
+  background:var(--paper); color:var(--ink); text-align:left;
+  font:700 13px "Roboto Mono",monospace;
+}
+#sowField:disabled { opacity:1; cursor:default; }
+#sowField b { font-size:18px; }
+#sowField i { grid-column:1/-1; height:9px; border:1px solid; }
+#sowField em { display:block; width:0; height:100%; background:var(--ink); transition:width .25s; }
+#sowField small { grid-column:1/-1; font-size:11px; font-weight:400; line-height:1.4; }
+#sowField:not(:disabled) { background:var(--y); cursor:pointer; }
+#sowField:not(:disabled):hover { box-shadow:4px 4px 0 var(--ink); }
+#plantEvidence { max-height:calc(100% - 36px); overflow:auto; }
+#plantEvidence h3 { padding-right:16px; }
+.evidenceClose { width:44px; height:44px; cursor:pointer; }
+.research-note { display:block; margin-top:18px; padding-top:12px; border-top:1px solid #f3eddf66; font:10px/1.5 "Roboto Mono",monospace; }
+/* Use complete quadrants, including fine antennae, rather than slicing wings. */
+.ink-visitor { background-image:url('/assets/ink-fauna-clean.webp'); background-size:160px 132px; height:66px; }
+.ink-visitor-0,.ink-visitor-2 { background-position:0 0; }
+.ink-visitor-1 { background-position:-80px 0; }
+@media(max-width:820px) {
+  #seedDiscovery { left:14px; right:14px; bottom:12px; gap:8px; }
+  #seedContainers { max-width:500px; gap:4px 8px; }
+  #seedContainers svg { height:110px; }
+  #seedContainers b { font-size:11px; }
+  #seedContainers small { font-size:9px; }
+  .eco-seeds .eco-readout { max-width:calc(100% - 28px); }
+  .eco-seeds #plantEvidence { max-height:45%; }
+  .ink-visitor { width:56px; height:46px; background-size:112px 92px; }
+  .ink-visitor-0,.ink-visitor-2 { background-position:0 0; }
+  .ink-visitor-1 { background-position:-56px 0; }
+}
+@media(max-width:520px) {
+  #seedContainers { grid-template-columns:repeat(2,minmax(0,1fr)); max-width:340px; }
+  #seedContainers svg { height:92px; }
+  #seedContainers b { font-size:11px; }
+  .eco-seeds .eco-readout strong { font-size:22px; }
+  .eco-seeds #plantEvidence { top:8px; max-height:calc(100% - 16px); }
+  .eco-seeds:has(#plantEvidence.open) #seedDiscovery { visibility:hidden; }
+}
+@media(prefers-reduced-motion:reduce) { #seedContainers svg,#sowField em { transition:none; } }

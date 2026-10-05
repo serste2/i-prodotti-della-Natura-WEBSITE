@@ -383,11 +383,6 @@
             ><small id="basinHint">distribuito nel campo</small>
           </div>
           <div id="ecoAnnouncement" class="sr-only" aria-live="assertive"></div>
-          <section id="seedDiscovery" aria-label="Semi e ricerca prima della semina" hidden>
-            <div id="seedContainers" role="group" aria-label="Quattro contenitori di semi"></div>
-            <p class="seed-invitation">CLICCA I CONTENITORI DEI SEMI<br /><span>Scopri gli studi e le connessioni con l’Inula.</span></p>
-            <button id="sowField" type="button" disabled><span>SEMINA</span><b>0%</b><i aria-hidden="true"><em></em></i><small>0 / 4 schede scoperte</small></button>
-          </section>
           <aside id="plantEvidence" aria-label="Scheda di ricerca del seme" hidden>
             <button class="evidenceClose" aria-label="Chiudi scheda">×</button
             ><small>STUDIO SCIENTIFICO</small>
@@ -399,22 +394,22 @@
           </aside>
         </div>
         <div class="eco-controls">
-          <div id="depositQueue" role="group" aria-label="Tre sacchi di INBRUMA da distribuire">
-            <button class="active" data-mix="carbonari" type="button">
-              <span>INBRUMA dei Carbonari</span><b>0%</b><i><em></em></i></button
-            ><button data-mix="aulivi" type="button"><span>INBRUMA Aulivi</span><b>0%</b><i><em></em></i></button
-            ><button data-mix="devigna" type="button"><span>INBRUMA DeVigna</span><b>0%</b><i><em></em></i></button>
+          <section id="inbrumaSupplies" aria-label="Scegli i sacchi di INBRUMA">
+            <div id="depositQueue" role="group" aria-label="Tre sacchi di INBRUMA da distribuire"><button class="active" data-mix="carbonari" type="button" aria-pressed="true"><svg viewBox="0 0 682.6666666666666 680" aria-hidden="true" focusable="false"><defs><clipPath id="sack-clip-0"><rect width="682.6666666666666" height="680" /></clipPath></defs><g clip-path="url(#sack-clip-0)"><image href="/assets/inbruma-sacks.webp" x="-0.0" width="2048" height="680" /></g></svg><span>INBRUMA dei Carbonari</span><b>0%</b><i><em></em></i></button><button data-mix="aulivi" type="button" aria-pressed="false"><svg viewBox="0 0 682.6666666666666 680" aria-hidden="true" focusable="false"><defs><clipPath id="sack-clip-1"><rect width="682.6666666666666" height="680" /></clipPath></defs><g clip-path="url(#sack-clip-1)"><image href="/assets/inbruma-sacks.webp" x="-682.6666666666666" width="2048" height="680" /></g></svg><span>INBRUMA Aulivi</span><b>0%</b><i><em></em></i></button><button data-mix="devigna" type="button" aria-pressed="false"><svg viewBox="0 0 682.6666666666666 680" aria-hidden="true" focusable="false"><defs><clipPath id="sack-clip-2"><rect width="682.6666666666666" height="680" /></clipPath></defs><g clip-path="url(#sack-clip-2)"><image href="/assets/inbruma-sacks.webp" x="-1365.3333333333333" width="2048" height="680" /></g></svg><span>INBRUMA DeVigna</span><b>0%</b><i><em></em></i></button></div>
+            <p class="supply-invitation">CLICCA UN SACCO, POI DISTRIBUISCI NEL CAMPO</p>
+          </section>
+          <section id="seedDiscovery" aria-label="Semi e ricerca prima della semina" hidden>
+            <div id="seedContainers" role="group" aria-label="Quattro contenitori di semi"></div>
+            <p class="seed-invitation">CLICCA I CONTENITORI DEI SEMI<br /><span>Scopri gli studi e le connessioni con l’Inula.</span></p>
+            <button id="sowField" type="button" disabled><span>SEMINA</span><b>0%</b><i aria-hidden="true"><em></em></i><small>0 / 4 schede scoperte</small></button>
+          </section>
+          <div class="eco-toolbox">
+            <label class="brush-size">QUANTITÀ / BRUSH
+              <input id="brushSize" type="range" min="12" max="48" value="28" />
+            </label>
+            <button id="water" hidden disabled>PREPARA CÍGNULA NEL CATINO ↗</button>
+            <button id="resetEco" type="button">RESET</button>
           </div>
-          <label class="brush-size"
-            >QUANTITÀ / BRUSH
-            <input
-              id="brushSize"
-              type="range"
-              min="12"
-              max="48"
-              value="28" /></label
-          ><button id="water" disabled>PREPARA CÍGNULA NEL CATINO ↗</button
-          ><button id="resetEco">RESET</button>
         </div>
       </div>
     </dialog>

@@ -662,7 +662,7 @@ function updateEco() {
     brush: [
       "BRUSH / INBRUMA",
       "SCEGLI E DISTRIBUISCI",
-      "Scegli liberamente un sacco e distribuiscilo nel campo. Completa tutti e tre al 100%.",
+      "Clicca un sacco nel pannello sotto il campo e distribuisci la biomassa. Completa tutti e tre al 100%.",
     ],
     mixing: [
       "CÍGNULA / PREPARAZIONE",
@@ -703,9 +703,15 @@ function updateEco() {
   shell.classList.toggle("eco-sowing", ecoMode === "sowing");
   shell.classList.toggle("eco-seeds", ecoMode === "seeds");
   document.querySelector("#seedDiscovery").hidden = ecoMode !== "seeds";
+  document.querySelector("#inbrumaSupplies").hidden = ecoMode !== "brush" || bagsComplete();
+  document.querySelector(".brush-size").hidden = ecoMode !== "brush" || bagsComplete();
+  document.querySelector("#water").hidden = ecoMode !== "brush" || !bagsComplete();
+  document.querySelector(".eco-controls").hidden = ["macerating", "sowing"].includes(ecoMode);
   mixButtons.forEach((b) => {
     const filled = bagFilled[b.dataset.mix];
     b.disabled = ecoMode !== "brush" || filled >= 100;
+    b.hidden = ecoMode !== "brush" || filled >= 100;
+    b.setAttribute("aria-pressed", String(b.dataset.mix === mix && ecoMode === "brush"));
     b.classList.toggle("empty", filled >= 100);
     b.classList.toggle("active", b.dataset.mix === mix && ecoMode === "brush");
     b.querySelector("b").textContent = `${filled}%`;
@@ -730,7 +736,8 @@ function addDeposit(e) {
   if (!playablePoint(x, y)) return;
   const last = deposits.findLast((deposit) => deposit.mix === mix);
   if (last && Math.hypot(last.x - x, last.y - y) < +brush.value * 0.45) return;
-  const step = Math.max(2, Math.round(+brush.value / 7));
+  // One deposit is 1%: 100 full mounds per bag, independent of brush size.
+  const step = 1;
   const increment = Math.min(100 - bagFilled[mix], step);
   deposits.push({ x, y, size: +brush.value * increment / step, mix, seed: deposits.length + 1 });
   bagFilled[mix] += increment;

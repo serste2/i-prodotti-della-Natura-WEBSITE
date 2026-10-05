@@ -1495,70 +1495,122 @@ h2 em,
   .harvest-cart { grid-template-columns: 1fr; }
 }
 
-/* Research is discovered in the seed vessels before sowing. */
-#seedDiscovery[hidden], #plantEvidence[hidden] { display: none; }
-.eco-seeds .basin-meter,
-.eco-seeds #depositQueue, .eco-seeds .brush-size, .eco-seeds #water { display:none; }
-.eco-seeds .eco-controls { display:flex; justify-content:flex-end; padding-block:8px; }
+
+/* Supplies live below the landscape, in a tray capped at 25% of the viewport. */
+#ecosystem { overflow-y:auto; overscroll-behavior:contain; }
+.eco-shell { height:auto; min-height:100dvh; grid-template-rows:auto calc(100dvh - 140px) auto; }
+.eco-stage { height:calc(100dvh - 140px); min-height:0; }
+.eco-controls {
+  display:grid; grid-template-columns:minmax(0,1fr) 240px; gap:12px 24px;
+  padding:12px 4vw; max-height:25dvh; overflow-y:auto;
+  align-items:center; scrollbar-color:var(--ink) var(--paper);
+  opacity:1; pointer-events:auto;
+}
+.eco-controls[hidden], #inbrumaSupplies[hidden], #seedDiscovery[hidden],
+#depositQueue button[hidden], .brush-size[hidden], #water[hidden], #plantEvidence[hidden] { display:none !important; }
+#inbrumaSupplies { min-width:0; }
+#depositQueue { display:flex; justify-content:center; flex-wrap:nowrap; gap:18px; }
+#depositQueue button {
+  min-width:0; width:180px; display:grid; grid-template-columns:1fr auto;
+  gap:3px 8px; padding:4px 8px 8px; border:0; border-bottom:2px solid transparent;
+  background:transparent; color:var(--ink); cursor:pointer;
+}
+#depositQueue svg { grid-column:1/-1; width:100%; height:100px; overflow:hidden; transition:transform .2s; }
+#depositQueue button span { font:11px/1.3 "Roboto Mono",monospace; }
+#depositQueue button b { font:700 12px "Roboto Mono",monospace; }
+#depositQueue button i { margin:3px 0 0; height:5px; }
+#depositQueue button.active { background:transparent; color:var(--ink); border-bottom-color:var(--p); }
+#depositQueue button:hover svg { transform:translateY(-3px); }
+#depositQueue button:focus-visible, #seedContainers button:focus-visible, #sowField:focus-visible { outline:3px solid var(--p); outline-offset:3px; }
+.supply-invitation { margin:7px 0 0; text-align:center; font:10px/1.3 "Roboto Mono",monospace; }
+.eco-toolbox { display:flex; flex-direction:column; align-items:stretch; gap:12px; }
+.eco-toolbox button { border:2px solid var(--ink); padding:9px 12px; background:transparent; font:11px "Roboto Mono",monospace; cursor:pointer; }
+.eco-toolbox #resetEco { align-self:flex-end; }
+.eco-toolbox .brush-size { font:11px/1.4 "Roboto Mono",monospace; }
+.eco-toolbox #water { background:var(--y); color:var(--ink); }
+.eco-mixing .eco-controls, .eco-watering .eco-controls, .eco-future .eco-controls { display:flex; justify-content:flex-end; }
+.eco-seeds .basin-meter { display:none; }
 .eco-seeds .eco-readout { max-width:390px; }
 #seedDiscovery {
-  position:absolute; left:8%; right:22%; bottom:22px;
-  display:flex; flex-direction:column; align-items:center; gap:14px;
+  position:static; display:grid; grid-template-columns:minmax(0,1fr) 290px;
+  align-items:center; gap:6px 24px; min-width:0; width:100%;
 }
-#seedContainers { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; width:100%; }
+#seedContainers { grid-column:1; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; max-width:540px; width:100%; justify-self:center; }
 #seedContainers button {
-  padding:0 4px 9px; border:0; border-bottom:2px solid transparent;
+  padding:2px 4px 5px; border:0; border-bottom:2px solid transparent;
   background:transparent; color:var(--ink); cursor:pointer;
   display:flex; flex-direction:column; align-items:center;
   font-family:"Roboto Mono",monospace;
 }
-#seedContainers svg { width:100%; height:clamp(100px,14vw,185px); overflow:hidden; transition:transform .2s; }
-#seedContainers b { font-size:13px; letter-spacing:.04em; background:#f3eddfed; padding:3px 8px; }
-#seedContainers small { font-size:10px; background:#f3eddfed; padding:4px 6px; }
-#seedContainers button:hover svg { transform:translateY(-5px); }
+#seedContainers svg { width:100%; height:70px; overflow:hidden; transition:transform .2s; }
+#seedContainers b { font-size:11px; letter-spacing:.02em; padding:2px 0; }
+#seedContainers small { font-size:9px; line-height:1.4; }
+#seedContainers button:hover svg { transform:translateY(-3px); }
 #seedContainers button.discovered { border-bottom-color:var(--ink); }
-#seedContainers button:focus-visible, #sowField:focus-visible { outline:3px solid var(--p); outline-offset:4px; }
-.seed-invitation { margin:0; padding:8px 14px; text-align:center; background:#f3eddfed; font:700 12px/1.5 "Roboto Mono",monospace; }
-.seed-invitation span { font-weight:400; font-size:11px; }
+.seed-invitation { grid-column:1; margin:0; text-align:center; font:700 10px/1.4 "Roboto Mono",monospace; }
+.seed-invitation span { font-weight:400; }
 #sowField {
-  width:min(420px,100%); display:grid; grid-template-columns:1fr auto;
-  gap:6px 14px; padding:12px 18px; border:2px solid var(--ink);
+  grid-column:2; grid-row:1/3; width:100%; display:grid; grid-template-columns:1fr auto;
+  gap:5px 10px; padding:10px 12px; border:2px solid var(--ink);
   background:var(--paper); color:var(--ink); text-align:left;
-  font:700 13px "Roboto Mono",monospace;
+  font:700 11px "Roboto Mono",monospace;
 }
 #sowField:disabled { opacity:1; cursor:default; }
-#sowField b { font-size:18px; }
-#sowField i { grid-column:1/-1; height:9px; border:1px solid; }
+#sowField b { font-size:16px; }
+#sowField i { grid-column:1/-1; height:7px; border:1px solid; }
 #sowField em { display:block; width:0; height:100%; background:var(--ink); transition:width .25s; }
-#sowField small { grid-column:1/-1; font-size:11px; font-weight:400; line-height:1.4; }
+#sowField small { grid-column:1/-1; font-size:10px; font-weight:400; line-height:1.4; }
 #sowField:not(:disabled) { background:var(--y); cursor:pointer; }
-#sowField:not(:disabled):hover { box-shadow:4px 4px 0 var(--ink); }
+#sowField:not(:disabled):hover { background:#f4cf11; }
+.eco-seeds .eco-controls { grid-template-columns:minmax(0,1fr) auto; }
 #plantEvidence { max-height:calc(100% - 36px); overflow:auto; }
 #plantEvidence h3 { padding-right:16px; }
 .evidenceClose { width:44px; height:44px; cursor:pointer; }
 .research-note { display:block; margin-top:18px; padding-top:12px; border-top:1px solid #f3eddf66; font:10px/1.5 "Roboto Mono",monospace; }
-/* Use complete quadrants, including fine antennae, rather than slicing wings. */
+/* Whole fauna quadrants preserve wings and antennae. */
 .ink-visitor { background-image:url('/assets/ink-fauna-clean.webp'); background-size:160px 132px; height:66px; }
 .ink-visitor-0,.ink-visitor-2 { background-position:0 0; }
 .ink-visitor-1 { background-position:-80px 0; }
 @media(max-width:820px) {
-  #seedDiscovery { left:14px; right:14px; bottom:12px; gap:8px; }
-  #seedContainers { max-width:500px; gap:4px 8px; }
-  #seedContainers svg { height:110px; }
-  #seedContainers b { font-size:11px; }
-  #seedContainers small { font-size:9px; }
+  .eco-controls { grid-template-columns:minmax(0,1fr) 150px; padding:8px 14px; gap:10px; }
+  #depositQueue { gap:8px; }
+  #depositQueue button { padding-inline:3px; width:145px; }
+  #depositQueue svg { height:80px; }
+  #depositQueue button span { font-size:10px; }
+  .eco-toolbox { gap:8px; }
+  #seedDiscovery { grid-template-columns:minmax(0,1fr) 210px; gap:4px 12px; }
+  #seedContainers { gap:4px; }
+  #seedContainers svg { height:60px; }
+  #seedContainers b { font-size:10px; }
+  #seedContainers small { font-size:8px; }
+  .seed-invitation { font-size:9px; }
   .eco-seeds .eco-readout { max-width:calc(100% - 28px); }
-  .eco-seeds #plantEvidence { max-height:45%; }
   .ink-visitor { width:56px; height:46px; background-size:112px 92px; }
   .ink-visitor-0,.ink-visitor-2 { background-position:0 0; }
   .ink-visitor-1 { background-position:-56px 0; }
 }
 @media(max-width:520px) {
-  #seedContainers { grid-template-columns:repeat(2,minmax(0,1fr)); max-width:340px; }
-  #seedContainers svg { height:92px; }
-  #seedContainers b { font-size:11px; }
+  .eco-controls { grid-template-columns:1fr; gap:6px; padding:6px 12px; }
+  .eco-toolbox { flex-direction:row; align-items:center; justify-content:space-between; }
+  .eco-toolbox .brush-size { display:flex; align-items:center; gap:8px; font-size:9px; }
+  .eco-toolbox .brush-size input { width:110px; }
+  .eco-toolbox button { min-height:32px; padding:5px 9px; font-size:10px; }
+  #depositQueue svg { height:60px; }
+  #depositQueue button { width:110px; padding-bottom:4px; }
+  #depositQueue button span { font-size:9px; }
+  #depositQueue button b { font-size:10px; }
+  .supply-invitation { font-size:9px; margin-top:4px; }
+  .eco-seeds .eco-controls { grid-template-columns:1fr; }
+  #seedDiscovery { grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:5px 10px; }
+  #seedContainers { grid-column:1/-1; gap:3px; }
+  #seedContainers svg { height:48px; }
+  #seedContainers b { font-size:9px; }
+  #seedContainers small { font-size:8px; }
+  .seed-invitation { grid-column:1; grid-row:2; font-size:8px; }
+  #sowField { grid-column:2; grid-row:2; padding:6px 8px; gap:3px 8px; font-size:9px; }
+  #sowField b { font-size:12px; }
+  #sowField small { font-size:8px; }
   .eco-seeds .eco-readout strong { font-size:22px; }
   .eco-seeds #plantEvidence { top:8px; max-height:calc(100% - 16px); }
-  .eco-seeds:has(#plantEvidence.open) #seedDiscovery { visibility:hidden; }
 }
-@media(prefers-reduced-motion:reduce) { #seedContainers svg,#sowField em { transition:none; } }
+@media(prefers-reduced-motion:reduce) { #depositQueue svg,#seedContainers svg,#sowField em { transition:none; } }

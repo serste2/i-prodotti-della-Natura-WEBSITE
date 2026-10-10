@@ -1499,7 +1499,7 @@ h2 em,
 .ink-visitor {
   position:absolute; z-index:2; pointer-events:none; display:block;
   width:80px; height:74px;
-  background-image:url('/assets/ink-fauna.png');
+  background-image:var(--pollinator-image, url('/assets/pollinator-vespa.webp'));
   background-size:320px 107px;
   background-repeat:no-repeat;
   opacity:.78;
@@ -1872,7 +1872,7 @@ h2 em,
 .evidenceClose { width:44px; height:44px; cursor:pointer; }
 .research-note { display:block; margin-top:18px; padding-top:12px; border-top:1px solid #f3eddf66; font:10px/1.5 "Roboto Mono",monospace; }
 /* Whole fauna quadrants preserve wings and antennae. */
-.ink-visitor { background-image:url('/assets/ink-fauna-clean.webp'); background-size:160px 132px; height:66px; }
+.ink-visitor { background-image:var(--pollinator-image, url('/assets/pollinator-vespa.webp')); background-size:160px 132px; height:66px; }
 .ink-visitor-0,.ink-visitor-2 { background-position:0 0; }
 .ink-visitor-1 { background-position:-80px 0; }
 @media(max-width:820px) {
@@ -2038,3 +2038,14 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
 @media(min-width:821px) and (max-width:1100px) { body > header { padding-inline:2vw; column-gap:14px; } body > header nav { gap:12px; } body > header .brand,body > header nav > a:not(.cart-link) { font-size:10px; letter-spacing:0; } }
 @media(max-width:820px) { .pickup-nav span { position:static; margin-left:8px; } }
 @media(max-width:420px) { .pickup-grid { gap:8px; } #pickupDialog { padding:28px 18px; } }
+
+/* Site decorations use individual new pollinators, never the old bee atlas. */
+.ink-visitor,
+.ink-visitor-0,
+.ink-visitor-1,
+.ink-visitor-2 {
+  background-image:var(--pollinator-image, url('/assets/pollinator-vespa.webp'));
+  background-size:contain;
+  background-position:center;
+  scale:var(--pollinator-direction, 1) 1;
+}

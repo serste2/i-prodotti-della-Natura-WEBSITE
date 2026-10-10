@@ -2018,3 +2018,23 @@ body > header nav { align-items: center; }
   body > header .brand { white-space: nowrap; }
   body > header nav { gap: clamp(14px, 2.5vw, 38px); }
 }
+
+/* #IONONBRUCIO collection */
+body > header .pickup-nav { position:relative; white-space:nowrap; }
+.pickup-nav span { position:absolute; bottom:100%; left:0; font:700 7px/1 "Roboto Mono",monospace; background:var(--y); padding:3px 5px; }
+.pickup-section h2 { font-size:clamp(32px,6vw,80px); overflow-wrap:anywhere; }
+.pickup-section > button { background:var(--y); border:2px solid var(--ink); padding:14px 28px; font-weight:700; box-shadow:4px 4px var(--ink); }
+#pickupDialog { width:min(680px,calc(100vw - 32px)); max-height:90dvh; overflow-y:auto; }
+#pickupDialog h2 { font-size:clamp(28px,5vw,48px); margin-bottom:26px; }
+#pickupDialog label { display:grid; gap:8px; font-size:11px; font-weight:700; margin-bottom:16px; }
+#pickupDialog input,#pickupDialog select,#pickupDialog textarea { width:100%; min-width:0; border:1px solid var(--ink); background:var(--paper); color:var(--ink); padding:12px; font:inherit; }
+#pickupDialog fieldset { border:1px solid var(--ink); padding:16px; margin:0 0 20px; }
+#pickupDialog legend { font-size:11px; font-weight:700; }
+#pickupDialog small,#pickupDialog p { font-size:11px; line-height:1.6; }
+#pickupDialog button:not(.x) { padding:12px 18px; background:var(--y); border:2px solid var(--ink); font-weight:700; }
+.pickup-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.pickup-composition { grid-template-columns:repeat(3,minmax(0,1fr)); }
+#pickupResult[hidden] { display:none; }
+@media(min-width:821px) and (max-width:1100px) { body > header { padding-inline:2vw; column-gap:14px; } body > header nav { gap:12px; } body > header .brand,body > header nav > a:not(.cart-link) { font-size:10px; letter-spacing:0; } }
+@media(max-width:820px) { .pickup-nav span { position:static; margin-left:8px; } }
+@media(max-width:420px) { .pickup-grid { gap:8px; } #pickupDialog { padding:28px 18px; } }

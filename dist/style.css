@@ -1468,7 +1468,7 @@ h2 em,
 #home.hero {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: minmax(300px, 1fr) minmax(360px, .72fr);
+  grid-template-columns: minmax(300px, .72fr) minmax(480px, 1.28fr);
   grid-template-areas:
     "brand visual"
     ". actions";
@@ -1495,10 +1495,10 @@ h2 em,
 }
 #home .hero-diptych {
   grid-area: visual;
-  width: clamp(360px, 34vw, 520px);
+  width: clamp(480px, 52vw, 820px);
   height: auto;
   min-height: 0;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3;
   margin: 0;
   justify-self: start;
   box-shadow: 12px 14px 0 #18140e18;
@@ -1508,7 +1508,7 @@ h2 em,
 }
 .hero-actions {
   grid-area: actions;
-  width: clamp(360px, 34vw, 520px);
+  width: clamp(480px, 52vw, 820px);
   justify-self: start;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1533,7 +1533,7 @@ h2 em,
   width: auto;
   background: var(--y);
 }
-@media(max-width:900px) {
+@media(max-width:950px) {
   #home.hero {
     grid-template-columns: 1fr;
     grid-template-areas: "brand" "visual" "actions";
@@ -1545,15 +1545,15 @@ h2 em,
   #home .heroText { justify-self: center; text-align: center; }
   #home .heroText h1 { font-size: clamp(38px, 12vw, 64px); }
   #home .hero-diptych {
-    width: min(86vw, 420px);
+    width: min(92vw, 720px);
     height: auto;
     min-height: 0;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 3;
     margin: 0;
     justify-self: center;
   }
   #home .hero-diptych img { object-fit: cover; object-position: center; }
-  .hero-actions { width: min(86vw, 420px); justify-self: center; grid-template-columns: 1fr; }
+  .hero-actions { width: min(92vw, 720px); justify-self: center; grid-template-columns: 1fr; }
   .hero-button { min-height: 54px; font-size: 17px; }
 }
 .eco-future .eco-controls { justify-content: flex-end; min-height: 56px; }

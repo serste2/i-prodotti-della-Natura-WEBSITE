@@ -2000,3 +2000,21 @@ h2 em,
   .eco-controls { height:94px; }
   .eco-macerating #fieldFact { bottom:10px; padding:10px 12px; }
 }
+
+/* Shared visual center and typography for the primary navigation. */
+body > header .brand,
+body > header nav > a:not(.cart-link) {
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+  color: var(--ink);
+  font: 700 11px/1.2 "Roboto Mono", monospace;
+  letter-spacing: .035em;
+  text-decoration: none;
+}
+body > header nav { align-items: center; }
+@media (min-width: 821px) {
+  body > header { grid-template-columns: auto minmax(0, 1fr) auto; column-gap: clamp(18px, 3vw, 48px); }
+  body > header .brand { white-space: nowrap; }
+  body > header nav { gap: clamp(14px, 2.5vw, 38px); }
+}

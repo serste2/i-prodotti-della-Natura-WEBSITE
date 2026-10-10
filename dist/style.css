@@ -1464,52 +1464,43 @@ h2 em,
 .eco-future #resetEco,
 .eco-future .basin-meter { display: none !important; }
 
-/* Hero: company mark beside the 3:4 product diptych. */
+/* Hero: company mark, central product band, then the primary actions. */
 #home.hero {
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: minmax(300px, .72fr) minmax(480px, 1.28fr);
-  grid-template-areas:
-    "brand visual"
-    ". actions";
-  grid-template-rows: auto auto;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  column-gap: clamp(44px, 7vw, 120px);
-  row-gap: 18px;
+  justify-content: center;
+  gap: 18px;
   padding: 116px clamp(20px, 4vw, 64px) 52px;
 }
 #home .heroText {
-  grid-area: brand;
-  width: auto;
+  width: min(92vw, 1400px);
   display: block;
-  text-align: left;
-  justify-self: end;
+  text-align: center;
 }
 #home .heroText h1 {
   margin: 0;
-  max-width: 8.8ch;
-  font-size: clamp(52px, 6.2vw, 96px);
+  max-width: none;
+  font-size: clamp(42px, 6vw, 92px);
   line-height: .88;
   letter-spacing: -.04em;
   text-wrap: balance;
 }
 #home .hero-diptych {
-  grid-area: visual;
-  width: clamp(480px, 52vw, 820px);
-  height: auto;
+  width: min(92vw, 1400px);
+  height: clamp(240px, 28vw, 410px);
   min-height: 0;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: auto;
   margin: 0;
-  justify-self: start;
   box-shadow: 12px 14px 0 #18140e18;
 }
 #home .hero-diptych img {
-  object-position: center center;
+  object-fit: cover;
+  object-position: center 52%;
 }
 .hero-actions {
-  grid-area: actions;
-  width: clamp(480px, 52vw, 820px);
-  justify-self: start;
+  width: min(92vw, 1400px);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
@@ -1535,25 +1526,19 @@ h2 em,
 }
 @media(max-width:950px) {
   #home.hero {
-    grid-template-columns: 1fr;
-    grid-template-areas: "brand" "visual" "actions";
-    grid-template-rows: auto auto auto;
-    justify-items: center;
     padding-top: 96px;
     gap: 18px;
   }
-  #home .heroText { justify-self: center; text-align: center; }
   #home .heroText h1 { font-size: clamp(38px, 12vw, 64px); }
   #home .hero-diptych {
-    width: min(92vw, 720px);
-    height: auto;
+    width: 100%;
+    height: clamp(220px, 58vw, 340px);
     min-height: 0;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: auto;
     margin: 0;
-    justify-self: center;
   }
-  #home .hero-diptych img { object-fit: cover; object-position: center; }
-  .hero-actions { width: min(92vw, 720px); justify-self: center; grid-template-columns: 1fr; }
+  #home .hero-diptych img { object-fit: cover; object-position: center 52%; }
+  .hero-actions { width: 100%; grid-template-columns: 1fr; }
   .hero-button { min-height: 54px; font-size: 17px; }
 }
 .eco-future .eco-controls { justify-content: flex-end; min-height: 56px; }

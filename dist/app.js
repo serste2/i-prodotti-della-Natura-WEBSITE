@@ -606,6 +606,15 @@ function drawClouds(now) {
   }
   ex.restore();
 }
+// Shuffle a balanced mix once per page load; keep each insect's orientation stable.
+const pollinatorDirections = (() => {
+  const directions = [-1, -1, -1, -1, 1, 1, 1, 1];
+  for (let i = directions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [directions[i], directions[j]] = [directions[j], directions[i]];
+  }
+  return directions;
+})();
 function drawFauna(now) {
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   const creatures = [
@@ -620,7 +629,9 @@ function drawFauna(now) {
     const dx = Math.sin(t) * w * .018, dy = Math.cos(t * 1.3) * h * .014;
     const height = size * image.naturalHeight / image.naturalWidth;
     ex.save(); ex.globalAlpha = .94;
-    ex.drawImage(image, nx*w+dx-size/2, ny*h+dy-height/2, size, height);
+    ex.translate(nx*w+dx, ny*h+dy);
+    ex.scale(pollinatorDirections[i], 1);
+    ex.drawImage(image, -size/2, -height/2, size, height);
     ex.restore();
   });
   if (!faunaImage.complete || !faunaImage.naturalWidth) return;

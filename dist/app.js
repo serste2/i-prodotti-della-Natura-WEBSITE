@@ -318,6 +318,12 @@ let factIndex = -1, factInterval, canHeld = false;
 const faunaImage = new Image(), cloudImage = new Image();
 const cropsAtlas = new Image(), biomassAtlas = new Image(), ladleAtlas = new Image(), lizardImage = new Image();
 faunaImage.src = "/assets/ink-fauna-clean.webp";
+const pollinatorSprites = ["vespa", "bombo", "bombo-pratense", "sfinge", "lepidottero"].map(name => {
+  const image = new Image(); image.src = "/assets/pollinator-" + name + ".webp"; return image;
+});
+const nocturnalSprites = ["cinghiali", "volpe", "succiacapre"].map(name => {
+  const image = new Image(); image.src = "/assets/night-" + name + ".webp"; return image;
+});
 cloudImage.src = "/assets/ink-clouds-clean.webp";
 cropsAtlas.src = "/assets/ink-crops-atlas.png";
 biomassAtlas.src = "/assets/inbruma-brush-atlas.png";
@@ -601,76 +607,42 @@ function drawClouds(now) {
   ex.restore();
 }
 function drawFauna(now) {
-  if (!faunaImage.complete || !faunaImage.naturalWidth) return;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   const creatures = [
-    [0, .34, .40, 32, true], [1, .59, .34, 30, true],
-    [0, .69, .46, 21, true], [1, .48, .52, 17, true],
-    [0, .53, .39, 18, true], [1, .37, .58, 20, true],
-    [0, .62, .59, 18, true], [1, .75, .55, 16, true],
-    [2, .38, .77, 25, false], [2, .65, .70, 20, false],
-    [3, .74, .83, 45, false], [3, .29, .87, 33, false],
+    [0,.34,.40,32], [1,.59,.34,34], [2,.69,.46,29],
+    [3,.48,.52,38], [4,.53,.39,37],
+    [0,.37,.58,23], [2,.62,.59,22], [4,.75,.55,25]
   ];
-  creatures.forEach(([type, nx, ny, size, flies], i) => {
-    const t = now / (flies ? 1100 : 4600) + i * 1.7;
-    const dx = flies ? Math.sin(t) * w * .018 : Math.sin(t) * w * .004;
-    const dy = flies ? Math.cos(t * 1.3) * h * .014 : 0;
-    ex.save(); ex.globalAlpha = .86;
-    const cellW = faunaImage.naturalWidth / 2, cellH = faunaImage.naturalHeight / 2;
-    const aspect = cellW / cellH;
-    ex.drawImage(faunaImage, (type % 2) * cellW, Math.floor(type / 2) * cellH, cellW, cellH,
-      nx * w + dx - size / 2, ny * h + dy - size / aspect / 2,
-      size, size / aspect);
+  creatures.forEach(([type,nx,ny,size], i) => {
+    const image = pollinatorSprites[type];
+    if (!image.complete || !image.naturalWidth) return;
+    const t = now / 1100 + i * 1.7;
+    const dx = Math.sin(t) * w * .018, dy = Math.cos(t * 1.3) * h * .014;
+    const height = size * image.naturalHeight / image.naturalWidth;
+    ex.save(); ex.globalAlpha = .94;
+    ex.drawImage(image, nx*w+dx-size/2, ny*h+dy-height/2, size, height);
     ex.restore();
+  });
+  if (!faunaImage.complete || !faunaImage.naturalWidth) return;
+  [[2,.38,.77,25],[2,.65,.70,20],[3,.74,.83,45],[3,.29,.87,33]].forEach(([type,nx,ny,size],i) => {
+    const cellW = faunaImage.naturalWidth/2, cellH = faunaImage.naturalHeight/2;
+    ex.drawImage(faunaImage,(type%2)*cellW,Math.floor(type/2)*cellH,cellW,cellH,
+      nx*w+Math.sin(now/4600+i)*w*.004-size/2,ny*h-size*cellH/cellW/2,size,size*cellH/cellW);
   });
 }
 function drawNocturnalVisitors(now) {
   if (ecoMode !== "macerating" || macerationNightStrength < .12) return;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
-  const alpha = Math.min(1, macerationNightStrength * 1.7);
-  const sway = Math.sin(now / 420) * w * .003;
-  ex.save();
-  ex.globalAlpha = alpha;
-  ex.fillStyle = "#211f1c";
-  ex.strokeStyle = "#f2dfab";
-  ex.lineWidth = Math.max(.8, w * .0008);
-  ex.lineCap = "round"; ex.lineJoin = "round";
-  const boar = (x, y, scale, flip = false, striped = false) => {
-    ex.save(); ex.translate(x, y); ex.scale((flip ? -1 : 1) * scale, scale);
-    ex.beginPath(); ex.ellipse(0, 0, 26, 12, -.08, 0, Math.PI * 2); ex.fill();
-    ex.beginPath(); ex.moveTo(20,-7); ex.quadraticCurveTo(35,-10,39,-2); ex.quadraticCurveTo(34,5,23,5); ex.closePath(); ex.fill();
-    ex.beginPath(); ex.moveTo(28,-8); ex.lineTo(31,-16); ex.lineTo(35,-7); ex.closePath(); ex.fill();
-    [-13,8].forEach(lx => { ex.beginPath(); ex.moveTo(lx,8); ex.lineTo(lx-2,20); ex.moveTo(lx+7,8); ex.lineTo(lx+8,20); ex.stroke(); });
-    ex.beginPath(); ex.arc(34,-3,1.4,0,Math.PI*2); ex.fillStyle="#f3d56b"; ex.fill();
-    if (striped) { ex.strokeStyle="#c9a764"; [-12,-4,4,12].forEach(lx => { ex.beginPath(); ex.moveTo(lx,-9); ex.lineTo(lx+3,8); ex.stroke(); }); }
-    ex.restore();
-  };
-  if ([1, 6].includes(macerationDayIndex)) {
-    const baseX = w * (.67 + (macerationDayIndex === 6 ? -.22 : 0)) + sway;
-    const baseY = h * .49;
-    boar(baseX, baseY, Math.max(.55, w / 1450), false);
-    boar(baseX + w*.055, baseY + h*.006, Math.max(.48, w / 1650), true);
-    boar(baseX - w*.025, baseY + h*.026, Math.max(.27, w / 2700), false, true);
-    boar(baseX + w*.018, baseY + h*.03, Math.max(.25, w / 2900), false, true);
-    boar(baseX + w*.049, baseY + h*.028, Math.max(.24, w / 3000), true, true);
-  } else if (macerationDayIndex === 3) {
-    const x = w * .64 + sway, y = h * .48, s = Math.max(.62, w / 1400);
-    ex.save(); ex.translate(x,y); ex.scale(s,s);
-    ex.beginPath(); ex.ellipse(0,0,30,9,-.08,0,Math.PI*2); ex.fill();
-    ex.beginPath(); ex.moveTo(22,-6); ex.quadraticCurveTo(38,-16,47,-8); ex.lineTo(40,-1); ex.quadraticCurveTo(34,5,23,4); ex.closePath(); ex.fill();
-    ex.beginPath(); ex.moveTo(33,-12); ex.lineTo(36,-22); ex.lineTo(41,-12); ex.closePath(); ex.fill();
-    ex.beginPath(); ex.moveTo(-26,-2); ex.bezierCurveTo(-52,-18,-63,-8,-76,-19); ex.bezierCurveTo(-66,-2,-52,6,-28,5); ex.closePath(); ex.fill();
-    [-12,11].forEach(lx=>{ex.beginPath(); ex.moveTo(lx,6); ex.lineTo(lx-3,22); ex.moveTo(lx+6,6); ex.lineTo(lx+8,22); ex.stroke();});
-    ex.fillStyle="#f3d56b"; ex.beginPath(); ex.arc(41,-8,1.5,0,Math.PI*2); ex.fill(); ex.restore();
-  } else if (macerationDayIndex === 8) {
-    const bird = (x,y,s,flip=1) => {
-      ex.save(); ex.translate(x,y); ex.scale(flip*s,s);
-      ex.beginPath(); ex.moveTo(0,2); ex.bezierCurveTo(-16,-20,-36,-24,-54,-13); ex.bezierCurveTo(-32,-10,-20,2,-4,7); ex.bezierCurveTo(11,-1,29,-15,52,-10); ex.bezierCurveTo(35,-1,23,9,3,8); ex.closePath(); ex.fill();
-      ex.strokeStyle="#c9a764"; ex.beginPath(); ex.moveTo(-42,-14); ex.lineTo(-8,4); ex.moveTo(40,-8); ex.lineTo(8,5); ex.stroke(); ex.restore();
-    };
-    bird(w*.59+sway,h*.31,Math.max(.52,w/1650),1);
-    bird(w*.72-sway,h*.38,Math.max(.43,w/1900),-1);
-  }
+  let type, nx, ny, width;
+  if ([1,6].includes(macerationDayIndex)) { type=0; nx=macerationDayIndex===6?.45:.67; ny=.49; width=w*.20; }
+  else if (macerationDayIndex===3) { type=1; nx=.64; ny=.48; width=w*.105; }
+  else if (macerationDayIndex===8) { type=2; nx=.65; ny=.33; width=w*.20; }
+  else return;
+  const image = nocturnalSprites[type];
+  if (!image.complete || !image.naturalWidth) return;
+  const height = width * image.naturalHeight / image.naturalWidth;
+  ex.save(); ex.globalAlpha=Math.min(1,macerationNightStrength*1.7);
+  ex.drawImage(image,nx*w+Math.sin(now/900)*w*.005-width/2,ny*h-height,width,height);
   ex.restore();
 }
 function drawLadle(now) {
@@ -1582,7 +1554,7 @@ document.querySelector("#reopenField").onclick = openFuture;
 ecosystem.addEventListener("close", () => {
   if (!["future", "sowing"].includes(ecoMode)) resetEco();
 });
-[fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, ladleAtlas, lizardImage, ...farmerSowingFrames, seatedFarmerImage, stoolImage].forEach((image) => {
+[...pollinatorSprites, ...nocturnalSprites, fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, ladleAtlas, lizardImage, ...farmerSowingFrames, seatedFarmerImage, stoolImage].forEach((image) => {
   image.onload = () => ecosystem.open && paintEco();
 });
 addEventListener("resize", () => {

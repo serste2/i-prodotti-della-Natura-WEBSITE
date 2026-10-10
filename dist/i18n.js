@@ -213,7 +213,11 @@
   const translateTree = (root) => {
     if (root.nodeType === Node.TEXT_NODE) {
       const parent = root.parentElement;
-      if (parent && !parent.closest("script,style,noscript")) root.nodeValue = translate(root.nodeValue);
+      if (parent && !parent.closest("script,style,noscript")) {
+        const current = root.nodeValue;
+        const translated = translate(current);
+        if (translated !== current) root.nodeValue = translated;
+      }
       return;
     }
     if (!(root instanceof Element || root instanceof Document)) return;
@@ -221,7 +225,11 @@
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach((node) => {
-      if (!node.parentElement?.closest("script,style,noscript")) node.nodeValue = translate(node.nodeValue);
+      if (!node.parentElement?.closest("script,style,noscript")) {
+        const current = node.nodeValue;
+        const translated = translate(current);
+        if (translated !== current) node.nodeValue = translated;
+      }
     });
     const elements = root instanceof Element ? [root, ...root.querySelectorAll("[aria-label],[alt],[title],[placeholder]")] : [...root.querySelectorAll("[aria-label],[alt],[title],[placeholder]")];
     elements.forEach((el) => ["aria-label", "alt", "title", "placeholder"].forEach((name) => {

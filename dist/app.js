@@ -1593,3 +1593,44 @@ if (localStorage.getItem("inulaHarvestComplete"))
 else if (localStorage.getItem("inulaFieldComplete"))
   document.querySelector("#reopenField").classList.add("ready");
 updateEco();
+
+/* Olive pruning collection request. No booking is confirmed without dispatch. */
+(() => {
+  const modal = document.querySelector("#pickupDialog");
+  const form = document.querySelector("#pickupForm");
+  document.querySelector("#openPickup").onclick = () => modal.showModal();
+  document.querySelector("#closePickup").onclick = () => modal.close();
+  const date = form.elements.date;
+  const now = new Date();
+  const today = now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
+  date.min = today;
+  form.onsubmit = event => {
+    event.preventDefault();
+    const fields = form.elements;
+    const total = ["branches", "trunks", "leaves"].reduce((sum,key) => sum + Number(fields[key].value), 0);
+    const status = document.querySelector("#pickupStatus");
+    if (total !== 100) { status.textContent = "Controlla le percentuali: il totale deve essere 100% (ora " + total + "%)."; return; }
+    if (date.value < today) { status.textContent = "Scegli oggi o un giorno futuro."; return; }
+    const summary = [
+      "#IONONBRUCIO · Richiesta ritiro potature di ulivo",
+      "Nome: " + fields.name.value,
+      "Recapito: " + fields.contact.value,
+      "Luogo del ritiro: " + fields.location.value,
+      "Quantità indicativa: " + fields.quantity.value + " " + fields.unit.value,
+      "Rami: " + fields.branches.value + "%",
+      "Tronchi: " + fields.trunks.value + "%",
+      "Fogliame: " + fields.leaves.value + "%",
+      "Giorno desiderato: " + date.value,
+      "Note: " + fields.notes.value
+    ].join("\n");
+    document.querySelector("#pickupSummary").value = summary;
+    document.querySelector("#pickupResult").hidden = false;
+    status.textContent = "Richiesta preparata. Copia il riepilogo per inviarlo all’azienda.";
+    document.querySelector("#pickupResult").scrollIntoView({block:"nearest"});
+  };
+  document.querySelector("#copyPickup").onclick = async () => {
+    const summary = document.querySelector("#pickupSummary");
+    try { await navigator.clipboard.writeText(summary.value); document.querySelector("#pickupStatus").textContent = "Richiesta copiata."; }
+    catch { summary.focus(); summary.select(); document.querySelector("#pickupStatus").textContent = "Seleziona e copia il riepilogo."; }
+  };
+})();

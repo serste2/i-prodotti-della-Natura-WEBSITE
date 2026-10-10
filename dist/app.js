@@ -529,23 +529,17 @@ function drawFarmer() {
   ex.restore();
 }
 function seedField() {
-  const patches = getDepositPatches();
-  const counts = patches.map(p => Math.max(18, Math.min(44,
-    Math.round(p.deposits.reduce((n, d) => n + d.size, 0) * .52))));
-  const total = counts.reduce((a, b) => a + b, 0);
   seeded = [];
-  patches.forEach((patch, pi) => {
-    const species = formulationSpecies[patch.mix] || [];
-    for (let i = 0; i < counts[pi]; i++) {
-      const angle = i * 2.39996 + pi * 1.17;
-      const radius = 5 + Math.sqrt((i + 1) / counts[pi]) * Math.min(34, patch.radius * .72);
-      const x = patch.x + Math.cos(angle) * radius;
-      const y = patch.y + Math.sin(angle) * radius * .63;
-      if (playablePoint(x, y)) seeded.push({
-        x, y, t: seeded.length / Math.max(1, total), mix: patch.mix,
-        species: species[i % Math.max(1, species.length)]
-      });
-    }
+  deposits.forEach((deposit, i) => {
+    const species = formulationSpecies[deposit.mix] || [];
+    const angle = i * 2.39996 + deposit.seed * .37;
+    const radius = Math.min(12, Math.max(3, deposit.size * .28));
+    const x = deposit.x + Math.cos(angle) * radius;
+    const y = deposit.y + Math.sin(angle) * radius * .58;
+    if (playablePoint(x, y)) seeded.push({
+      x, y, size: deposit.size, t: i / Math.max(1, deposits.length - 1),
+      mix: deposit.mix, species: species[i % Math.max(1, species.length)]
+    });
   });
 }
 function getDepositPatches() {
@@ -568,19 +562,13 @@ function getDepositPatches() {
 }
 function computeGrowthSites() {
   growthSites = [];
-  getDepositPatches().forEach((patch, pi) => {
-    const names = formulationSpecies[patch.mix] || [];
-    names.forEach((shape, si) => {
-      const angle = (si / Math.max(1, names.length)) * Math.PI * 2 + pi * .73;
-      const offset = Math.min(25, patch.radius * .38);
-      const x = patch.x + Math.cos(angle) * offset;
-      const y = patch.y + Math.sin(angle) * offset * .58;
-      const near = (a, radius) => Math.hypot((a.x - x) / 1.35, (a.y - y) / .8) < radius;
-      const nearbyWater = watered.some(a => near(a, Math.max(34, patch.radius + a.size * .55)));
-      const nearbySeed = seeded.some(a => a.mix === patch.mix && a.species === shape &&
-        near(a, Math.max(24, patch.radius + 14)));
-      const species = fieldPlants.find(p => p.shape === shape);
-      if (nearbyWater && nearbySeed && species) growthSites.push({ x, y, species, mix: patch.mix });
+  seeded.forEach((seed, i) => {
+    const nearbyWater = watered.some(a =>
+      Math.hypot((a.x - seed.x) / 1.35, (a.y - seed.y) / .8) <
+      Math.max(34, seed.size + a.size * .55));
+    const species = fieldPlants.find(p => p.shape === seed.species);
+    if (nearbyWater && species) growthSites.push({
+      x: seed.x, y: seed.y, size: seed.size, species, mix: seed.mix, seedIndex: i
     });
   });
 }
@@ -616,19 +604,21 @@ function paintEco() {
   if (ecoMode === "mixing") drawLadle(now);
   if (ecoMode === "future" || ecoMode === "growing") {
     const candidates = growthSites.flatMap((site, i) =>
-      Array.from({ length: 18 }, (_, j) => {
-        const angle = j * 2.39996 + i * 1.31, radius = Math.sqrt((j + .6) / 18);
-        const x = site.x + Math.cos(angle) * radius * 112;
-        const y = site.y + Math.sin(angle) * radius * 82;
+      Array.from({ length: 3 }, (_, j) => {
+        const angle = j * 2.39996 + i * 1.31;
+        const radius = j ? Math.min(20, 7 + site.size * .32) : 0;
+        const x = site.x + Math.cos(angle) * radius;
+        const y = site.y + Math.sin(angle) * radius * .58;
         const species = site.species;
         return { ...species, id: `${i}-${j}`, x: x / ecoCanvas.clientWidth, y: y / ecoCanvas.clientHeight,
-          mix: site.mix, variation: j - 6, size: Math.max(.08, growth) * (.20 + (j % 3) * .035) };
+          mix: site.mix, variation: site.seedIndex + j - 1,
+          size: Math.max(.08, growth) * (.20 + (j % 3) * .028) };
       }).filter(p => playablePoint(p.x * ecoCanvas.clientWidth, p.y * ecoCanvas.clientHeight))
     );
     const plants = [];
     for (const p of candidates) {
       if (plants.every(q => Math.hypot((p.x - q.x) * ecoCanvas.clientWidth,
-        (p.y - q.y) * ecoCanvas.clientHeight * 1.35) > 38)) plants.push(p);
+        (p.y - q.y) * ecoCanvas.clientHeight * 1.35) > 30)) plants.push(p);
     }
     renderedPlants = plants.sort((a, b) => a.y - b.y);
     renderedPlants.forEach(p => { if (!harvestedPlants.has(p.id)) plant(p, p.size, p.variation); });

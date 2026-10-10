@@ -8,7 +8,7 @@
       content="I prodotti della Natura — agricoltura rigenerativa, CÍGNULA Mini e INBRUMA dei Carbonari."
     />
     <title>I prodotti della Natura</title>
-    <link rel="stylesheet" href="/style.css?v=20261010-6" />
+    <link rel="stylesheet" href="/style.css?v=20261010-7" />
   </head>
   <body>
     <header>
@@ -16,7 +16,7 @@
       ><button class="menu" aria-expanded="false">MENU</button>
       <nav>
         <a href="#territorio">TERRITORIO</a><a href="#metodo">METODO</a
-        ><a href="#shop">SHOP</a><a href="#contatti">CONTATTI</a
+        ><a href="#shop">SHOP</a><a class="pickup-nav" href="#iononbrucio">#IONONBRUCIO<span>NOVITÀ</span></a><a href="#contatti">CONTATTI</a
         ><a class="cart-link" href="#cart" aria-label="Carrello"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 5h4l3 15h14l4-11H9M12 26a2 2 0 1 0 0 .1M23 26a2 2 0 1 0 0 .1" /></svg><span id="cartCount">0</span></a>
       </nav>
       <div class="language-switcher" role="navigation" aria-label="Lingue">
@@ -323,6 +323,14 @@
         </aside>
       </section>
 
+
+      <section id="iononbrucio" class="pickup-section">
+        <p class="eyebrow">NOVITÀ</p>
+        <h2>#IONONBRUCIO</h2>
+        <p>Ritiro delle potature di ulivo.</p>
+        <button id="openPickup" type="button">PRENOTA</button>
+      </section>
+
       <section id="contatti" class="contact">
         <i class="no">09</i>
         <div>
@@ -455,6 +463,39 @@
         </div>
       </div>
     </dialog>
+
+    <dialog id="pickupDialog" aria-labelledby="pickupTitle">
+      <button class="x" id="closePickup" type="button" aria-label="Chiudi">×</button>
+      <p class="eyebrow">#IONONBRUCIO</p>
+      <h2 id="pickupTitle">PRENOTA IL RITIRO</h2>
+      <form id="pickupForm">
+        <label>NOME<input name="name" autocomplete="name" required maxlength="120" /></label>
+        <label>EMAIL O TELEFONO<input name="contact" required maxlength="160" /></label>
+        <label>LUOGO DEL RITIRO<input name="location" autocomplete="street-address" required maxlength="250" /></label>
+        <div class="pickup-grid">
+          <label>QUANTITÀ INDICATIVA<input name="quantity" type="number" min="0.01" step="any" required /></label>
+          <label>UNITÀ<select name="unit"><option value="m³">m³</option><option value="kg">kg</option><option value="quintali">quintali</option></select></label>
+        </div>
+        <fieldset><legend>COMPOSIZIONE INDICATIVA (%)</legend>
+          <div class="pickup-grid pickup-composition">
+            <label>RAMI<input name="branches" type="number" min="0" max="100" step="1" required /></label>
+            <label>TRONCHI<input name="trunks" type="number" min="0" max="100" step="1" required /></label>
+            <label>FOGLIAME<input name="leaves" type="number" min="0" max="100" step="1" required /></label>
+          </div>
+          <small>Le tre percentuali devono sommare a 100%.</small>
+        </fieldset>
+        <label>GIORNO DESIDERATO DEL RITIRO<input name="date" type="date" required /></label>
+        <label>NOTE SULL’ACCESSO E SUL MATERIALE<textarea name="notes" rows="3" maxlength="1500"></textarea></label>
+        <button type="submit">PREPARA LA RICHIESTA ↗</button>
+        <p class="pickup-status" id="pickupStatus" role="status"></p>
+      </form>
+      <div id="pickupResult" hidden>
+        <label>RIEPILOGO<textarea id="pickupSummary" rows="10" readonly></textarea></label>
+        <button id="copyPickup" type="button">COPIA RICHIESTA</button>
+        <p>La richiesta non è stata inviata. Il giorno del ritiro dovrà essere confermato dall’azienda.</p>
+      </div>
+    </dialog>
+
     <dialog id="reserve">
       <button class="x" type="button" aria-label="Chiudi" onclick="this.closest('dialog').close()">×</button>
       <p class="eyebrow">INTERESSE / SENZA IMPEGNO</p>
@@ -469,6 +510,6 @@
       <small>Nessun pagamento. Nessun obbligo di acquisto.</small>
     </dialog>
     <script src="/i18n.js?v=20261010-3"></script>
-    <script src="/app.js?v=20261010-10"></script>
+    <script src="/app.js?v=20261010-11"></script>
   </body>
 </html>

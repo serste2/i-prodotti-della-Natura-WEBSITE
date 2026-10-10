@@ -560,29 +560,30 @@ form button {
 .inbruma-gallery .process img { object-position:center; }
 .inbruma-gallery figcaption { position:absolute; left:0; bottom:0; padding:7px 10px; background:var(--ink); color:var(--paper); font:700 9px "Roboto Mono",monospace; letter-spacing:.06em; }
 @media(max-width:640px) { .inbruma-gallery figure { height:240px; } .inbruma-gallery .process { height:90px; } }
-.hero-polaroid {
-  width: min(100%, 640px);
-  justify-self: center;
-  margin: 20px 2% 0 0;
-  padding: 14px 14px 48px;
-  background: #fffdf5;
-  color: var(--ink);
-  border: 1px solid #d4cbb8;
-  box-shadow: 0 18px 32px #18140e35, 0 3px 8px #18140e22;
-  transform: rotate(1.5deg);
+.hero-diptych {
+  width: min(72vw, 1120px);
+  height: min(76vh, 760px);
+  min-height: 520px;
+  justify-self: end;
+  margin: 16px -2vw 0 0;
+  display: grid;
+  grid-template-columns: .88fr 1.12fr;
+  gap: 10px;
+  overflow: hidden;
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: 12px 14px 0 #18140e18;
 }
-.hero-polaroid img {
+.hero-diptych img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
+  min-width: 0;
   object-fit: cover;
-  filter: sepia(.12) saturate(.82) contrast(1.04);
+  filter: saturate(.92) contrast(1.08);
 }
-.hero-polaroid figcaption {
-  padding: 15px 3px 0;
-  font: 700 9px/1.35 "Roboto Mono", monospace;
-  letter-spacing: .08em;
-}
+.hero-diptych .hero-substrate { object-position: 52% 58%; }
+.hero-diptych .hero-cignula { object-position: 50% 52%; }
 .tags {
   border: 2px solid;
   border-top: 0;
@@ -1446,8 +1447,11 @@ h2 em,
   .eco-mixing .basin-meter { right: 12px; top: 12px; }
 }
 @media(max-width:820px) {
-  .hero-polaroid { width: min(94%, 640px); margin: 34px auto 12px; }
+  .hero-diptych { width:100%; height:min(72vh,650px); min-height:460px; margin:34px auto 12px; grid-template-columns:1fr 1fr; }
   .research-grid { grid-column: 1; }
+}
+@media(max-width:560px) {
+  .hero-diptych { height:64vh; min-height:430px; gap:6px; }
 }
 @media(max-width:560px) {
   .research-grid { grid-template-columns: 1fr; }

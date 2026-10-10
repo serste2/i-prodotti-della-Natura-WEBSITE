@@ -8,7 +8,7 @@
       content="I prodotti della Natura — agricoltura rigenerativa, CÍGNULA Mini e INBRUMA dei Carbonari."
     />
     <title>I prodotti della Natura</title>
-    <link rel="stylesheet" href="/style.css?v=20261010-4" />
+    <link rel="stylesheet" href="/style.css?v=20261010-5" />
   </head>
   <body>
     <header>
@@ -16,7 +16,8 @@
       ><button class="menu" aria-expanded="false">MENU</button>
       <nav>
         <a href="#territorio">TERRITORIO</a><a href="#metodo">METODO</a
-        ><a href="#shop">SHOP</a><a href="#contatti">CONTATTI</a>
+        ><a href="#shop">SHOP</a><a href="#contatti">CONTATTI</a
+        ><a class="cart-link" href="#cart" aria-label="Carrello"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 5h4l3 15h14l4-11H9M12 26a2 2 0 1 0 0 .1M23 26a2 2 0 1 0 0 .1" /></svg><span id="cartCount">0</span></a>
       </nav>
       <div class="language-switcher" role="navigation" aria-label="Lingue">
         <a class="language-link" href="/en/" lang="en" hreflang="en" aria-label="English">
@@ -288,8 +289,43 @@
         </div>
       </section>
 
-      <section id="contatti" class="contact">
+      <section id="cart" class="cart-page">
         <i class="no">08</i>
+        <div class="head">
+          <p class="eyebrow">PRODOTTI DI LANCIO · RICHIESTA SENZA PAGAMENTO</p>
+          <h2>IL TUO<br /><em>CARRELLO.</em></h2>
+          <p>Scegli i prodotti e le quantità. Lo sconto salvato verrà applicato alla richiesta.</p>
+        </div>
+        <div class="cart-products" aria-label="Prodotti nel carrello">
+          <article class="cart-product" data-cart-item="cignula" data-price="12">
+            <span>CÍGNULA MINI</span><b>12 €</b><small>spedita in Italia</small>
+            <div class="quantity-control" aria-label="Quantità CÍGNULA Mini">
+              <button type="button" data-qty="minus" aria-label="Riduci CÍGNULA Mini">−</button>
+              <output aria-live="polite">0</output>
+              <button type="button" data-qty="plus" aria-label="Aggiungi CÍGNULA Mini">+</button>
+            </div>
+          </article>
+          <article class="cart-product" data-cart-item="inbruma" data-price="56">
+            <span>INBRUMA DEI CARBONARI</span><b>56 €</b><small>oltre 1 kg · spedizione inclusa</small>
+            <div class="quantity-control" aria-label="Quantità INBRUMA dei Carbonari">
+              <button type="button" data-qty="minus" aria-label="Riduci INBRUMA dei Carbonari">−</button>
+              <output aria-live="polite">0</output>
+              <button type="button" data-qty="plus" aria-label="Aggiungi INBRUMA dei Carbonari">+</button>
+            </div>
+          </article>
+        </div>
+        <aside class="cart-summary" aria-live="polite">
+          <small>RIEPILOGO</small>
+          <p id="cartDiscount">Nessuno sconto salvato.</p>
+          <div id="cartMystery" class="cart-mystery" hidden><b>+ OMAGGIO MISTERIOSO</b><span>prodotto bio aziendale · cumulabile</span></div>
+          <div class="cart-total"><span>TOTALE PRODOTTI</span><strong id="cartTotal">0 €</strong></div>
+          <button id="cartRequest" type="button" disabled>RICHIEDI QUESTO ORDINE ↗</button>
+          <small>Nessun pagamento immediato.</small>
+        </aside>
+      </section>
+
+      <section id="contatti" class="contact">
+        <i class="no">09</i>
         <div>
           <p class="eyebrow">SOCIETÀ AGRICOLA SEMPLICE</p>
           <h2>I PRODOTTI<br />DELLA <em>NATURA.</em></h2>
@@ -342,12 +378,14 @@
       <p id="harvestCompleteCount"></p>
       <div id="harvestCompleteSummary" aria-label="Riepilogo dei frutti raccolti"></div>
       <p id="harvestCompleteDiscount"></p>
-      <p class="harvest-cart-label">SCEGLI UN PRODOTTO DI LANCIO</p>
-      <div class="harvest-cart" aria-label="Prodotti di lancio">
-        <button type="button" data-harvest-product="CÍGNULA Mini"><b>CÍGNULA MINI</b><span>12 € · spedita in Italia</span></button>
-        <button type="button" data-harvest-product="INBRUMA dei Carbonari"><b>INBRUMA DEI CARBONARI</b><span>oltre 1 kg · 56 € spedizione inclusa</span></button>
+      <div class="mystery-reward" aria-label="Premio finale sbloccato">
+        <small>PREMIO FINALE SBLOCCATO</small>
+        <strong>OMAGGIO MISTERIOSO</strong>
+        <span>UN PRODOTTO BIO AZIENDALE</span>
+        <p>Incluso nel primo ordine e cumulabile con lo sconto già salvato.</p>
       </div>
-      <small>Lo sconto rivelato viene riportato nella richiesta. Nessun pagamento immediato.</small>
+      <button id="goToCart" type="button">VAI AL CARRELLO ↗</button>
+      <small>Lo sconto e l’omaggio sono già salvati. Il campo si chiuderà e tornerai al carrello.</small>
     </dialog>
     <dialog id="ecosystem" aria-labelledby="ecoTitle">
       <div class="eco-shell">
@@ -431,7 +469,7 @@
       </form>
       <small>Nessun pagamento. Nessun obbligo di acquisto.</small>
     </dialog>
-    <script src="/i18n.js?v=20261010-1"></script>
-    <script src="/app.js?v=20261010-8"></script>
+    <script src="/i18n.js?v=20261010-3"></script>
+    <script src="/app.js?v=20261010-10"></script>
   </body>
 </html>

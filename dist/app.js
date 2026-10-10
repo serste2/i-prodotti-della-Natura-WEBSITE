@@ -33,12 +33,16 @@ if (gestureSwitch && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
 tryButtons.forEach(
   (b) =>
     (b.onclick = () => {
+      sessionStorage.setItem("inulaFieldTried", "1");
+      tryButtons.forEach(button => { button.hidden = true; });
       resetEco();
       ecosystem.showModal();
       requestAnimationFrame(sizeEco);
       startEcoAnimation();
     }),
 );
+if (sessionStorage.getItem("inulaFieldTried"))
+  tryButtons.forEach(button => { button.hidden = true; });
 const menu = document.querySelector(".menu"),
   nav = document.querySelector("nav");
 menu.onclick = () => {
@@ -94,6 +98,60 @@ document.querySelectorAll("form").forEach(
         '<p class="success"><b>ANTEPRIMA DEL MODULO.</b><br>La richiesta non è stata inviata. Il servizio sarà disponibile alla pubblicazione.</p>';
     }),
 );
+const cartItems = [...document.querySelectorAll("[data-cart-item]")];
+let cartQuantities = { cignula: 0, inbruma: 0 };
+try { cartQuantities = { ...cartQuantities, ...JSON.parse(sessionStorage.getItem("inulaCart") || "{}") }; }
+catch { /* Start with an empty cart if an older session value is invalid. */ }
+function savedOrderReward() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem("inulaHarvest") || "null"); } catch { /* no saved harvest */ }
+  if (saved?.discount) return { code:`RACCOLTO${saved.discount}`, discount:saved.discount, gift:localStorage.getItem("inulaHarvestComplete") === "1" };
+  if (localStorage.getItem("inulaFieldComplete")) return { code:"INULA05", discount:5, gift:localStorage.getItem("inulaHarvestComplete") === "1" };
+  return { code:"", discount:0, gift:false };
+}
+function updateCart() {
+  let items = 0, total = 0;
+  cartItems.forEach(item => {
+    const key = item.dataset.cartItem, quantity = Math.max(0, Math.min(20, Number(cartQuantities[key]) || 0));
+    cartQuantities[key] = quantity;
+    item.querySelector("output").textContent = quantity;
+    items += quantity; total += quantity * Number(item.dataset.price);
+  });
+  sessionStorage.setItem("inulaCart", JSON.stringify(cartQuantities));
+  document.querySelector("#cartCount").textContent = items;
+  document.querySelector("#cartCount").classList.toggle("active", items > 0);
+  document.querySelector("#cartTotal").textContent = `${total} €`;
+  document.querySelector("#cartRequest").disabled = items === 0;
+  const reward = savedOrderReward();
+  const lang = document.documentElement.lang;
+  document.querySelector("#cartDiscount").textContent = reward.code
+    ? lang === "ja" ? `保存済み割引：${reward.discount}% · コード ${reward.code}`
+      : lang === "en" ? `Saved discount: ${reward.discount}% · code ${reward.code}`
+        : `Sconto salvato: ${reward.discount}% · codice ${reward.code}`
+    : lang === "ja" ? "保存済みの割引はありません。" : lang === "en" ? "No saved discount." : "Nessuno sconto salvato.";
+  document.querySelector("#cartMystery").hidden = !reward.gift;
+}
+cartItems.forEach(item => item.querySelectorAll("[data-qty]").forEach(button => {
+  button.addEventListener("click", () => {
+    const key = item.dataset.cartItem, step = button.dataset.qty === "plus" ? 1 : -1;
+    cartQuantities[key] = Math.max(0, Math.min(20, (Number(cartQuantities[key]) || 0) + step));
+    updateCart();
+  });
+}));
+document.querySelector("#cartRequest").addEventListener("click", () => {
+  const reward = savedOrderReward();
+  const lang = document.documentElement.lang;
+  const lines = [];
+  if (cartQuantities.cignula) lines.push(`CÍGNULA Mini × ${cartQuantities.cignula}`);
+  if (cartQuantities.inbruma) lines.push(`INBRUMA dei Carbonari × ${cartQuantities.inbruma}`);
+  if (reward.code) lines.push(lang === "ja" ? `割引コード：${reward.code}（${reward.discount}%）` : lang === "en" ? `Discount code: ${reward.code} (${reward.discount}%)` : `Codice sconto: ${reward.code} (${reward.discount}%)`);
+  if (reward.gift) lines.push(lang === "ja" ? "最終特典：ミステリーギフト（自社のオーガニック製品）。割引と併用できます。" : lang === "en" ? "Final reward: mystery gift, an organic farm product, combined with the discount." : "Premio finale: omaggio misterioso, prodotto bio aziendale, cumulabile con lo sconto.");
+  document.querySelector("#reserveTitle").textContent = lang === "ja" ? "カート" : lang === "en" ? "YOUR CART" : "IL TUO CARRELLO";
+  const note = document.querySelector("#reserve textarea");
+  if (note) note.value = lines.join("\n");
+  dialog.showModal();
+});
+updateCart();
 document.querySelectorAll("main section").forEach((section, sectionIndex) => {
   const visitor = document.createElement("span");
   visitor.className = `ink-visitor ink-visitor-${sectionIndex % 3}`;
@@ -107,13 +165,13 @@ const ecoCanvas = document.querySelector("#ecoCanvas"),
   fieldImage = new Image(),
   timerImage = new Image(),
   sowingImage = new Image(),
-  farmerAtlas = new Image(),
+  farmerSowingFrames = [new Image(), new Image(), new Image()],
   seatedFarmerImage = new Image(),
   stoolImage = new Image();
 fieldImage.src = "/assets/interaction-field-clean.webp";
 timerImage.src = "/assets/interaction-field-clean.webp";
 sowingImage.src = "/assets/interaction-field-clean.webp";
-farmerAtlas.src = "/assets/farmer-sowing-clean.webp";
+farmerSowingFrames.forEach((image, index) => { image.src = `/assets/farmer-sowing-frame-${index + 1}.png`; });
 seatedFarmerImage.src = "/assets/farmer-seated-only.webp";
 stoolImage.src = "/assets/stool-three-leg-ink.webp";
 const wateringCan = document.querySelector("#wateringCan"),
@@ -172,6 +230,7 @@ let deposits = [],
   harvestBurstAt = 3 + Math.floor(Math.random() * 2),
   groupedHarvestStreak = [],
   comboTimer = 0,
+  harvestExitTimer = 0,
   audioCtx = null,
   lastRustleVariant = -1,
   lastAudioCue = {};
@@ -632,26 +691,28 @@ function drawLadle(now) {
 function drawSeatedFarmer() {
   if (!seatedFarmerImage.complete || !seatedFarmerImage.naturalWidth) return;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
-  const height = h * .78, width = height * seatedFarmerImage.naturalWidth / seatedFarmerImage.naturalHeight;
-  ex.drawImage(seatedFarmerImage, w * .86 - width * .51, h * .99 - height, width, height);
+  const groundY = h * .965;
+  const height = h * .57, width = height * seatedFarmerImage.naturalWidth / seatedFarmerImage.naturalHeight;
+  ex.drawImage(seatedFarmerImage, w * .82 - width * .5, groundY - height, width, height);
 }
 function drawStool() {
   if (!stoolImage.complete || !stoolImage.naturalWidth) return;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
-  const height = h * .29, width = height * stoolImage.naturalWidth / stoolImage.naturalHeight;
-  ex.drawImage(stoolImage, w * .86 - width * .5, h * .99 - height, width, height);
+  const groundY = h * .965;
+  const height = h * .34, width = height * stoolImage.naturalWidth / stoolImage.naturalHeight;
+  ex.drawImage(stoolImage, w * .865 - width * .5, groundY - height, width, height);
 }
 function drawFarmer() {
   const { x, y, frame } = farmerSowingSites[Math.min(2, Math.floor(Math.min(1, sowingProgress) * 3))] || {};
-  const pose = farmerAtlas;
-  const rect = [[15, 20, 520, 990], [550, 20, 515, 990], [1080, 20, 456, 990]][frame ?? 0];
+  const pose = farmerSowingFrames[frame ?? 0];
   const h = ecoCanvas.clientHeight;
   const t = Math.min(1, sowingProgress);
-  // Three still poses, each anchored to a real deposit+water overlap. Draw the complete texture.
+  // Each still keeps its original 1:2 ratio and is foot-anchored to a real INBRUMA mound.
   if (Number.isFinite(x) && Number.isFinite(y) && pose?.complete && pose.naturalWidth) {
-    const height = h * (.27 + Math.max(0, Math.min(1, (y / h - .53) / .26)) * .18);
-    const width = height * rect[2] / rect[3];
-    ex.drawImage(pose, ...rect, x - width * .5, y - height, width, height);
+    const depth = Math.max(0, Math.min(1, (y / h - .48) / .38));
+    const height = h * (.25 + depth * .24);
+    const width = height * pose.naturalWidth / pose.naturalHeight;
+    ex.drawImage(pose, x - width * .5, y - height * .985, width, height);
   }
   ex.save(); ex.fillStyle = "#595047";
   for (const seed of seeded) {
@@ -738,9 +799,13 @@ function paintEco() {
   deposits.forEach(mound);
   watered.forEach(wetMark);
   if (ecoMode === "watering") drawPourAnimations(now);
-  if (!["future", "growing", "macerating"].includes(ecoMode)) drawStool();
-  if (ecoMode === "sowing") drawFarmer(now);
-  else if (!["future", "growing", "macerating"].includes(ecoMode)) drawSeatedFarmer();
+  if (ecoMode === "sowing") {
+    drawFarmer(now);
+    drawStool();
+  } else if (!["future", "growing", "macerating"].includes(ecoMode)) {
+    drawSeatedFarmer();
+    drawStool();
+  }
   if (ecoMode === "mixing") drawLadle(now);
   if (ecoMode === "future" || ecoMode === "growing") {
     const candidates = growthSites.flatMap((site, i) =>
@@ -1325,22 +1390,26 @@ function showHarvestComplete() {
     ? `Il tuo sconto sul prossimo ordine: <strong>${harvestDiscount}%</strong> · codice <code>RACCOLTO${harvestDiscount}</code>.`
     : "Ti resta il codice del primo ordine: INULA05 · sconto 5%.";
   document.querySelector("#harvestComplete").showModal();
+  localStorage.setItem("inulaHarvestComplete", "1");
+  document.querySelector("#reopenField").hidden = true;
+  updateCart();
+  clearTimeout(harvestExitTimer);
+  harvestExitTimer = setTimeout(finishHarvestToCart, 9000);
+}
+function finishHarvestToCart() {
+  clearTimeout(harvestExitTimer);
+  const complete = document.querySelector("#harvestComplete");
+  if (complete.open) complete.close();
+  if (ecosystem.open) ecosystem.close();
+  localStorage.setItem("inulaHarvestComplete", "1");
+  document.querySelector("#reopenField").hidden = true;
+  updateCart();
+  location.hash = "cart";
+  requestAnimationFrame(() => document.querySelector("#cart").scrollIntoView({ block:"start" }));
 }
 document.querySelector(".harvest-close").onclick = () => document.querySelector("#harvestReward").close();
-document.querySelector(".harvest-complete-close").onclick = () => document.querySelector("#harvestComplete").close();
-document.querySelectorAll("[data-harvest-product]").forEach(button => {
-  button.addEventListener("click", () => {
-    const product = button.dataset.harvestProduct;
-    const code = harvestDiscount ? `RACCOLTO${harvestDiscount}` : "INULA05";
-    document.querySelector("#harvestComplete").close();
-    ecosystem.close();
-    document.querySelector("#reserveTitle").textContent = product;
-    const form = document.querySelector("#reserve form");
-    const note = form?.querySelector("textarea");
-    if (note) note.value = `Prodotto: ${product}\nCodice sconto: ${code}`;
-    dialog.showModal();
-  });
-});
+document.querySelector(".harvest-complete-close").onclick = finishHarvestToCart;
+document.querySelector("#goToCart").onclick = finishHarvestToCart;
 document.querySelector("#copyHarvest").onclick = async () => {
   const code = document.querySelector("#harvestCode").textContent;
   try { await navigator.clipboard.writeText(code); document.querySelector("#harvestFeedback").textContent = "Codice copiato."; }
@@ -1463,6 +1532,7 @@ document.querySelector("#sowField").onclick = beginSowing;
 function resetEco() {
   cancelAnimationFrame(anim);
   clearInterval(factInterval);
+  clearTimeout(harvestExitTimer);
   document.querySelector("#fieldFact").classList.remove("visible");
   canHeld = false;
   document.querySelector("#harvestBins").hidden = true;
@@ -1512,12 +1582,14 @@ document.querySelector("#reopenField").onclick = openFuture;
 ecosystem.addEventListener("close", () => {
   if (!["future", "sowing"].includes(ecoMode)) resetEco();
 });
-[fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, ladleAtlas, lizardImage, farmerAtlas, seatedFarmerImage, stoolImage].forEach((image) => {
+[fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, ladleAtlas, lizardImage, ...farmerSowingFrames, seatedFarmerImage, stoolImage].forEach((image) => {
   image.onload = () => ecosystem.open && paintEco();
 });
 addEventListener("resize", () => {
   if (ecosystem.open) sizeEco();
 });
-if (localStorage.getItem("inulaFieldComplete"))
+if (localStorage.getItem("inulaHarvestComplete"))
+  document.querySelector("#reopenField").hidden = true;
+else if (localStorage.getItem("inulaFieldComplete"))
   document.querySelector("#reopenField").classList.add("ready");
 updateEco();

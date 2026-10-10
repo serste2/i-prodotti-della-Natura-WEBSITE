@@ -155,6 +155,9 @@ updateCart();
 document.querySelectorAll("main section").forEach((section, sectionIndex) => {
   const visitor = document.createElement("span");
   visitor.className = `ink-visitor ink-visitor-${sectionIndex % 3}`;
+  const species = ["vespa", "bombo", "bombo-pratense", "sfinge", "lepidottero"][sectionIndex % 5];
+  visitor.style.setProperty("--pollinator-image", 'url("/assets/pollinator-' + species + '.webp")');
+  visitor.style.setProperty("--pollinator-direction", Math.random() < .5 ? "-1" : "1");
   visitor.setAttribute("aria-hidden", "true");
   section.append(visitor);
 });

@@ -105,6 +105,12 @@
       "Ti resta il codice del primo ordine: INULA05 · sconto 5%.": "Your first-order code remains: INULA05 · 5% discount.", "Il tuo sconto sul prossimo ordine:": "Your discount on the next order:", "· codice": "· code",
       "Fotografie reali di INBRUMA e del campo": "Real photographs of INBRUMA and the field", "Scegli i sacchi di INBRUMA": "Choose the INBRUMA bags", "Tre sacchi di INBRUMA da distribuire": "Three INBRUMA bags to spread", "Semi e ricerca prima della semina": "Seeds and research before sowing",
       "Paesaggio agricolo interattivo: distribuisci INBRUMA, prepara e applica CÍGNULA": "Interactive agricultural landscape: spread INBRUMA, prepare and apply CÍGNULA"
+      ,"02 / CARBONARI · SUOLO ARGILLOSO DISTURBATO": "02 / CARBONARI · DISTURBED CLAY SOIL", "03 / AULIVI · RESIDUI DI POTATURA": "03 / AULIVI · PRUNING RESIDUES", "04 / DEVIGNA · RESIDUI DI VITE": "04 / DEVIGNA · VINE RESIDUES",
+      "Sequenza fotografica: ciclo delle biomasse e preparazione di CÍGNULA": "Photographic sequence: biomass cycle and CÍGNULA preparation", "RESET": "RESET",
+      "Uno studio in serra su un macerato microbico di Inula ha osservato crescita e sviluppo radicale di Amaranthus hypochondriacus.": "A greenhouse study of a microbial Inula macerate observed growth and root development in Amaranthus hypochondriacus.",
+      "Uno studio del 2020 ha misurato i parametri agronomici della lattuga in prove con biostimolanti a base di Inula.": "A 2020 study measured agronomic parameters in lettuce trials using Inula-based biostimulants.",
+      "Nello stesso studio sono state osservate crescita dello spinacio e interazioni con Pythium spp.": "The same study observed spinach growth and interactions with Pythium spp.",
+      "Una ricerca su estratti di Dittrichia viscosa ha esaminato l’attività contro Alternaria su pomodoro.": "Research on Dittrichia viscosa extracts examined activity against Alternaria on tomato."
     },
     ja: {
       "MENU": "メニュー", "CHIUDI": "閉じる", "TERRITORIO": "土地", "METODO": "方法", "SHOP": "製品", "CONTATTI": "お問い合わせ",
@@ -182,7 +188,13 @@
       "INBRUMA nasce dalla trasformazione della biomassa raccolta e tracciata in azienda.": "INBRUMAは農園で収集・履歴管理したバイオマスの変換から生まれます。", "Nel campo convivono Inula, cisto, olivi e altre piante: osserviamo i loro cicli nel tempo.": "畑にはイヌラ、シスタス、オリーブなどが共生し、その循環を長期的に観察しています。", "Per INBRUMA Aulivi valorizziamo anche le potature degli olivi.": "INBRUMA Auliviではオリーブの剪定枝も活用します。",
       "Seleziona il codice INULA05 e comunicalo nella richiesta del primo ordine.": "コードINULA05を選択し、初回注文のお問い合わせ時にお伝えください。", "Codice copiato. Continua a esplorare il sito e cerca «RIAPRI IL CAMPO».": "コードをコピーしました。サイトを探索し、「畑をもう一度開く」を探してください。",
       "Ti resta il codice del primo ordine: INULA05 · sconto 5%.": "初回注文コードは引き続き利用できます：INULA05 · 5%割引。", "Il tuo sconto sul prossimo ordine:": "次回注文の割引：", "· codice": "· コード",
-      "Fotografie reali di INBRUMA e del campo": "INBRUMAと畑の実写", "Scegli i sacchi di INBRUMA": "INBRUMAの袋を選ぶ", "Tre sacchi di INBRUMA da distribuire": "散布するINBRUMA 3袋", "Semi e ricerca prima della semina": "種まき前の種と研究", "Paesaggio agricolo interattivo: distribuisci INBRUMA, prepara e applica CÍGNULA": "農業インタラクション：INBRUMAを散布し、CÍGNULAを準備・施用"
+      "Fotografie reali di INBRUMA e del campo": "INBRUMAと畑の実写", "Scegli i sacchi di INBRUMA": "INBRUMAの袋を選ぶ", "Tre sacchi di INBRUMA da distribuire": "散布するINBRUMA 3袋", "Semi e ricerca prima della semina": "種まき前の種と研究", "Paesaggio agricolo interattivo: distribuisci INBRUMA, prepara e applica CÍGNULA": "農業インタラクション：INBRUMAを散布し、CÍGNULAを準備・施用",
+      "02 / CARBONARI · SUOLO ARGILLOSO DISTURBATO": "02 / CARBONARI · 攪乱された粘土質土壌", "03 / AULIVI · RESIDUI DI POTATURA": "03 / AULIVI · 剪定残渣", "04 / DEVIGNA · RESIDUI DI VITE": "04 / DEVIGNA · ブドウ残渣",
+      "Sequenza fotografica: ciclo delle biomasse e preparazione di CÍGNULA": "写真シーケンス：バイオマス循環とCÍGNULAの準備", "RESET": "リセット",
+      "Uno studio in serra su un macerato microbico di Inula ha osservato crescita e sviluppo radicale di Amaranthus hypochondriacus.": "イヌラ微生物浸漬液の温室試験で、Amaranthus hypochondriacusの生育と根の発達が観察されました。",
+      "Uno studio del 2020 ha misurato i parametri agronomici della lattuga in prove con biostimolanti a base di Inula.": "2020年の研究では、イヌラ由来バイオスティミュラントを用いたレタス試験の農学的指標が測定されました。",
+      "Nello stesso studio sono state osservate crescita dello spinacio e interazioni con Pythium spp.": "同じ研究で、ホウレンソウの生育とPythium属との相互作用が観察されました。",
+      "Una ricerca su estratti di Dittrichia viscosa ha esaminato l’attività contro Alternaria su pomodoro.": "Dittrichia viscosa抽出物の研究では、トマトのAlternariaに対する活性が調べられました。"
     }
   };
 
@@ -194,6 +206,8 @@
     if (value === "Semina il campo, tutte le quattro schede scoperte") return locale === "ja" ? "畑に種をまく：4件のカードをすべて発見" : "Sow the field: all four cards discovered";
     if ((m = value.match(/^(\d+) di quattro schede scoperte\.(.*)$/))) return locale === "ja" ? `4件中${m[1]}件のカードを発見。${m[2] ? " 種まきバーの準備ができました。クリックして開始。" : ""}` : `${m[1]} of four cards discovered.${m[2] ? " The sowing bar is ready: click to begin." : ""}`;
     if ((m = value.match(/^(.+), (\d+)% distribuito$/))) return locale === "ja" ? `${m[1]}、${m[2]}%散布済み` : `${m[1]}, ${m[2]}% spread`;
+    if (value.startsWith("SACCO ")) return (locale === "ja" ? "袋 " : "BAG ") + value.slice(6);
+    if (value.startsWith("Scopri i semi di ")) return locale === "ja" ? value.replace(/^Scopri i semi di /, "種を発見：").replace(/ e lo studio collegato$/, "／関連研究") : value.replace(/^Scopri i semi di /, "Discover ").replace(/ e lo studio collegato$/, " seeds and the related study");
     if ((m = value.match(/^Raccolto: (\d+) piante su (\d+)\.$/))) return locale === "ja" ? `収穫：${m[2]}株中${m[1]}株。` : `Harvested: ${m[1]} of ${m[2]} plants.`;
     if ((m = value.match(/^(\d+) piante vicine raccolte\. Raccolto: (\d+) piante su (\d+)\.$/))) return locale === "ja" ? `近くの${m[1]}株を収穫。収穫：${m[3]}株中${m[2]}株。` : `${m[1]} nearby plants harvested. Harvested: ${m[2]} of ${m[3]} plants.`;
     if ((m = value.match(/^Hai raccolto tutti e (\d+) i frutti del campo\. Complimenti!$/))) return locale === "ja" ? `畑の${m[1]}株をすべて収穫しました。おめでとうございます！` : `You harvested all ${m[1]} crops in the field. Congratulations!`;

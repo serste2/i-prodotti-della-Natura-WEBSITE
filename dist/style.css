@@ -1056,6 +1056,18 @@ h2 em,
   touch-action: none;
   cursor: crosshair;
 }
+#dayNightOverlay {
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  background:rgba(17,24,38,.52);
+  -webkit-backdrop-filter:grayscale(1) saturate(.28) brightness(.46) contrast(1.08);
+  backdrop-filter:grayscale(1) saturate(.28) brightness(.46) contrast(1.08);
+}
+#dayNightOverlay.visible { visibility:visible; }
 .eco-readout,
 .basin-meter {
   position: absolute;
@@ -1217,7 +1229,7 @@ h2 em,
 }
 #macerationClock {
   position: absolute;
-  z-index: 3;
+  z-index: 7;
   right: 5vw;
   top: 34%;
   width: 220px;
@@ -1267,6 +1279,53 @@ h2 em,
   font: 58px/1 "Bodoni Moda";
   color: var(--p);
   font-variant-numeric: tabular-nums;
+}
+#macerationClock strong {
+  position:relative;
+  z-index:2;
+  margin-top:7px;
+  padding:4px 8px;
+  background:var(--y);
+  border:1px solid var(--ink);
+  font:700 10px/1.2 "Roboto Mono",monospace;
+}
+#macerationClock .clock-hand {
+  position:absolute;
+  z-index:1;
+  left:50%;
+  bottom:50%;
+  width:2px;
+  height:34%;
+  background:var(--ink);
+  transform-origin:50% 100%;
+  pointer-events:none;
+}
+#macerationClock .clock-hour { height:25%; animation:clock-spin 2.4s linear infinite; }
+#macerationClock .clock-minute { animation:clock-spin .42s linear infinite; background:var(--p); }
+@keyframes clock-spin { to { transform:rotate(360deg); } }
+
+#harvestCombo {
+  position:absolute;
+  z-index:9;
+  display:grid;
+  place-items:center;
+  min-width:clamp(76px,8vw,112px);
+  aspect-ratio:1;
+  border:3px solid var(--ink);
+  background:var(--y);
+  color:var(--ink);
+  box-shadow:9px 9px 0 var(--p);
+  transform:translate(-50%,-50%) rotate(-4deg) scale(.68);
+  opacity:0;
+  pointer-events:none;
+}
+#harvestCombo[hidden] { display:none; }
+#harvestCombo b { font:700 clamp(38px,5.7vw,72px)/1 "Bodoni Moda",serif; }
+#harvestCombo.show { animation:harvest-combo-pop 1.6s cubic-bezier(.16,1,.3,1) both; }
+@keyframes harvest-combo-pop {
+  0% { opacity:0; transform:translate(-50%,-50%) rotate(-7deg) scale(.55); }
+  16%,78% { opacity:1; transform:translate(-50%,-50%) rotate(-3deg) scale(1); }
+  100% { opacity:0; transform:translate(-50%,-57%) rotate(2deg) scale(.9); }
 }
 .eco-mixing #ecoCanvas,
 .eco-watering #ecoCanvas {
@@ -1638,8 +1697,8 @@ h2 em,
   padding:clamp(8px,1.35vw,22px);
   background-color:#f8f2e5;
   background-image:
-    linear-gradient(45deg,#e9e0cf 25%,transparent 25%,transparent 75%,#e9e0cf 75%),
-    linear-gradient(45deg,#e9e0cf 25%,transparent 25%,transparent 75%,#e9e0cf 75%);
+    linear-gradient(45deg,var(--y) 25%,transparent 25%,transparent 75%,var(--y) 75%),
+    linear-gradient(45deg,var(--y) 25%,transparent 25%,transparent 75%,var(--y) 75%);
   background-position:0 0,12px 12px;
   background-size:24px 24px;
 }

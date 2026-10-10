@@ -120,7 +120,10 @@ const wateringCan = document.querySelector("#wateringCan"),
   plantButtons = document.querySelector("#plantButtons"),
   announcement = document.querySelector("#ecoAnnouncement"),
   macerationClock = document.querySelector("#macerationClock"),
-  clockValue = document.querySelector("#clockValue");
+  clockValue = document.querySelector("#clockValue"),
+  clockPhase = document.querySelector("#clockPhase"),
+  dayNightOverlay = document.querySelector("#dayNightOverlay"),
+  harvestCombo = document.querySelector("#harvestCombo");
 const mixColors = {
   carbonari: { matter: "#67584a", accent: "#332d27" },
   aulivi: { matter: "#77705d", accent: "#3a3b35" },
@@ -164,7 +167,12 @@ let deposits = [],
   harvestHoldTimer = 0,
   harvestPointer = null,
   harvestLongPress = false,
+  harvestClickCount = 0,
+  harvestBurstAt = 3 + Math.floor(Math.random() * 2),
+  groupedHarvestStreak = [],
+  comboTimer = 0,
   audioCtx = null,
+  lastRustleVariant = -1,
   lastAudioCue = {};
 function playSound(kind, count = 1) {
   const AudioEngine = window.AudioContext || window.webkitAudioContext;
@@ -192,7 +200,37 @@ function playSound(kind, count = 1) {
     if (kind === "stir") tone(118, .08, .011, "triangle");
     if (kind === "seed") { tone(440, .16, .021, "sine"); tone(660, .2, .014, "sine", .07); }
     if (kind === "sow") [196, 247, 294].forEach((f, i) => tone(f, .3, .018, "triangle", i * .12));
-    if (kind === "harvest") Array.from({ length: Math.min(3, count) }, (_, i) => tone(330 + i * 86, .16, .024, "triangle", i * .07));
+    if (kind === "harvest") {
+      const choices = [0, 1, 2].filter(i => i !== lastRustleVariant);
+      const variant = choices[Math.floor(Math.random() * choices.length)];
+      lastRustleVariant = variant;
+      const settings = [
+        { duration:.18, frequency:1450, q:.65, gain:.025, type:"bandpass" },
+        { duration:.23, frequency:880, q:.8, gain:.029, type:"bandpass" },
+        { duration:.15, frequency:2050, q:.55, gain:.021, type:"highpass" },
+      ][variant];
+      const frames = Math.ceil(audioCtx.sampleRate * settings.duration);
+      const buffer = audioCtx.createBuffer(1, frames, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < frames; i += 1) {
+        const progress = i / frames;
+        const flutter = .62 + .38 * Math.sin(progress * Math.PI * (8 + variant * 3));
+        data[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * progress) * flutter;
+      }
+      const source = audioCtx.createBufferSource(), filter = audioCtx.createBiquadFilter(), envelope = audioCtx.createGain();
+      source.buffer = buffer;
+      filter.type = settings.type; filter.frequency.value = settings.frequency; filter.Q.value = settings.q;
+      envelope.gain.setValueAtTime(.0001, now);
+      envelope.gain.exponentialRampToValueAtTime(settings.gain * Math.min(1.35, 1 + count * .035), now + .025);
+      envelope.gain.exponentialRampToValueAtTime(.0001, now + settings.duration);
+      source.connect(filter).connect(envelope).connect(audioCtx.destination);
+      source.start(now); source.stop(now + settings.duration + .02);
+      if (Math.random() < .26) {
+        const bell = [659.25, 739.99, 880][Math.floor(Math.random() * 3)];
+        tone(bell, .48, .007, "sine", .035 + Math.random() * .08);
+        tone(bell * 2.01, .34, .0026, "sine", .055 + Math.random() * .08);
+      }
+    }
     if (kind === "complete") [262, 330, 392].forEach((f, i) => tone(f, .6, .018, "sine", i * .06));
   } catch { /* The interaction remains usable when Web Audio is unavailable. */ }
 }
@@ -650,9 +688,9 @@ function paintEco() {
   deposits.forEach(mound);
   watered.forEach(wetMark);
   if (ecoMode === "watering") drawPourAnimations(now);
-  if (!["future", "growing"].includes(ecoMode)) drawStool();
+  if (!["future", "growing", "macerating"].includes(ecoMode)) drawStool();
   if (ecoMode === "sowing") drawFarmer(now);
-  else if (!["future", "growing"].includes(ecoMode)) drawSeatedFarmer();
+  else if (!["future", "growing", "macerating"].includes(ecoMode)) drawSeatedFarmer();
   if (ecoMode === "mixing") drawLadle(now);
   if (ecoMode === "future" || ecoMode === "growing") {
     const candidates = growthSites.flatMap((site, i) =>
@@ -783,6 +821,7 @@ function updateEco() {
   wateringCan.classList.toggle("held", canHeld);
   document.querySelector("#canPrompt").classList.toggle("visible", ecoMode === "watering");
   macerationClock.classList.toggle("visible", ecoMode === "macerating");
+  dayNightOverlay.classList.toggle("visible", ecoMode === "macerating");
   plantButtons.classList.toggle("visible", future);
   shell.classList.toggle("eco-harvesting", future);
   positionCan();
@@ -920,20 +959,29 @@ function showNextFact() {
 function startMaceration() {
   ecoMode = "macerating";
   timerStart = performance.now();
-  showNextFact();
-  factInterval = setInterval(showNextFact, 4000);
+  document.querySelector("#fieldFact").classList.remove("visible");
+  dayNightOverlay.style.opacity = "0";
   announcement.textContent =
-    "Ingredienti mescolati. Inizia la macerazione aerobica: da 5 a 10 giorni reali, compressi qui in 15 secondi.";
+    "Ingredienti mescolati. Iniziano dieci cicli accelerati di giorno e notte.";
   updateEco();
   function tick(now) {
-    const elapsed = Math.min(15000, now - timerStart),
-      remaining = Math.max(0, 15 - Math.floor(elapsed / 1000));
+    const duration = 15000,
+      dayDuration = duration / 10,
+      elapsed = Math.min(duration, now - timerStart),
+      dayIndex = Math.min(9, Math.floor(elapsed / dayDuration)),
+      cycle = (elapsed % dayDuration) / dayDuration,
+      isNight = cycle >= .5,
+      nightStrength = cycle < .5 ? 0 : Math.sin((cycle - .5) * Math.PI * 2),
+      remaining = Math.max(0, 10 - Math.floor(elapsed / dayDuration));
     document.querySelector("#clockValue").textContent = remaining;
+    clockPhase.textContent = `${isNight ? "NOTTE" : "GIORNO"} ${dayIndex + 1} / 10`;
+    dayNightOverlay.style.opacity = String(Math.max(0, nightStrength));
     paintEco();
-    if (elapsed < 15000) anim = requestAnimationFrame(tick);
+    if (elapsed < duration) anim = requestAnimationFrame(tick);
     else {
       clearInterval(factInterval);
       document.querySelector("#fieldFact").classList.remove("visible");
+      dayNightOverlay.style.opacity = "0";
       ecoMode = "watering";
       canHeld = false;
       waterTotal = deposits.length;
@@ -1024,7 +1072,7 @@ ecoCanvas.addEventListener("pointerdown", (e) => {
     harvestHoldTimer = setTimeout(() => {
       if (!harvestPointer) return;
       harvestLongPress = true;
-      collectNearbySame(harvestPointer.hit, 3);
+      handleHarvestClick(harvestPointer.hit, true);
     }, 430);
     return;
   }
@@ -1050,7 +1098,7 @@ ecoCanvas.addEventListener("pointermove", (e) => {
 ecoCanvas.addEventListener("pointerup", (e) => {
   if (harvestPointer?.id === e.pointerId) {
     clearTimeout(harvestHoldTimer);
-    if (!harvestLongPress) collectPlant(harvestPointer.hit);
+    if (!harvestLongPress) handleHarvestClick(harvestPointer.hit, false);
     harvestPointer = null;
     harvestHoldTimer = 0;
     harvestLongPress = false;
@@ -1077,6 +1125,10 @@ document.querySelector("#water").onclick = () => {
 };
 function openFuture() {
   ecoMode = "growing";
+  harvestClickCount = 0;
+  harvestBurstAt = 3 + Math.floor(Math.random() * 2);
+  groupedHarvestStreak = [];
+  hideHarvestCombo();
   try {
     const savedHarvest = JSON.parse(localStorage.getItem("inulaHarvest") || "null");
     harvestedPlants = new Set(savedHarvest?.ids || []);
@@ -1154,11 +1206,39 @@ function updateHarvestBins() {
     return `<div class="fruit-count" aria-label="${label}: ${count} raccolti">${produceDrawing(shape, count)}<span>${label}</span><b aria-hidden="true">${count}</b></div>`;
   }).join("");
 }
-function collectPlants(plants) {
+function showHarvestCombo(total, plants) {
+  clearTimeout(comboTimer);
+  const average = plants.reduce((point, plant) => ({ x:point.x + plant.x, y:point.y + plant.y }), { x:0, y:0 });
+  const x = Math.max(16, Math.min(84, average.x / plants.length * 100));
+  const y = Math.max(18, Math.min(70, average.y / plants.length * 100 - 13));
+  harvestCombo.style.left = `${x}%`; harvestCombo.style.top = `${y}%`;
+  harvestCombo.querySelector("b").textContent = total;
+  harvestCombo.setAttribute("aria-label", `${total} piante raccolte nelle ultime due raccolte multiple`);
+  harvestCombo.hidden = false;
+  harvestCombo.classList.remove("show");
+  void harvestCombo.offsetWidth;
+  harvestCombo.classList.add("show");
+  comboTimer = setTimeout(hideHarvestCombo, 1600);
+}
+function hideHarvestCombo() {
+  clearTimeout(comboTimer);
+  harvestCombo.classList.remove("show");
+  harvestCombo.hidden = true;
+}
+function recordGroupedHarvest(count, plants) {
+  if (count <= 3) { groupedHarvestStreak = []; return; }
+  groupedHarvestStreak.push({ count, plants });
+  if (groupedHarvestStreak.length < 2) return;
+  const pair = groupedHarvestStreak.slice(-2);
+  showHarvestCombo(pair[0].count + pair[1].count, [...pair[0].plants, ...pair[1].plants]);
+  groupedHarvestStreak = [];
+}
+function collectPlants(plants, grouped = false) {
   const added = plants.filter(p => p && !harvestedPlants.has(p.id));
   if (!added.length) return;
   added.forEach(p => harvestedPlants.add(p.id));
   playSound("harvest", added.length);
+  if (grouped) recordGroupedHarvest(added.length, added);
   const completed = renderedPlants.length > 0 && harvestedPlants.size >= renderedPlants.length;
   if (!harvestDiscount && harvestedPlants.size >= harvestPrizeAt) {
     harvestDiscount = [10, 15, 20][Math.floor(Math.random() * 3)];
@@ -1225,13 +1305,23 @@ function hitPlantAt(clientX, clientY) {
   }).filter(v => v.valid).sort((a,b) => a.distance-b.distance)[0];
   return hit?.p || null;
 }
-function collectNearbySame(anchor, limit = 3) {
+function collectNearbySame(anchor, limit = 6) {
   const r = ecoCanvas.getBoundingClientRect();
   const nearby = renderedPlants.filter(p => !harvestedPlants.has(p.id) && p.shape === anchor.shape)
     .map(p => ({ p, distance:Math.hypot((p.x-anchor.x)*r.width, (p.y-anchor.y)*r.height) }))
-    .filter(item => item.p.id === anchor.id || item.distance <= Math.max(72, r.width * .075))
+    .filter(item => item.p.id === anchor.id || item.distance <= Math.max(82, r.width * .105))
     .sort((a,b) => a.distance-b.distance).slice(0, limit).map(item => item.p);
-  collectPlants(nearby);
+  collectPlants(nearby, true);
+}
+function handleHarvestClick(anchor, held) {
+  harvestClickCount += 1;
+  const automaticGroup = harvestClickCount >= harvestBurstAt;
+  if (automaticGroup) {
+    harvestClickCount = 0;
+    harvestBurstAt = 3 + Math.floor(Math.random() * 2);
+  }
+  if (held || automaticGroup) collectNearbySame(anchor, 6);
+  else collectPlant(anchor);
 }
 ecoCanvas.addEventListener("keydown", (e) => {
   if (ecoMode === "mixing" && (e.key === " " || e.key === "Enter")) {
@@ -1338,7 +1428,11 @@ function resetEco() {
   evidenceTrigger = null;
   document.querySelector("#plantEvidence").hidden = true;
   lastMixPoint = null;
-  document.querySelector("#clockValue").textContent = "15";
+  document.querySelector("#clockValue").textContent = "10";
+  clockPhase.textContent = "GIORNO 1 / 10";
+  dayNightOverlay.style.opacity = "0";
+  harvestClickCount = 0; harvestBurstAt = 3 + Math.floor(Math.random() * 2); groupedHarvestStreak = [];
+  hideHarvestCombo();
   document.querySelector("#plantEvidence").classList.remove("open");
   updateEco();
   paintEco();

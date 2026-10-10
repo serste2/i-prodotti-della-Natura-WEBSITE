@@ -121,7 +121,6 @@ const wateringCan = document.querySelector("#wateringCan"),
   announcement = document.querySelector("#ecoAnnouncement"),
   macerationClock = document.querySelector("#macerationClock"),
   clockValue = document.querySelector("#clockValue"),
-  clockPhase = document.querySelector("#clockPhase"),
   dayNightOverlay = document.querySelector("#dayNightOverlay"),
   harvestCombo = document.querySelector("#harvestCombo");
 const mixColors = {
@@ -160,6 +159,8 @@ let deposits = [],
   cloudAnim = 0,
   lastMixPoint = null,
   timerStart = 0,
+  macerationDayIndex = 0,
+  macerationNightStrength = 0,
   farmerSowingSites = [],
   sowingProgress = 0,
   discoveredSeeds = new Set(),
@@ -564,6 +565,55 @@ function drawFauna(now) {
     ex.restore();
   });
 }
+function drawNocturnalVisitors(now) {
+  if (ecoMode !== "macerating" || macerationNightStrength < .12) return;
+  const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
+  const alpha = Math.min(1, macerationNightStrength * 1.7);
+  const sway = Math.sin(now / 420) * w * .003;
+  ex.save();
+  ex.globalAlpha = alpha;
+  ex.fillStyle = "#211f1c";
+  ex.strokeStyle = "#f2dfab";
+  ex.lineWidth = Math.max(.8, w * .0008);
+  ex.lineCap = "round"; ex.lineJoin = "round";
+  const boar = (x, y, scale, flip = false, striped = false) => {
+    ex.save(); ex.translate(x, y); ex.scale((flip ? -1 : 1) * scale, scale);
+    ex.beginPath(); ex.ellipse(0, 0, 26, 12, -.08, 0, Math.PI * 2); ex.fill();
+    ex.beginPath(); ex.moveTo(20,-7); ex.quadraticCurveTo(35,-10,39,-2); ex.quadraticCurveTo(34,5,23,5); ex.closePath(); ex.fill();
+    ex.beginPath(); ex.moveTo(28,-8); ex.lineTo(31,-16); ex.lineTo(35,-7); ex.closePath(); ex.fill();
+    [-13,8].forEach(lx => { ex.beginPath(); ex.moveTo(lx,8); ex.lineTo(lx-2,20); ex.moveTo(lx+7,8); ex.lineTo(lx+8,20); ex.stroke(); });
+    ex.beginPath(); ex.arc(34,-3,1.4,0,Math.PI*2); ex.fillStyle="#f3d56b"; ex.fill();
+    if (striped) { ex.strokeStyle="#c9a764"; [-12,-4,4,12].forEach(lx => { ex.beginPath(); ex.moveTo(lx,-9); ex.lineTo(lx+3,8); ex.stroke(); }); }
+    ex.restore();
+  };
+  if ([1, 6].includes(macerationDayIndex)) {
+    const baseX = w * (.67 + (macerationDayIndex === 6 ? -.22 : 0)) + sway;
+    const baseY = h * .49;
+    boar(baseX, baseY, Math.max(.55, w / 1450), false);
+    boar(baseX + w*.055, baseY + h*.006, Math.max(.48, w / 1650), true);
+    boar(baseX - w*.025, baseY + h*.026, Math.max(.27, w / 2700), false, true);
+    boar(baseX + w*.018, baseY + h*.03, Math.max(.25, w / 2900), false, true);
+    boar(baseX + w*.049, baseY + h*.028, Math.max(.24, w / 3000), true, true);
+  } else if (macerationDayIndex === 3) {
+    const x = w * .64 + sway, y = h * .48, s = Math.max(.62, w / 1400);
+    ex.save(); ex.translate(x,y); ex.scale(s,s);
+    ex.beginPath(); ex.ellipse(0,0,30,9,-.08,0,Math.PI*2); ex.fill();
+    ex.beginPath(); ex.moveTo(22,-6); ex.quadraticCurveTo(38,-16,47,-8); ex.lineTo(40,-1); ex.quadraticCurveTo(34,5,23,4); ex.closePath(); ex.fill();
+    ex.beginPath(); ex.moveTo(33,-12); ex.lineTo(36,-22); ex.lineTo(41,-12); ex.closePath(); ex.fill();
+    ex.beginPath(); ex.moveTo(-26,-2); ex.bezierCurveTo(-52,-18,-63,-8,-76,-19); ex.bezierCurveTo(-66,-2,-52,6,-28,5); ex.closePath(); ex.fill();
+    [-12,11].forEach(lx=>{ex.beginPath(); ex.moveTo(lx,6); ex.lineTo(lx-3,22); ex.moveTo(lx+6,6); ex.lineTo(lx+8,22); ex.stroke();});
+    ex.fillStyle="#f3d56b"; ex.beginPath(); ex.arc(41,-8,1.5,0,Math.PI*2); ex.fill(); ex.restore();
+  } else if (macerationDayIndex === 8) {
+    const bird = (x,y,s,flip=1) => {
+      ex.save(); ex.translate(x,y); ex.scale(flip*s,s);
+      ex.beginPath(); ex.moveTo(0,2); ex.bezierCurveTo(-16,-20,-36,-24,-54,-13); ex.bezierCurveTo(-32,-10,-20,2,-4,7); ex.bezierCurveTo(11,-1,29,-15,52,-10); ex.bezierCurveTo(35,-1,23,9,3,8); ex.closePath(); ex.fill();
+      ex.strokeStyle="#c9a764"; ex.beginPath(); ex.moveTo(-42,-14); ex.lineTo(-8,4); ex.moveTo(40,-8); ex.lineTo(8,5); ex.stroke(); ex.restore();
+    };
+    bird(w*.59+sway,h*.31,Math.max(.52,w/1650),1);
+    bird(w*.72-sway,h*.38,Math.max(.43,w/1900),-1);
+  }
+  ex.restore();
+}
 function drawLadle(now) {
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   const pos = ladleHeld && ladlePos ? ladlePos : { x: w * .11, y: h * .78, angle: -.08 };
@@ -713,13 +763,14 @@ function paintEco() {
     renderedPlants = plants.sort((a, b) => a.y - b.y);
     renderedPlants.forEach(p => { if (!harvestedPlants.has(p.id)) plant(p, p.size, p.variation); });
   }
-  if (lizardImage.complete && lizardImage.naturalWidth) {
+  drawNocturnalVisitors(now);
+  if ((ecoMode !== "macerating" || macerationNightStrength < .18) && lizardImage.complete && lizardImage.naturalWidth) {
     const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
     ex.save(); ex.globalAlpha = 1;
     ex.drawImage(lizardImage, w * .035, h * .48, Math.min(100, w * .075), Math.min(56, h * .07));
     ex.restore();
   }
-  drawFauna(now);
+  if (ecoMode !== "macerating" || macerationNightStrength < .18) drawFauna(now);
 }
 function animateEco(now) {
   if (!ecosystem.open) { cloudAnim = 0; lastCloudTime = 0; return; }
@@ -959,13 +1010,14 @@ function showNextFact() {
 function startMaceration() {
   ecoMode = "macerating";
   timerStart = performance.now();
-  document.querySelector("#fieldFact").classList.remove("visible");
+  showNextFact();
+  factInterval = setInterval(showNextFact, 3000);
   dayNightOverlay.style.opacity = "0";
   announcement.textContent =
     "Ingredienti mescolati. Iniziano dieci cicli accelerati di giorno e notte.";
   updateEco();
   function tick(now) {
-    const duration = 15000,
+    const duration = 30000,
       dayDuration = duration / 10,
       elapsed = Math.min(duration, now - timerStart),
       dayIndex = Math.min(9, Math.floor(elapsed / dayDuration)),
@@ -974,7 +1026,8 @@ function startMaceration() {
       nightStrength = cycle < .5 ? 0 : Math.sin((cycle - .5) * Math.PI * 2),
       remaining = Math.max(0, 10 - Math.floor(elapsed / dayDuration));
     document.querySelector("#clockValue").textContent = remaining;
-    clockPhase.textContent = `${isNight ? "NOTTE" : "GIORNO"} ${dayIndex + 1} / 10`;
+    macerationDayIndex = dayIndex;
+    macerationNightStrength = Math.max(0, nightStrength);
     dayNightOverlay.style.opacity = String(Math.max(0, nightStrength));
     paintEco();
     if (elapsed < duration) anim = requestAnimationFrame(tick);
@@ -982,6 +1035,7 @@ function startMaceration() {
       clearInterval(factInterval);
       document.querySelector("#fieldFact").classList.remove("visible");
       dayNightOverlay.style.opacity = "0";
+      macerationNightStrength = 0;
       ecoMode = "watering";
       canHeld = false;
       waterTotal = deposits.length;
@@ -1429,8 +1483,8 @@ function resetEco() {
   document.querySelector("#plantEvidence").hidden = true;
   lastMixPoint = null;
   document.querySelector("#clockValue").textContent = "10";
-  clockPhase.textContent = "GIORNO 1 / 10";
   dayNightOverlay.style.opacity = "0";
+  macerationDayIndex = 0; macerationNightStrength = 0;
   harvestClickCount = 0; harvestBurstAt = 3 + Math.floor(Math.random() * 2); groupedHarvestStreak = [];
   hideHarvestCombo();
   document.querySelector("#plantEvidence").classList.remove("open");

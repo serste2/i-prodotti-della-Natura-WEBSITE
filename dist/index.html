@@ -414,7 +414,7 @@
       </div>
     </dialog>
     <dialog id="reserve">
-      <button class="x" type="button" aria-label="Chiudi">×</button>
+      <button class="x" type="button" aria-label="Chiudi" onclick="this.closest('dialog').close()">×</button>
       <p class="eyebrow">INTERESSE / SENZA IMPEGNO</p>
       <h2 id="reserveTitle"></h2>
       <p class="form-preview-note">Modulo dimostrativo: in questa anteprima la richiesta non viene inviata.</p>
@@ -426,6 +426,6 @@
       </form>
       <small>Nessun pagamento. Nessun obbligo di acquisto.</small>
     </dialog>
-    <script src="/app.js"></script>
+    <script src="/app.js?v=20261010-2"></script>
   </body>
 </html>

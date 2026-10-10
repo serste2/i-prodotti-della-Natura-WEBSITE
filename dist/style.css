@@ -1464,41 +1464,52 @@ h2 em,
 .eco-future #resetEco,
 .eco-future .basin-meter { display: none !important; }
 
-/* Hero: title, unified photograph, then the two primary actions. */
+/* Hero: company mark beside the 3:4 product diptych. */
 #home.hero {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(360px, .72fr);
+  grid-template-areas:
+    "brand visual"
+    ". actions";
+  grid-template-rows: auto auto;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
+  column-gap: clamp(44px, 7vw, 120px);
+  row-gap: 18px;
   padding: 116px clamp(20px, 4vw, 64px) 52px;
 }
 #home .heroText {
-  width: min(92vw, 1400px);
+  grid-area: brand;
+  width: auto;
   display: block;
-  text-align: center;
+  text-align: left;
+  justify-self: end;
 }
 #home .heroText h1 {
   margin: 0;
-  font-size: clamp(42px, 6vw, 92px);
+  max-width: 8.8ch;
+  font-size: clamp(52px, 6.2vw, 96px);
   line-height: .88;
-  letter-spacing: -.055em;
+  letter-spacing: -.04em;
+  text-wrap: balance;
 }
 #home .hero-diptych {
-  width: min(92vw, 1400px);
+  grid-area: visual;
+  width: clamp(360px, 34vw, 520px);
   height: auto;
   min-height: 0;
-  aspect-ratio: 1672 / 941;
+  aspect-ratio: 3 / 4;
   margin: 0;
-  justify-self: auto;
+  justify-self: start;
   box-shadow: 12px 14px 0 #18140e18;
 }
 #home .hero-diptych img {
   object-position: center center;
 }
 .hero-actions {
-  width: min(92vw, 1400px);
+  grid-area: actions;
+  width: clamp(360px, 34vw, 520px);
+  justify-self: start;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
@@ -1522,18 +1533,27 @@ h2 em,
   width: auto;
   background: var(--y);
 }
-@media(max-width:820px) {
-  #home.hero { padding-top: 96px; gap: 16px; }
+@media(max-width:900px) {
+  #home.hero {
+    grid-template-columns: 1fr;
+    grid-template-areas: "brand" "visual" "actions";
+    grid-template-rows: auto auto auto;
+    justify-items: center;
+    padding-top: 96px;
+    gap: 18px;
+  }
+  #home .heroText { justify-self: center; text-align: center; }
   #home .heroText h1 { font-size: clamp(38px, 12vw, 64px); }
   #home .hero-diptych {
-    width: 100%;
+    width: min(86vw, 420px);
     height: auto;
     min-height: 0;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 4;
     margin: 0;
+    justify-self: center;
   }
   #home .hero-diptych img { object-fit: cover; object-position: center; }
-  .hero-actions { width: 100%; grid-template-columns: 1fr; }
+  .hero-actions { width: min(86vw, 420px); justify-self: center; grid-template-columns: 1fr; }
   .hero-button { min-height: 54px; font-size: 17px; }
 }
 .eco-future .eco-controls { justify-content: flex-end; min-height: 56px; }

@@ -648,15 +648,17 @@ function drawNocturnalVisitors(now) {
   if (ecoMode !== "macerating" || macerationNightStrength < .12) return;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   let type, nx, ny, width;
-  if ([1,6].includes(macerationDayIndex)) { type=0; nx=macerationDayIndex===6?.45:.67; ny=.49; width=w*.20; }
-  else if (macerationDayIndex===3) { type=1; nx=.64; ny=.48; width=w*.105; }
+  if ([1,6].includes(macerationDayIndex)) { type=0; nx=.20; ny=.43; width=w*.14; }
+  else if (macerationDayIndex===3) { type=1; nx=.84; ny=.48; width=w*.105; }
   else if (macerationDayIndex===8) { type=2; nx=.65; ny=.33; width=w*.20; }
   else return;
   const image = nocturnalSprites[type];
   if (!image.complete || !image.naturalWidth) return;
   const height = width * image.naturalHeight / image.naturalWidth;
   ex.save(); ex.globalAlpha=Math.min(1,macerationNightStrength*1.7);
-  ex.drawImage(image,nx*w+Math.sin(now/900)*w*.005-width/2,ny*h-height,width,height);
+  ex.translate(nx*w, ny*h-height/2);
+  if (type === 1) ex.scale(-1, 1);
+  ex.drawImage(image,-width/2,-height/2,width,height);
   ex.restore();
 }
 function drawLadle(now) {
@@ -674,19 +676,30 @@ function drawLadle(now) {
   ex.drawImage(ladleAtlas, 55, 0, 520, 941, -29, -133, 58, 139);
   ex.restore();
 }
+function seatedLayout() {
+  const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
+  const farmerH = h * .57;
+  const farmerW = farmerH * seatedFarmerImage.naturalWidth / seatedFarmerImage.naturalHeight;
+  const groundY = h * .965;
+  // Landmarks measured on the original sprites: sole, pelvis contact, seat and feet.
+  const farmerX = w * .82 - farmerW * .5;
+  const farmerY = groundY - farmerH * .944;
+  const seatX = farmerX + farmerW * .64;
+  const seatY = farmerY + farmerH * .745;
+  const stoolH = (groundY - seatY) / (.933 - .225);
+  const stoolW = stoolH * stoolImage.naturalWidth / stoolImage.naturalHeight;
+  return { farmerX, farmerY, farmerW, farmerH,
+    stoolX: seatX - stoolW * .53, stoolY: seatY - stoolH * .225, stoolW, stoolH };
+}
 function drawSeatedFarmer() {
   if (!seatedFarmerImage.complete || !seatedFarmerImage.naturalWidth) return;
-  const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
-  const groundY = h * .965;
-  const height = h * .57, width = height * seatedFarmerImage.naturalWidth / seatedFarmerImage.naturalHeight;
-  ex.drawImage(seatedFarmerImage, w * .82 - width * .5, groundY - height, width, height);
+  const p = seatedLayout();
+  ex.drawImage(seatedFarmerImage, p.farmerX, p.farmerY, p.farmerW, p.farmerH);
 }
 function drawStool() {
-  if (!stoolImage.complete || !stoolImage.naturalWidth) return;
-  const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
-  const groundY = h * .965;
-  const height = h * .34, width = height * stoolImage.naturalWidth / stoolImage.naturalHeight;
-  ex.drawImage(stoolImage, w * .865 - width * .5, groundY - height, width, height);
+  if (!stoolImage.complete || !stoolImage.naturalWidth || !seatedFarmerImage.naturalWidth) return;
+  const p = seatedLayout();
+  ex.drawImage(stoolImage, p.stoolX, p.stoolY, p.stoolW, p.stoolH);
 }
 function drawFarmer() {
   const { x, y, frame } = farmerSowingSites[Math.min(2, Math.floor(Math.min(1, sowingProgress) * 3))] || {};
@@ -787,10 +800,9 @@ function paintEco() {
   if (ecoMode === "watering") drawPourAnimations(now);
   if (ecoMode === "sowing") {
     drawFarmer(now);
-    drawStool();
   } else if (!["future", "growing", "macerating"].includes(ecoMode)) {
-    drawSeatedFarmer();
     drawStool();
+    drawSeatedFarmer();
   }
   if (ecoMode === "mixing") drawLadle(now);
   if (ecoMode === "future" || ecoMode === "growing") {

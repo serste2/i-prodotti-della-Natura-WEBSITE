@@ -2049,3 +2049,9 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
   background-position:center;
   scale:var(--pollinator-direction, 1) 1;
 }
+
+/* English language selector: Union Jack. */
+.flag-england {
+  background: url("/assets/flag-english-uk.svg") center / 100% 100% no-repeat;
+}
+.flag-england::before, .flag-england::after { content:none; }

@@ -1389,7 +1389,7 @@ function showHarvestComplete() {
     : "Ti resta il codice del primo ordine: INULA05 · sconto 5%.";
   document.querySelector("#harvestComplete").showModal();
   localStorage.setItem("inulaHarvestComplete", "1");
-  document.querySelector("#reopenField").hidden = true;
+  document.querySelector("#reopenField").hidden = false;
   updateCart();
   clearTimeout(harvestExitTimer);
   harvestExitTimer = setTimeout(finishHarvestToCart, 9000);
@@ -1400,7 +1400,7 @@ function finishHarvestToCart() {
   if (complete.open) complete.close();
   if (ecosystem.open) ecosystem.close();
   localStorage.setItem("inulaHarvestComplete", "1");
-  document.querySelector("#reopenField").hidden = true;
+  document.querySelector("#reopenField").hidden = false;
   updateCart();
   location.hash = "cart";
   requestAnimationFrame(() => document.querySelector("#cart").scrollIntoView({ block:"start" }));
@@ -1586,9 +1586,8 @@ ecosystem.addEventListener("close", () => {
 addEventListener("resize", () => {
   if (ecosystem.open) sizeEco();
 });
-if (localStorage.getItem("inulaHarvestComplete"))
-  document.querySelector("#reopenField").hidden = true;
-else if (localStorage.getItem("inulaFieldComplete"))
+document.querySelector("#reopenField").hidden = false;
+if (localStorage.getItem("inulaFieldComplete"))
   document.querySelector("#reopenField").classList.add("ready");
 updateEco();
 

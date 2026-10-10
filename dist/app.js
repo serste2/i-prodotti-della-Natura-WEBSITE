@@ -85,7 +85,7 @@ document.addEventListener("click", (e) => {
     dialog.showModal();
   }
 });
-document.querySelector(".x").onclick = () => dialog.close();
+document.querySelector("#reserve .x").onclick = () => dialog.close();
 document.querySelectorAll("form").forEach(
   (f) =>
     (f.onsubmit = (e) => {
@@ -324,8 +324,9 @@ function plant(p, scale = 1, offset = 0) {
     const depth = Math.max(0, Math.min(1, (y / h - .52) / .27));
     const height = h * (.075 + depth * .17) * scale / .23 * ratio;
     const width = height * 510 / 768;
-    ex.save(); ex.translate(x, y); ex.rotate(offset * .012);
-    if (offset % 2) ex.scale(-1, 1);
+    const variation = Math.abs(offset);
+    ex.save(); ex.translate(x, y); ex.rotate(((variation % 7) - 3) * .018);
+    if (variation % 2) ex.scale(-1, 1);
     ex.globalAlpha = .93;
     ex.filter = "saturate(1.18) contrast(1.03)";
     const buried = height * .12;
@@ -572,6 +573,13 @@ function computeGrowthSites() {
     });
   });
 }
+function waterCoversDeposit(mark, deposit) {
+  return Math.hypot((mark.x - deposit.x) / 1.35, (mark.y - deposit.y) / .8) <
+    Math.max(34, deposit.size + mark.size * .65);
+}
+function countUnwateredDeposits(marks = watered) {
+  return deposits.filter(deposit => !marks.some(mark => waterCoversDeposit(mark, deposit))).length;
+}
 function selectFarmerSowingSites() {
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   const candidates = [];
@@ -604,7 +612,7 @@ function paintEco() {
   if (ecoMode === "mixing") drawLadle(now);
   if (ecoMode === "future" || ecoMode === "growing") {
     const candidates = growthSites.flatMap((site, i) =>
-      Array.from({ length: 3 }, (_, j) => {
+      Array.from({ length: 4 }, (_, j) => {
         const angle = j * 2.39996 + i * 1.31;
         const radius = j ? Math.min(20, 7 + site.size * .32) : 0;
         const x = site.x + Math.cos(angle) * radius;
@@ -612,13 +620,13 @@ function paintEco() {
         const species = site.species;
         return { ...species, id: `${i}-${j}`, x: x / ecoCanvas.clientWidth, y: y / ecoCanvas.clientHeight,
           mix: site.mix, variation: site.seedIndex + j - 1,
-          size: Math.max(.08, growth) * (.20 + (j % 3) * .028) };
+          size: Math.max(.08, growth) * (.18 + (j % 4) * .024) };
       }).filter(p => playablePoint(p.x * ecoCanvas.clientWidth, p.y * ecoCanvas.clientHeight))
     );
     const plants = [];
     for (const p of candidates) {
       if (plants.every(q => Math.hypot((p.x - q.x) * ecoCanvas.clientWidth,
-        (p.y - q.y) * ecoCanvas.clientHeight * 1.35) > 30)) plants.push(p);
+        (p.y - q.y) * ecoCanvas.clientHeight * 1.35) > 17)) plants.push(p);
     }
     renderedPlants = plants.sort((a, b) => a.y - b.y);
     renderedPlants.forEach(p => { if (!harvestedPlants.has(p.id)) plant(p, p.size, p.variation); });
@@ -645,7 +653,7 @@ function bagsComplete() {
 function updateEco() {
   const n =
       ecoMode === "watering"
-        ? Math.max(0, Math.round(waterRemaining))
+        ? Math.max(0, Math.ceil(waterRemaining / Math.max(1, waterTotal) * 100))
         : ecoMode === "mixing"
           ? Math.round(mixProgress)
           : bagFilled[mix],
@@ -683,8 +691,8 @@ function updateEco() {
     ],
     watering: [
       "CÍGNULA / ANNAFFIATOIO",
-      "SVUOTA TUTTO IL MACERATO",
-      "Tasto destro sull’annaffiatoio per sollevarlo; sinistro sul campo per annaffiare.",
+      "ANNAFFIA TUTTA L’INBRUMA",
+      "Il livello cala solo quando bagni una nuova area coperta. Continua finché tutto il terreno preparato è annaffiato.",
     ],
     seeds: [
       "SEMI / RICERCA",
@@ -707,6 +715,7 @@ function updateEco() {
   shell.classList.toggle("eco-mixing", ecoMode === "mixing");
   shell.classList.toggle("eco-macerating", ecoMode === "macerating");
   shell.classList.toggle("eco-watering", ecoMode === "watering");
+  shell.classList.toggle("eco-brush", ecoMode === "brush");
   shell.classList.toggle("eco-sowing", ecoMode === "sowing");
   shell.classList.toggle("eco-seeds", ecoMode === "seeds");
   document.querySelector("#seedDiscovery").hidden = ecoMode !== "seeds";
@@ -798,9 +807,18 @@ function pourAt(x, y) {
   canPos = { x: px / r.width, y: py / r.height };
   positionCan();
   const spout = canSpoutPoint();
-  watered.push({ x: px, y: py, size: Math.max(15, +brush.value * 0.7) });
+  const mark = { x: px, y: py, size: Math.max(20, +brush.value * .85) };
+  const before = countUnwateredDeposits();
+  const after = countUnwateredDeposits([...watered, mark]);
+  if (after === before) {
+    announcement.textContent = "Questa zona è già bagnata o non contiene INBRUMA. Porta il macerato su una nuova area coperta.";
+    updateEco();
+    paintEco();
+    return;
+  }
+  watered.push(mark);
   pourAnimations.push({ x: px, y: py, spoutX: spout.x, spoutY: spout.y, start: performance.now() });
-  waterRemaining = Math.max(0, waterRemaining - Math.max(4, waterTotal / 16));
+  waterRemaining = after;
   if (waterRemaining === 0) {
     announcement.textContent =
       "L’annaffiatoio è vuoto. Tutto il macerato è stato distribuito.";
@@ -871,8 +889,8 @@ function startMaceration() {
       document.querySelector("#fieldFact").classList.remove("visible");
       ecoMode = "watering";
       canHeld = false;
-      waterTotal = 100;
-      waterRemaining = 100;
+      waterTotal = deposits.length;
+      waterRemaining = countUnwateredDeposits();
       canPos = { x: 0.2, y: 0.72 };
       announcement.textContent =
         "Il macerato è pronto. Solleva l’annaffiatoio con il tasto destro, poi annaffia il campo con il sinistro.";

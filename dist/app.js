@@ -106,8 +106,9 @@ catch { /* Start with an empty cart if an older session value is invalid. */ }
 function savedOrderReward() {
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem("inulaHarvest") || "null"); } catch { /* no saved harvest */ }
-  if (saved?.discount) return { code:`RACCOLTO${saved.discount}`, discount:saved.discount, gift:localStorage.getItem("inulaHarvestComplete") === "1" };
-  if (localStorage.getItem("inulaFieldComplete")) return { code:"INULA05", discount:5, gift:localStorage.getItem("inulaHarvestComplete") === "1" };
+  const gift = localStorage.getItem("inulaMysteryGiftUnlocked") === "1";
+  if (saved?.discount) return { code:`RACCOLTO${saved.discount}`, discount:saved.discount, gift };
+  if (localStorage.getItem("inulaFieldComplete")) return { code:"INULA05", discount:5, gift };
   return { code:"", discount:0, gift:false };
 }
 function updateCart() {
@@ -732,9 +733,9 @@ function drawNocturnalVisitors(now) {
 }
 function basinSurface(width = ecoCanvas.clientWidth, height = ecoCanvas.clientHeight) {
   // Liquid landmarks measured on the 1672 × 941 field illustration.
-  return { cx: width * 157 / 1672, cy: height * 725 / 941,
-    ux: width * 174 / 1672, uy: height * -22 / 941,
-    vx: width * 4 / 1672, vy: height * 36 / 941 };
+  return { cx: width * 164 / 1672, cy: height * 722 / 941,
+    ux: width * 174 / 1672, uy: height * -14 / 941,
+    vx: 0, vy: height * 34 / 941 };
 }
 function basinPoint(surface, x, y) {
   return { x: surface.cx + surface.ux * x + surface.vx * y,
@@ -748,13 +749,13 @@ function drawLadle(now) {
     const fade = ladleHeld ? 1 : Math.max(0, 1 - (now - lastStirAt) / 700);
     ex.save();
     ex.transform(surface.ux, surface.uy, surface.vx, surface.vy, surface.cx, surface.cy);
-    ex.beginPath(); ex.arc(0, 0, .94, 0, Math.PI * 2); ex.clip();
+    ex.beginPath(); ex.arc(0, 0, .88, 0, Math.PI * 2); ex.clip();
     ex.strokeStyle = "#e5d8bd"; ex.globalAlpha = .58 * fade; ex.lineWidth = .012;
     const phase = reducedMotion.matches ? stirTurns : now / 1100;
     for (let arm = 0; arm < 3; arm++) {
       ex.beginPath();
       for (let k = 0; k <= 110; k++) {
-        const t = k / 110, radius = .08 + t * .82;
+        const t = k / 110, radius = .08 + t * .76;
         const angle = t * Math.PI * 3.2 + arm * Math.PI * 2 / 3 + phase;
         const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
         if (k === 0) ex.moveTo(x, y); else ex.lineTo(x, y);
@@ -797,7 +798,9 @@ function drawStool() {
   ex.drawImage(stoolImage, p.stoolX, p.stoolY, p.stoolW, p.stoolH);
 }
 function drawFarmer() {
-  const { x, y, frame } = farmerSowingSites[Math.min(2, Math.floor(Math.min(1, sowingProgress) * 3))] || {};
+  const siteIndex = Math.min(farmerSowingSites.length - 1, Math.floor(Math.min(1, sowingProgress) * farmerSowingSites.length));
+  const { x, y } = farmerSowingSites[siteIndex] || {};
+  const frame = Math.floor(sowingProgress * farmerSowingSites.length * 3) % 3;
   const pose = farmerSowingFrames[frame ?? 0];
   const h = ecoCanvas.clientHeight;
   const t = Math.min(1, sowingProgress);
@@ -878,14 +881,23 @@ function selectFarmerSowingSites() {
     const y = d.y * .58 + water.y * .42;
     if (playablePoint(x, y)) candidates.push({ x, y, mix: d.mix });
   });
-  // Pick separated locations from actual INBRUMA marks that also overlap a watered area.
-  candidates.sort((a, b) => a.y - b.y || a.x - b.x);
-  const selected = [];
+  // One real mound per occupied spatial cell, traversed foreground to background.
+  const cells = new Map();
+  candidates.sort((a, b) => b.y - a.y || a.x - b.x);
   for (const candidate of candidates) {
-    if (selected.every(p => Math.hypot(p.x - candidate.x, p.y - candidate.y) > Math.min(w, h) * .045)) selected.push(candidate);
-    if (selected.length === 3) break;
+    const key = `${Math.floor(candidate.x / w * 5)}:${Math.floor(candidate.y / h * 6)}`;
+    if (!cells.has(key)) cells.set(key, candidate);
   }
-  farmerSowingSites = selected.slice(0, 3).map((site, i) => ({ ...site, frame: i }));
+  farmerSowingSites = [...cells.values()].sort((a, b) => b.y - a.y || a.x - b.x);
+  // Seed appearance follows the same stops as the farmer.
+  seeded.forEach(seed => {
+    let nearest = 0, distance = Infinity;
+    farmerSowingSites.forEach((site, index) => {
+      const d = Math.hypot(seed.x - site.x, seed.y - site.y);
+      if (d < distance) { nearest = index; distance = d; }
+    });
+    seed.t = (nearest + .5) / Math.max(1, farmerSowingSites.length);
+  });
 }
 let keyboardFieldActive = false, keyboardPlantId = null;
 let keyboardFieldPoint = { x:.57, y:.63 };
@@ -1497,6 +1509,7 @@ function collectPlants(plants, grouped = false) {
 }
 function collectPlant(p) { collectPlants([p]); }
 function showHarvestComplete() {
+  if (!renderedPlants.length || harvestedPlants.size < renderedPlants.length) return;
   const counts = harvestKinds.map(([shape, , label]) => ({
     shape, label, count:renderedPlants.filter(p => p.shape === shape && harvestedPlants.has(p.id)).length
   }));
@@ -1509,6 +1522,8 @@ function showHarvestComplete() {
     ? `Il tuo sconto sul prossimo ordine: <strong>${harvestDiscount}%</strong> · codice <code>RACCOLTO${harvestDiscount}</code>.`
     : "Ti resta il codice del primo ordine: INULA05 · sconto 5%.";
   document.querySelector("#harvestComplete").showModal();
+  if (document.querySelector("#harvestComplete").open)
+    localStorage.setItem("inulaMysteryGiftUnlocked", "1");
   localStorage.setItem("inulaHarvestComplete", "1");
   document.querySelector("#reopenField").hidden = false;
   updateCart();

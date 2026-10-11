@@ -2096,3 +2096,25 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
   .eco-seeds #sowField b {font-size:12px;}
   .eco-seeds #sowField small {font-size:8px;line-height:1.15;}
 }
+
+/* Facts occupy the seat vacated during the day/night sequence. */
+.eco-macerating #fieldFact {
+  left:auto; right:3%; bottom:5%; top:auto; transform:none;
+  width:min(390px,34%); box-sizing:border-box;
+}
+#fieldMusic {
+  margin-left:auto; flex:none; min-width:40px; min-height:36px;
+  border:1px solid var(--ink); background:transparent; color:var(--ink);
+  font:18px "Roboto Mono",monospace; cursor:pointer;
+}
+#fieldMusic:focus-visible {outline:3px solid var(--p);outline-offset:3px;}
+@media(max-width:820px) {
+  .eco-macerating #fieldFact {right:3%;bottom:5%;width:44%;padding:13px 15px;}
+}
+@media(max-width:520px) {
+  .eco-macerating #fieldFact {left:auto;right:12px;bottom:12px;width:58%;padding:11px 12px;font-size:12px;}
+  #fieldMusic {min-width:34px;min-height:32px;}
+}
+@media(max-height:620px) {
+  .eco-macerating #fieldFact {bottom:10px;padding:10px 12px;font-size:12px;}
+}

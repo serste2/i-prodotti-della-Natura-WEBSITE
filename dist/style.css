@@ -2141,3 +2141,53 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
   .field-postit {right:9px;top:-16px;width:42px;height:34px;}
   .field-postit svg {width:31px;height:24px;}
 }
+
+/* Impeccable audit: shared controls, readable hierarchy and explicit states. */
+:root { --control-size:44px; --control-gap:8px; --focus-color:var(--b); }
+::selection {background:var(--y);color:var(--ink);}
+input,textarea {caret-color:var(--b);}
+a {text-underline-offset:.2em;}
+:where(button,a,input,textarea,select,[tabindex]):focus-visible {
+  outline:3px solid var(--focus-color);outline-offset:3px;
+}
+#ecoCanvas:focus-visible {outline-offset:-5px;}
+#plantEvidence :focus-visible {outline-color:var(--y);}
+.eco-head {align-items:center;gap:16px;padding-block:0;}
+.eco-head small {min-width:0;line-height:1.35;}
+.eco-head-actions {display:flex;align-items:center;gap:var(--control-gap);flex:none;}
+.eco-head-actions #fieldMusic,.eco-head-actions .eco-close {
+  display:grid;place-items:center;flex:none;margin:0;padding:0;
+  width:var(--control-size);height:var(--control-size);min-width:0;min-height:0;
+  border:2px solid var(--ink);background:var(--paper);color:var(--ink);
+  line-height:1;transition:background-color .15s,color .15s;
+}
+.eco-head-actions svg {display:block;width:22px;height:22px;}
+.eco-head-actions button:hover {background:var(--y);}
+.eco-head-actions button:active {background:var(--ink);color:var(--paper);}
+#fieldMusic .music-slash {display:none;}
+#fieldMusic[data-muted="true"] .music-slash {display:block;}
+.eco-readout strong {line-height:1.08;margin:7px 0;text-wrap:balance;}
+.eco-readout small,.basin-meter small {line-height:1.45;}
+.basin-meter b,#sowField b,.fruit-count b,#clockValue {font-variant-numeric:tabular-nums;}
+.eco-toolbox button {min-height:44px;}
+.supply-invitation {margin:4px 0 0;}
+#plantEvidence {scrollbar-color:var(--paper) var(--ink);scrollbar-width:thin;}
+#plantEvidence h3 {line-height:1.15;text-wrap:balance;}
+#seedContainers button:focus-visible,#depositQueue button:focus-visible {outline-offset:-2px;}
+@media(max-width:520px) {
+  .eco-head {gap:8px;padding-inline:12px;}
+  .eco-head small {font-size:9px;}
+  .eco-head-actions {gap:6px;}
+  .eco-seeds .eco-toolbox #resetEco {min-height:44px;}
+}
+@media(max-height:620px) {
+  .eco-head-actions {--control-size:36px;}
+  .eco-head-actions svg {width:20px;height:20px;}
+  .eco-toolbox button {min-height:32px;}
+  .eco-seeds .eco-toolbox #resetEco {min-height:32px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  .ink-visitor {animation:none;}
+  #harvestCombo.show {animation:none;opacity:1;transform:translate(-50%,-50%) rotate(-3deg);}
+  .eco-head-actions button,#plantEvidence,#wateringCan,#macerationClock {transition:none;}
+}

@@ -220,6 +220,10 @@
   translations.ja["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "予約受付を開始しました。オリーブの剪定枝を回収します。お申し込みの義務はありませんので、フォームにご記入ください。";
   translations.en["Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari."] = "Pick up the flat spoon in the basin and follow the inner rim with circular movements.";
   translations.ja["Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari."] = "たらいの平たいスプーンをつかみ、内側の縁に沿って円を描くように動かしてください。";
+  translations.en["Controlli del campo"] = "Field controls";
+  translations.ja["Controlli del campo"] = "畑の操作";
+  translations.en["Tastiera: usa le frecce per muoverti nel campo e Invio o Spazio per distribuire INBRUMA. Durante il mescolamento premi Spazio. Per annaffiare usa le frecce, Invio per sollevare e Spazio per versare. Nella raccolta usa le frecce per scegliere una pianta e Invio per raccoglierla; Maiusc e Invio per raccogliere un gruppo."] = "Keyboard: use the arrow keys to move around the field and Enter or Space to spread INBRUMA. Press Space to stir. To water, use the arrows, Enter to lift and Space to pour. During harvest, use the arrows to select a plant and Enter to collect it; Shift and Enter collects a group.";
+  translations.ja["Tastiera: usa le frecce per muoverti nel campo e Invio o Spazio per distribuire INBRUMA. Durante il mescolamento premi Spazio. Per annaffiare usa le frecce, Invio per sollevare e Spazio per versare. Nella raccolta usa le frecce per scegliere una pianta e Invio per raccoglierla; Maiusc e Invio per raccogliere un gruppo."] = "キーボード：矢印キーで移動し、EnterまたはスペースでINBRUMAを散布します。スペースでかき混ぜます。水やりでは矢印キーで移動し、Enterで持ち上げ、スペースで注ぎます。収穫では矢印キーで植物を選び、Enterで収穫します。ShiftとEnterでまとめて収穫します。";
   const dict = translations[locale];
   const dynamic = (value) => {
     let m;

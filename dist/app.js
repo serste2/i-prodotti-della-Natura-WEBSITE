@@ -1,5 +1,6 @@
 document.querySelector("#layerText").textContent =
   "Curve di livello · infiltrazione · ristagni";
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const body = document.body,
   tryButtons = document.querySelectorAll(".try,.tryBig"),
   ecosystem = document.querySelector("#ecosystem");
@@ -246,7 +247,7 @@ const musicButton = document.querySelector("#fieldMusic");
 const musicLabels = location.pathname.startsWith("/ja") ? ["音楽を消す", "音楽を再生"] :
   location.pathname.startsWith("/en") ? ["Mute music", "Play music"] : ["Silenzia musica", "Attiva musica"];
 function updateMusicButton() {
-  musicButton.textContent = fieldMusicMuted ? "♪ ×" : "♪";
+  musicButton.dataset.muted = String(fieldMusicMuted);
   musicButton.setAttribute("aria-label", musicLabels[fieldMusicMuted ? 1 : 0]);
   musicButton.title = musicLabels[fieldMusicMuted ? 1 : 0];
   musicButton.setAttribute("aria-pressed", String(!fieldMusicMuted));
@@ -306,7 +307,10 @@ musicButton.addEventListener("click", () => {
 ecosystem.addEventListener("pointerdown", startFieldMusic);
 ecosystem.addEventListener("keydown", startFieldMusic);
 ecosystem.addEventListener("close", stopFieldMusic);
-document.addEventListener("visibilitychange", () => document.hidden ? stopFieldMusic() : startFieldMusic());
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) { stopFieldMusic(); cancelAnimationFrame(cloudAnim); cloudAnim = 0; }
+  else if (ecosystem.open) startEcoAnimation();
+});
 updateMusicButton();
 
 function playSound(kind, count = 1) {
@@ -406,7 +410,7 @@ cropsAtlas.src = "/assets/ink-crops-atlas.png";
 biomassAtlas.src = "/assets/inbruma-brush-atlas.png";
 lizardImage.src = "/assets/lacerta-viridis-ink.png";
 function sizeEco() {
-  const d = devicePixelRatio || 1,
+  const d = Math.min(devicePixelRatio || 1, 2),
     w = ecoCanvas.clientWidth,
     h = ecoCanvas.clientHeight;
   ecoCanvas.width = w * d;
@@ -657,7 +661,7 @@ function drawPourAnimations(now) {
 }
 function drawClouds(now) {
   if (!lastCloudTime) lastCloudTime = now;
-  cloudTravel += Math.min(100, now - lastCloudTime) * (ecoMode === "macerating" ? .033 : .0025);
+  if (!reducedMotion.matches) cloudTravel += Math.min(100, now - lastCloudTime) * (ecoMode === "macerating" ? .033 : .0025);
   lastCloudTime = now;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   if (!cloudImage.complete || !cloudImage.naturalWidth) return;
@@ -683,6 +687,7 @@ const pollinatorDirections = (() => {
   return directions;
 })();
 function drawFauna(now, daylight = 1) {
+  if (reducedMotion.matches) now = 0;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   const creatures = [
     [0,.34,.40,32], [1,.59,.34,34], [2,.69,.46,29],
@@ -745,7 +750,7 @@ function drawLadle(now) {
     ex.transform(surface.ux, surface.uy, surface.vx, surface.vy, surface.cx, surface.cy);
     ex.beginPath(); ex.arc(0, 0, .94, 0, Math.PI * 2); ex.clip();
     ex.strokeStyle = "#e5d8bd"; ex.globalAlpha = .58 * fade; ex.lineWidth = .012;
-    const phase = now / 1100;
+    const phase = reducedMotion.matches ? stirTurns : now / 1100;
     for (let arm = 0; arm < 3; arm++) {
       ex.beginPath();
       for (let k = 0; k <= 110; k++) {
@@ -882,6 +887,23 @@ function selectFarmerSowingSites() {
   }
   farmerSowingSites = selected.slice(0, 3).map((site, i) => ({ ...site, frame: i }));
 }
+let keyboardFieldActive = false, keyboardPlantId = null;
+let keyboardFieldPoint = { x:.57, y:.63 };
+function drawKeyboardTarget() {
+  if (!keyboardFieldActive || document.activeElement !== ecoCanvas) return;
+  const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
+  const target = ecoMode === "future"
+    ? renderedPlants.find(p => p.id === keyboardPlantId && !harvestedPlants.has(p.id))
+    : ecoMode === "brush" ? keyboardFieldPoint : null;
+  if (!target) return;
+  const x = target.x * w, y = target.y * h;
+  ex.save(); ex.setLineDash([4, 3]); ex.lineWidth = 3; ex.strokeStyle = "#2437d5";
+  ex.beginPath(); ex.arc(x, y - (ecoMode === "future" ? 13 : 0), 19, 0, Math.PI * 2); ex.stroke();
+  ex.setLineDash([]); ex.lineWidth = 1; ex.strokeStyle = "#f3eddf";
+  ex.beginPath(); ex.arc(x, y - (ecoMode === "future" ? 13 : 0), 16, 0, Math.PI * 2); ex.stroke();
+  ex.restore();
+}
+
 function paintEco() {
   const now = performance.now();
   background(); drawClouds(now); drawForeground();
@@ -925,9 +947,10 @@ function paintEco() {
     ex.restore();
   }
   if (daylight > 0) { ex.save(); ex.globalAlpha = daylight; drawFauna(now, daylight); ex.restore(); }
+  drawKeyboardTarget();
 }
 function animateEco(now) {
-  if (!ecosystem.open) { cloudAnim = 0; lastCloudTime = 0; return; }
+  if (!ecosystem.open || document.hidden) { cloudAnim = 0; lastCloudTime = 0; return; }
   if (!["macerating", "sowing", "growing"].includes(ecoMode)) paintEco();
   cloudAnim = requestAnimationFrame(animateEco);
 }
@@ -1275,6 +1298,7 @@ mixButtons.forEach(
     }),
 );
 ecoCanvas.addEventListener("pointerdown", (e) => {
+  keyboardFieldActive = false;
   if (e.button !== 0) return;
   if (ecoMode === "future") {
     const hit = hitPlantAt(e.clientX, e.clientY);
@@ -1542,6 +1566,42 @@ function handleHarvestClick(anchor, held) {
   else collectPlant(anchor);
 }
 ecoCanvas.addEventListener("keydown", (e) => {
+  const arrows = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+  if (ecoMode === "brush" && (arrows.includes(e.key) || e.key === " " || e.key === "Enter")) {
+    e.preventDefault(); keyboardFieldActive = true;
+    if (arrows.includes(e.key)) {
+      const point = { ...keyboardFieldPoint }, step = e.shiftKey ? .045 : .022;
+      if (e.key === "ArrowLeft") point.x -= step;
+      if (e.key === "ArrowRight") point.x += step;
+      if (e.key === "ArrowUp") point.y -= step;
+      if (e.key === "ArrowDown") point.y += step;
+      if (playablePoint(point.x * ecoCanvas.clientWidth, point.y * ecoCanvas.clientHeight)) keyboardFieldPoint = point;
+    } else {
+      const r = ecoCanvas.getBoundingClientRect();
+      addDeposit({ clientX:r.left + keyboardFieldPoint.x * r.width, clientY:r.top + keyboardFieldPoint.y * r.height });
+    }
+    paintEco(); return;
+  }
+  if (ecoMode === "future" && (arrows.includes(e.key) || e.key === " " || e.key === "Enter")) {
+    e.preventDefault(); keyboardFieldActive = true;
+    const available = renderedPlants.filter(p => !harvestedPlants.has(p.id));
+    if (!available.length) return;
+    let index = available.findIndex(p => p.id === keyboardPlantId);
+    if (index < 0) index = 0;
+    else if (arrows.includes(e.key)) index = (index + (["ArrowLeft", "ArrowUp"].includes(e.key) ? -1 : 1) + available.length) % available.length;
+    const selected = available[index];
+    keyboardPlantId = selected.id;
+    if (e.key === " " || e.key === "Enter") {
+      handleHarvestClick(selected, e.shiftKey);
+      keyboardPlantId = available.find(p => !harvestedPlants.has(p.id))?.id || null;
+    } else {
+      const lang = document.documentElement.lang;
+      announcement.textContent = lang === "ja" ? selected.name + "。Enterキーで収穫。"
+        : lang === "en" ? selected.name + ". Press Enter to harvest."
+          : selected.name + ". Premi Invio per raccogliere.";
+    }
+    paintEco(); return;
+  }
   if (ecoMode === "mixing" && (e.key === " " || e.key === "Enter")) {
     e.preventDefault();
     if (!stirLastTime) stirLastTime = performance.now();
@@ -1636,6 +1696,7 @@ function resetEco() {
   watered = []; seeded = []; growthSites = []; renderedPlants = []; pourAnimations = [];
   mix = "carbonari";
   ecoMode = "brush";
+  keyboardFieldActive = false; keyboardPlantId = null; keyboardFieldPoint = { x:.57, y:.63 };
   growth = 0;
   waterTotal = 0;
   waterRemaining = 0;

@@ -809,7 +809,13 @@ function drawFarmer() {
     const depth = Math.max(0, Math.min(1, (y / h - .48) / .38));
     const height = h * (.25 + depth * .24);
     const width = height * pose.naturalWidth / pose.naturalHeight;
-    ex.drawImage(pose, x - width * .5, y - height * .985, width, height);
+    // Remove neighbouring-pose fragments at the atlas slice's left edge.
+    // Keep the full-frame scale and foot anchor; cropping must not stretch the pose.
+    const leftInset = [0, 26, 48][frame] * pose.naturalWidth / 512;
+    const visibleWidth = pose.naturalWidth - leftInset;
+    ex.drawImage(pose, leftInset, 0, visibleWidth, pose.naturalHeight,
+      x - width * .5 + leftInset / pose.naturalWidth * width,
+      y - height * .985, visibleWidth / pose.naturalWidth * width, height);
   }
   ex.save(); ex.fillStyle = "#595047";
   for (const seed of seeded) {

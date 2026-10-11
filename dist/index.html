@@ -8,7 +8,7 @@
       content="I prodotti della Natura — agricoltura rigenerativa, CÍGNULA Mini e INBRUMA dei Carbonari."
     />
     <title>I prodotti della Natura</title>
-    <link rel="stylesheet" href="/style.css?v=20261011-1" />
+    <link rel="stylesheet" href="/style.css?v=20261011-3" />
   </head>
   <body>
     <header>
@@ -38,7 +38,7 @@
         </figure>
         <div class="hero-actions" aria-label="Azioni principali">
           <a class="hero-button products-button" href="#shop">PRODOTTI</a>
-          <button class="hero-button tryBig">PROVACI SUL CAMPO</button>
+          <button class="hero-button tryBig"><span>PROVACI SUL CAMPO</span><span class="field-postit" aria-hidden="true"><svg viewBox="0 0 64 42" focusable="false"><path d="M16 9h32c7 0 11 6 12 14l1 7c1 7-6 10-10 5l-7-7H20l-7 7c-4 5-11 2-10-5l1-7C5 15 9 9 16 9Z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M17 15v12M11 21h12" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="45" cy="17" r="2.5" fill="currentColor"/><circle cx="51" cy="23" r="2.5" fill="currentColor"/></svg></span></button>
         </div>
       </section>
 
@@ -327,7 +327,7 @@
       <section id="iononbrucio" class="pickup-section">
         <p class="eyebrow">NOVITÀ</p>
         <h2>#IONONBRUCIO</h2>
-        <p>Ritiro delle potature di ulivo.</p>
+        <p>È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno.</p>
         <button id="openPickup" type="button">PRENOTA</button>
       </section>
 
@@ -380,6 +380,7 @@
     </dialog>
     <dialog id="harvestComplete" aria-labelledby="harvestCompleteTitle">
       <button class="x harvest-complete-close" type="button" aria-label="Chiudi riepilogo">×</button>
+      <img class="recap-lizard" src="/assets/lacerta-viridis-ink.png" alt="" aria-hidden="true" />
       <p class="eyebrow">RACCOLTA COMPLETATA</p>
       <h2 id="harvestCompleteTitle">COMPLIMENTI.<br /><em>CAMPO RACCOLTO.</em></h2>
       <p id="harvestCompleteCount"></p>
@@ -421,7 +422,7 @@
             <b id="clockValue">10</b>
             <span>GIORNI</span>
           </div>
-          <div id="harvestCombo" role="status" aria-live="polite" aria-atomic="true" hidden><b>0</b></div>
+          <div id="harvestCombo" role="status" aria-live="polite" aria-atomic="true" hidden><small>COMBO!</small><b>+0</b></div>
           <div id="plantButtons" role="group" aria-live="polite" aria-label="Contatori dei frutti raccolti"></div>
           <div class="eco-readout">
             <span id="ecoState">BRUSH / INBRUMA</span
@@ -510,7 +511,7 @@
       </form>
       <small>Nessun pagamento. Nessun obbligo di acquisto.</small>
     </dialog>
-    <script src="/i18n.js?v=20261010-3"></script>
-    <script src="/app.js?v=20261011-2"></script>
+    <script src="/i18n.js?v=20261011-3"></script>
+    <script src="/app.js?v=20261011-3"></script>
   </body>
 </html>

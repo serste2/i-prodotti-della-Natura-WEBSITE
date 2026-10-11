@@ -2118,3 +2118,26 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
 @media(max-height:620px) {
   .eco-macerating #fieldFact {bottom:10px;padding:10px 12px;font-size:12px;}
 }
+
+/* A small game-control note rests on the CTA corner. */
+#home .tryBig {position:relative;overflow:visible;}
+.field-postit {
+  position:absolute;right:14px;top:-19px;width:48px;height:39px;
+  display:grid;place-items:center;background:var(--paper);color:var(--ink);
+  border:1px solid var(--ink);box-shadow:3px 3px 0 #16151044;
+  transform:rotate(11deg);pointer-events:none;
+}
+.field-postit::before {content:"";position:absolute;top:-5px;left:13px;width:22px;height:9px;background:#ead391aa;transform:rotate(-6deg);}
+.field-postit svg {width:36px;height:27px;}
+#harvestCombo {
+  min-width:0;width:clamp(54px,5.2vw,72px);border-width:2px;
+  grid-template-rows:auto 1fr;gap:1px;padding:6px 3px 4px;
+  box-sizing:border-box;box-shadow:4px 4px 0 var(--p);
+}
+#harvestCombo small {font:700 clamp(8px,.85vw,10px)/1 "Roboto Mono",monospace;letter-spacing:.03em;}
+#harvestCombo b {font:700 clamp(25px,3vw,39px)/1 "Bodoni Moda",serif;}
+#harvestComplete .recap-lizard {float:right;width:clamp(74px,18%,105px);height:auto;margin:10px 24px 4px 12px;pointer-events:none;}
+@media(max-width:520px) {
+  .field-postit {right:9px;top:-16px;width:42px;height:34px;}
+  .field-postit svg {width:31px;height:24px;}
+}

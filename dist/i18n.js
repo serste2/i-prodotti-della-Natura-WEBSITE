@@ -216,6 +216,10 @@
     }
   };
 
+  translations.en["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "Bookings are now open. We collect your olive prunings: fill in the form with no obligation.";
+  translations.ja["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "予約受付を開始しました。オリーブの剪定枝を回収します。お申し込みの義務はありませんので、フォームにご記入ください。";
+  translations.en["Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari."] = "Pick up the flat spoon in the basin and follow the inner rim with circular movements.";
+  translations.ja["Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari."] = "たらいの平たいスプーンをつかみ、内側の縁に沿って円を描くように動かしてください。";
   const dict = translations[locale];
   const dynamic = (value) => {
     let m;

@@ -391,7 +391,9 @@ const fieldFacts = [
 ];
 let factIndex = -1, factInterval, canHeld = false;
 const faunaImage = new Image(), cloudImage = new Image();
-const cropsAtlas = new Image(), biomassAtlas = new Image(), ladleAtlas = new Image(), lizardImage = new Image();
+const cropsAtlas = new Image(), biomassAtlas = new Image(), lizardImage = new Image();
+const tomatoSprites = [1, 2, 3].map(i => { const image = new Image(); image.src = `/assets/tomato-red-${i}.webp`; return image; });
+const flatSpoonImage = new Image(); flatSpoonImage.src = "/assets/wood-flat-spoon.webp";
 faunaImage.src = "/assets/ink-fauna-clean.webp";
 const pollinatorSprites = ["vespa", "bombo", "bombo-pratense", "sfinge", "lepidottero"].map(name => {
   const image = new Image(); image.src = "/assets/pollinator-" + name + ".webp"; return image;
@@ -402,7 +404,6 @@ const nocturnalSprites = ["cinghiali", "volpe", "succiacapre"].map(name => {
 cloudImage.src = "/assets/ink-clouds-clean.webp";
 cropsAtlas.src = "/assets/ink-crops-atlas.png";
 biomassAtlas.src = "/assets/inbruma-brush-atlas.png";
-ladleAtlas.src = "/assets/wood-ladle-ripples-atlas.png";
 lizardImage.src = "/assets/lacerta-viridis-ink.png";
 function sizeEco() {
   const d = devicePixelRatio || 1,
@@ -555,20 +556,11 @@ function plant(p, scale = 1, offset = 0) {
       ex.lineTo(nx, ground);
     }
     ex.closePath(); ex.clip();
-    ex.drawImage(cropsAtlas, type * 511, 0, 511, 768, -width / 2, -height, width, height + buried);
-    if (p.shape === "tomato") {
-      // The atlas carries pale unripe fruit; recolour only the two fruit areas,
-      // preserving the engraved texture, sepals, leaves and dark ink outlines.
-      ex.save();
-      ex.globalCompositeOperation = "color";
-      ex.globalAlpha = .92;
-      ex.fillStyle = "#d52f2f";
-      [[.075, -.452, .083], [.247, -.414, .079]].forEach(([tx, ty, tr]) => {
-        ex.beginPath();
-        ex.arc(width * tx, height * ty, width * tr, 0, Math.PI * 2);
-        ex.fill();
-      });
-      ex.restore();
+    const tomato = tomatoSprites[Math.floor(variation) % tomatoSprites.length];
+    if (p.shape === "tomato" && tomato.complete && tomato.naturalWidth) {
+      ex.drawImage(tomato, -width / 2, -height, width, height + buried);
+    } else {
+      ex.drawImage(cropsAtlas, type * 511, 0, 511, 768, -width / 2, -height, width, height + buried);
     }
     ex.restore(); return;
   }
@@ -733,19 +725,45 @@ function drawNocturnalVisitors(now) {
   ex.drawImage(image,-width/2,-height/2,width,height);
   ex.restore();
 }
+function basinSurface(width = ecoCanvas.clientWidth, height = ecoCanvas.clientHeight) {
+  // Liquid landmarks measured on the 1672 × 941 field illustration.
+  return { cx: width * 157 / 1672, cy: height * 725 / 941,
+    ux: width * 174 / 1672, uy: height * -22 / 941,
+    vx: width * 4 / 1672, vy: height * 36 / 941 };
+}
+function basinPoint(surface, x, y) {
+  return { x: surface.cx + surface.ux * x + surface.vx * y,
+    y: surface.cy + surface.uy * x + surface.vy * y };
+}
 function drawLadle(now) {
-  const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
-  const pos = ladleHeld && ladlePos ? ladlePos : { x: w * .11, y: h * .78, angle: -.08 };
-  if (!ladleAtlas.complete || !ladleAtlas.naturalWidth) return;
-  if (ladleHeld || now - lastStirAt < 520) {
-    const frame = Math.floor(now / 170) % 3;
-    ex.save(); ex.globalAlpha = .62 * (ladleHeld ? 1 : Math.max(0, 1 - (now - lastStirAt) / 520));
-    ex.drawImage(ladleAtlas, 630, frame * 313, 1000, 313,
-      w * .11 - w * .09, h * .78 - h * .033, w * .18, h * .067);
+  const surface = basinSurface();
+  const pos = ladleHeld && ladlePos ? ladlePos : { x: surface.cx, y: surface.cy, angle: -.08 };
+  const moving = ladleHeld || (lastStirAt > 0 && now - lastStirAt < 700);
+  if (moving) {
+    const fade = ladleHeld ? 1 : Math.max(0, 1 - (now - lastStirAt) / 700);
+    ex.save();
+    ex.transform(surface.ux, surface.uy, surface.vx, surface.vy, surface.cx, surface.cy);
+    ex.beginPath(); ex.arc(0, 0, .94, 0, Math.PI * 2); ex.clip();
+    ex.strokeStyle = "#e5d8bd"; ex.globalAlpha = .58 * fade; ex.lineWidth = .012;
+    const phase = now / 1100;
+    for (let arm = 0; arm < 3; arm++) {
+      ex.beginPath();
+      for (let k = 0; k <= 110; k++) {
+        const t = k / 110, radius = .08 + t * .82;
+        const angle = t * Math.PI * 3.2 + arm * Math.PI * 2 / 3 + phase;
+        const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
+        if (k === 0) ex.moveTo(x, y); else ex.lineTo(x, y);
+      }
+      ex.stroke();
+    }
     ex.restore();
   }
+  if (!flatSpoonImage.complete || !flatSpoonImage.naturalWidth) return;
+  const height = Math.max(86, Math.min(142, ecoCanvas.clientHeight * .23));
+  const width = height * 170 / 750;
   ex.save(); ex.translate(pos.x, pos.y); ex.rotate(pos.angle ?? -.08);
-  ex.drawImage(ladleAtlas, 55, 0, 520, 941, -29, -133, 58, 139);
+  // The shallow spoon head, rather than the handle end, meets the liquid.
+  ex.drawImage(flatSpoonImage, 175, 8, 170, 750, -width / 2, -height * .86, width, height);
   ex.restore();
 }
 function seatedLayout() {
@@ -900,7 +918,7 @@ function paintEco() {
   }
   drawNocturnalVisitors(now);
   const daylight = ecoMode === "macerating" ? Math.max(0, 1 - macerationNightStrength / .55) : 1;
-  if (daylight > 0 && lizardImage.complete && lizardImage.naturalWidth) {
+  if (["brush", "mixing"].includes(ecoMode) && lizardImage.complete && lizardImage.naturalWidth) {
     const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
     ex.save(); ex.globalAlpha = daylight;
     ex.drawImage(lizardImage, w * .035, h * .48, Math.min(100, w * .075), Math.min(56, h * .07));
@@ -952,7 +970,7 @@ function updateEco() {
     mixing: [
       "CÍGNULA / PREPARAZIONE",
       "MESCOLA GLI INGREDIENTI",
-      "Afferra il mestolo nel catino e segui il bordo interno con movimenti circolari.",
+      "Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari.",
     ],
     macerating: [
       "CÍGNULA / MACERAZIONE",
@@ -1107,15 +1125,22 @@ function mixAt(x, y) {
   const px = x - r.left, py = y - r.top, now = performance.now();
   if (px > r.width * .24 || py < r.height * .65 || py > r.height * .89) return;
   if (!ladleHeld) {
-    if (Math.hypot(px - r.width * .11, py - r.height * .78) > Math.max(48, r.width * .055)) return;
+    const surface = basinSurface(r.width, r.height);
+    if (Math.hypot(px - surface.cx, py - surface.cy) > Math.max(48, r.width * .065)) return;
     ladleHeld = true;
     stirLastTime = now; lastMixPoint = { x: px, y: py };
     return;
   }
-  const cx = r.width * .11, cy = r.height * .78;
-  const a = Math.atan2((py - cy) / r.height, (px - cx) / r.width);
+  const surface = basinSurface(r.width, r.height), { cx, cy } = surface;
+  const angleAt = (x, y) => {
+    const dx = x - cx, dy = y - cy;
+    const determinant = surface.ux * surface.vy - surface.uy * surface.vx;
+    return Math.atan2((surface.ux * dy - surface.uy * dx) / determinant,
+      (dx * surface.vy - dy * surface.vx) / determinant);
+  };
+  const a = angleAt(px, py);
   if (lastMixPoint) {
-    const before = Math.atan2((lastMixPoint.y - cy) / r.height, (lastMixPoint.x - cx) / r.width);
+    const before = angleAt(lastMixPoint.x, lastMixPoint.y);
     let delta = a - before;
     delta = Math.atan2(Math.sin(delta), Math.cos(delta));
     const radius = Math.hypot(px - cx, py - cy);
@@ -1125,10 +1150,9 @@ function mixAt(x, y) {
       playSound("stir");
     }
   }
-  const rx = Math.min(r.width * .045, 52), ry = Math.min(r.height * .055, 40);
   const nextAngle = Math.sin(a) * .14;
   stirAngle += Math.atan2(Math.sin(nextAngle - stirAngle), Math.cos(nextAngle - stirAngle)) * .24;
-  ladlePos = { x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry, angle: stirAngle };
+  ladlePos = { ...basinPoint(surface, Math.cos(a) * .48, Math.sin(a) * .48), angle: stirAngle };
   lastStirAt = now;
   lastMixPoint = { x: px, y: py }; stirLastTime = now;
   mixProgress = Math.min(100, stirElapsed / 7000 * 100, stirTurns / (Math.PI * 4) * 100);
@@ -1402,7 +1426,7 @@ function showHarvestCombo(total, plants) {
   const x = Math.max(16, Math.min(84, average.x / plants.length * 100));
   const y = Math.max(18, Math.min(70, average.y / plants.length * 100 - 13));
   harvestCombo.style.left = `${x}%`; harvestCombo.style.top = `${y}%`;
-  harvestCombo.querySelector("b").textContent = total;
+  harvestCombo.querySelector("b").textContent = `+${total}`;
   harvestCombo.setAttribute("aria-label", `${total} piante raccolte nelle ultime due raccolte multiple`);
   harvestCombo.hidden = false;
   harvestCombo.classList.remove("show");
@@ -1653,7 +1677,7 @@ document.querySelector("#reopenField").onclick = openFuture;
 ecosystem.addEventListener("close", () => {
   if (!["future", "sowing"].includes(ecoMode)) resetEco();
 });
-[...pollinatorSprites, ...nocturnalSprites, fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, ladleAtlas, lizardImage, ...farmerSowingFrames, seatedFarmerImage, stoolImage].forEach((image) => {
+[...tomatoSprites, flatSpoonImage, ...pollinatorSprites, ...nocturnalSprites, fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, lizardImage, ...farmerSowingFrames, seatedFarmerImage, stoolImage].forEach((image) => {
   image.onload = () => ecosystem.open && paintEco();
 });
 addEventListener("resize", () => {

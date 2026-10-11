@@ -690,7 +690,7 @@ const pollinatorDirections = (() => {
   }
   return directions;
 })();
-function drawFauna(now) {
+function drawFauna(now, daylight = 1) {
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   const creatures = [
     [0,.34,.40,32], [1,.59,.34,34], [2,.69,.46,29],
@@ -703,7 +703,7 @@ function drawFauna(now) {
     const t = now / 1100 + i * 1.7;
     const dx = Math.sin(t) * w * .018, dy = Math.cos(t * 1.3) * h * .014;
     const height = size * image.naturalHeight / image.naturalWidth;
-    ex.save(); ex.globalAlpha = .94;
+    ex.save(); ex.globalAlpha = .94 * daylight;
     ex.translate(nx*w+dx, ny*h+dy);
     ex.scale(pollinatorDirections[i], 1);
     ex.drawImage(image, -size/2, -height/2, size, height);
@@ -727,7 +727,7 @@ function drawNocturnalVisitors(now) {
   const image = nocturnalSprites[type];
   if (!image.complete || !image.naturalWidth) return;
   const height = width * image.naturalHeight / image.naturalWidth;
-  ex.save(); ex.globalAlpha=Math.min(1,macerationNightStrength*1.7);
+  ex.save(); ex.globalAlpha=Math.min(1,Math.max(0,(macerationNightStrength-.12)/.65));
   ex.translate(nx*w, ny*h-height/2);
   if (type === 1) ex.scale(-1, 1);
   ex.drawImage(image,-width/2,-height/2,width,height);
@@ -899,13 +899,14 @@ function paintEco() {
     renderedPlants.forEach(p => { if (!harvestedPlants.has(p.id)) plant(p, p.size, p.variation); });
   }
   drawNocturnalVisitors(now);
-  if ((ecoMode !== "macerating" || macerationNightStrength < .18) && lizardImage.complete && lizardImage.naturalWidth) {
+  const daylight = ecoMode === "macerating" ? Math.max(0, 1 - macerationNightStrength / .55) : 1;
+  if (daylight > 0 && lizardImage.complete && lizardImage.naturalWidth) {
     const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
-    ex.save(); ex.globalAlpha = 1;
+    ex.save(); ex.globalAlpha = daylight;
     ex.drawImage(lizardImage, w * .035, h * .48, Math.min(100, w * .075), Math.min(56, h * .07));
     ex.restore();
   }
-  if (ecoMode !== "macerating" || macerationNightStrength < .18) drawFauna(now);
+  if (daylight > 0) { ex.save(); ex.globalAlpha = daylight; drawFauna(now, daylight); ex.restore(); }
 }
 function animateEco(now) {
   if (!ecosystem.open) { cloudAnim = 0; lastCloudTime = 0; return; }
@@ -1158,8 +1159,7 @@ function startMaceration() {
       elapsed = Math.min(duration, now - timerStart),
       dayIndex = Math.min(9, Math.floor(elapsed / dayDuration)),
       cycle = (elapsed % dayDuration) / dayDuration,
-      isNight = cycle >= .5,
-      nightStrength = cycle < .5 ? 0 : Math.sin((cycle - .5) * Math.PI * 2),
+      nightStrength = Math.min(1, (1 - Math.cos(cycle * Math.PI * 2)) * .6),
       remaining = Math.max(0, 10 - Math.floor(elapsed / dayDuration));
     document.querySelector("#clockValue").textContent = remaining;
     macerationDayIndex = dayIndex;

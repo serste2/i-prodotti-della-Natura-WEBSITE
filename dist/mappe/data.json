@@ -1,0 +1,662 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-11T09:21:19.951Z",
+  "through": "2026-10-10",
+  "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "modes": [
+    {
+      "name": "Umidita vegetazione/superficie | NDMI",
+      "band": "NDMI",
+      "unit": "indice",
+      "note": "Proxy dell umidita della vegetazione e superficie; non misura direttamente acqua nel suolo o runoff.",
+      "vis": {
+        "min": -0.45,
+        "max": 0.55,
+        "palette": [
+          "8c510a",
+          "dfc27d",
+          "f6e8c3",
+          "80cdc1",
+          "01665e"
+        ]
+      }
+    },
+    {
+      "name": "Copertura e vigore | NDVI",
+      "band": "NDVI",
+      "unit": "indice",
+      "note": "Vigore vegetativo relativo; non misura direttamente biomassa o percentuale di copertura.",
+      "vis": {
+        "min": -0.1,
+        "max": 0.9,
+        "palette": [
+          "8c510a",
+          "dfc27d",
+          "ffffcc",
+          "78c679",
+          "006837"
+        ]
+      }
+    },
+    {
+      "name": "Probabilita di copertura vegetale | Dynamic World",
+      "band": "VEG_PROB",
+      "unit": "probabilita",
+      "note": "Somma delle probabilita delle classi vegetali Dynamic World.",
+      "vis": {
+        "min": 0,
+        "max": 1,
+        "palette": [
+          "6e3b16",
+          "e5c07b",
+          "b8de7a",
+          "238b45",
+          "005a32"
+        ]
+      }
+    },
+    {
+      "name": "Temperatura superficiale | Landsat LST",
+      "band": "LST_C",
+      "unit": "C",
+      "note": "Temperatura radiometrica superficiale; non temperatura aria o suolo profondo.",
+      "vis": {
+        "min": 16,
+        "max": 44,
+        "palette": [
+          "313695",
+          "74add1",
+          "ffffbf",
+          "f46d43",
+          "a50026"
+        ]
+      }
+    },
+    {
+      "name": "Ricrescita e disturbo | NBR",
+      "band": "NBR",
+      "unit": "indice",
+      "note": "Indicatore spettrale di disturbo e ricrescita.",
+      "vis": {
+        "min": -0.35,
+        "max": 0.85,
+        "palette": [
+          "7f0000",
+          "d7301f",
+          "fdbb84",
+          "ffffcc",
+          "78c679",
+          "006837"
+        ]
+      }
+    },
+    {
+      "name": "Recupero spettrale | riferimento 2024",
+      "band": "NBR_RECOVERY",
+      "unit": "frazione",
+      "note": "(NBR anno − NBR 2024) / max(|NBR 2023 − NBR 2024|, 0,05), limitato tra −1 e 2 prima della media. Non è una percentuale di recupero ecologico.",
+      "vis": {
+        "min": -1,
+        "max": 2,
+        "palette": [
+          "7f0000",
+          "d7301f",
+          "ffffbf",
+          "78c679",
+          "006837"
+        ]
+      }
+    },
+    {
+      "name": "Colori reali | Sentinel-2",
+      "band": "RGB",
+      "unit": "",
+      "note": "Composito stagionale Sentinel-2 a colori reali (rosso, verde, blu). Il bordo giallo indica il perimetro aziendale.",
+      "vis": {
+        "min": 0,
+        "max": 0.3,
+        "palette": [
+          "000000",
+          "ffffff"
+        ]
+      }
+    }
+  ],
+  "images": {
+    "NDMI_2021": "images/NDMI_2021.png",
+    "NDMI_2019": "images/NDMI_2019.png",
+    "NDMI_2020": "images/NDMI_2020.png",
+    "NDMI_2022": "images/NDMI_2022.png",
+    "NDMI_2023": "images/NDMI_2023.png",
+    "NDMI_2025": "images/NDMI_2025.png",
+    "NDMI_2026": "images/NDMI_2026.png",
+    "NDMI_2024": "images/NDMI_2024.png",
+    "NDVI_2021": "images/NDVI_2021.png",
+    "NDVI_2020": "images/NDVI_2020.png",
+    "NDVI_2019": "images/NDVI_2019.png",
+    "NDVI_2022": "images/NDVI_2022.png",
+    "NDVI_2023": "images/NDVI_2023.png",
+    "NDVI_2024": "images/NDVI_2024.png",
+    "NDVI_2026": "images/NDVI_2026.png",
+    "NDVI_2025": "images/NDVI_2025.png",
+    "VEG_PROB_2020": "images/VEG_PROB_2020.png",
+    "VEG_PROB_2019": "images/VEG_PROB_2019.png",
+    "VEG_PROB_2021": "images/VEG_PROB_2021.png",
+    "VEG_PROB_2022": "images/VEG_PROB_2022.png",
+    "VEG_PROB_2023": "images/VEG_PROB_2023.png",
+    "VEG_PROB_2024": "images/VEG_PROB_2024.png",
+    "VEG_PROB_2026": "images/VEG_PROB_2026.png",
+    "VEG_PROB_2025": "images/VEG_PROB_2025.png",
+    "LST_C_2019": "images/LST_C_2019.png",
+    "LST_C_2020": "images/LST_C_2020.png",
+    "LST_C_2022": "images/LST_C_2022.png",
+    "LST_C_2021": "images/LST_C_2021.png",
+    "LST_C_2023": "images/LST_C_2023.png",
+    "LST_C_2025": "images/LST_C_2025.png",
+    "LST_C_2024": "images/LST_C_2024.png",
+    "LST_C_2026": "images/LST_C_2026.png",
+    "NBR_2020": "images/NBR_2020.png",
+    "NBR_2019": "images/NBR_2019.png",
+    "NBR_2022": "images/NBR_2022.png",
+    "NBR_2021": "images/NBR_2021.png",
+    "NBR_2023": "images/NBR_2023.png",
+    "NBR_2025": "images/NBR_2025.png",
+    "NBR_2026": "images/NBR_2026.png",
+    "NBR_2024": "images/NBR_2024.png",
+    "NBR_RECOVERY_2019": "images/NBR_RECOVERY_2019.png",
+    "NBR_RECOVERY_2022": "images/NBR_RECOVERY_2022.png",
+    "NBR_RECOVERY_2023": "images/NBR_RECOVERY_2023.png",
+    "NBR_RECOVERY_2020": "images/NBR_RECOVERY_2020.png",
+    "NBR_RECOVERY_2021": "images/NBR_RECOVERY_2021.png",
+    "NBR_RECOVERY_2024": "images/NBR_RECOVERY_2024.png",
+    "NBR_RECOVERY_2025": "images/NBR_RECOVERY_2025.png",
+    "RGB_2019": "images/RGB_2019.png",
+    "RGB_2021": "images/RGB_2021.png",
+    "NBR_RECOVERY_2026": "images/NBR_RECOVERY_2026.png",
+    "RGB_2020": "images/RGB_2020.png",
+    "RGB_2023": "images/RGB_2023.png",
+    "RGB_2022": "images/RGB_2022.png",
+    "RGB_2025": "images/RGB_2025.png",
+    "RGB_2026": "images/RGB_2026.png",
+    "RGB_2024": "images/RGB_2024.png"
+  },
+  "statistics": [
+    {
+      "LST_C": 30.99486395720927,
+      "LST_VALID_COUNT": 13.295462376706702,
+      "NBR": 0.5135210565511849,
+      "NBR_RECOVERY": -0.345758029372008,
+      "NDMI": 0.2168555574932863,
+      "NDVI": 0.7477560114429482,
+      "S2_VALID_COUNT": 36.57275918507987,
+      "VEG_PROB": 0.8569491176991587,
+      "end_date": "2019-10-10",
+      "gruppo": "azienda",
+      "nome": "Azienda",
+      "start_date": "2019-04-01",
+      "year": 2019
+    },
+    {
+      "LST_C": 30.519103065450576,
+      "LST_VALID_COUNT": 14.356040147788514,
+      "NBR": 0.5031140899470804,
+      "NBR_RECOVERY": 0.03070787368060003,
+      "NDMI": 0.21565266178416284,
+      "NDVI": 0.7284743812581255,
+      "S2_VALID_COUNT": 36.95631539219271,
+      "VEG_PROB": 0.8505765738497904,
+      "end_date": "2019-10-10",
+      "gruppo": "confronto",
+      "nome": "Contesto circostante (non classificato)",
+      "start_date": "2019-04-01",
+      "year": 2019
+    },
+    {
+      "LST_C": 30.899426970597307,
+      "LST_VALID_COUNT": 13.221303355299975,
+      "NBR": 0.5211627712644875,
+      "NBR_RECOVERY": -0.2154929624052774,
+      "NDMI": 0.2232578890620726,
+      "NDVI": 0.7570318721907745,
+      "S2_VALID_COUNT": 40.53458672524441,
+      "VEG_PROB": 0.8549313399160013,
+      "end_date": "2020-10-10",
+      "gruppo": "azienda",
+      "nome": "Azienda",
+      "start_date": "2020-04-01",
+      "year": 2020
+    },
+    {
+      "LST_C": 31.18318582707386,
+      "LST_VALID_COUNT": 15.689676704972022,
+      "NBR": 0.503079760038477,
+      "NBR_RECOVERY": 0.027244403926496418,
+      "NDMI": 0.2152751206319424,
+      "NDVI": 0.7318758400772006,
+      "S2_VALID_COUNT": 38.55069661689788,
+      "VEG_PROB": 0.8468255975230193,
+      "end_date": "2020-10-10",
+      "gruppo": "confronto",
+      "nome": "Contesto circostante (non classificato)",
+      "start_date": "2020-04-01",
+      "year": 2020
+    },
+    {
+      "LST_C": 32.203304876682026,
+      "LST_VALID_COUNT": 11.527027609079544,
+      "NBR": 0.5363583911796599,
+      "NBR_RECOVERY": 0.04192156834401766,
+      "NDMI": 0.2468582632052893,
+      "NDVI": 0.7554200161149762,
+      "S2_VALID_COUNT": 43.32565576947925,
+      "VEG_PROB": 0.8478494032091364,
+      "end_date": "2021-10-10",
+      "gruppo": "azienda",
+      "nome": "Azienda",
+      "start_date": "2021-04-01",
+      "year": 2021
+    },
+    {
+      "LST_C": 32.34274790126694,
+      "LST_VALID_COUNT": 11.042827907052553,
+      "NBR": 0.5029597760463964,
+      "NBR_RECOVERY": 0.09118552344109829,
+      "NDMI": 0.22143586036465243,
+      "NDVI": 0.7182468542165699,
+      "S2_VALID_COUNT": 38.95985934216383,
+      "VEG_PROB": 0.8456986383251921,
+      "end_date": "2021-10-10",
+      "gruppo": "confronto",
+      "nome": "Contesto circostante (non classificato)",
+      "start_date": "2021-04-01",
+      "year": 2021
+    },
+    {
+      "LST_C": 32.74130263431902,
+      "LST_VALID_COUNT": 37.21736227764138,
+      "NBR": 0.5399540309919519,
+      "NBR_RECOVERY": 0.07438793931982483,
+      "NDMI": 0.2487363035166083,
+      "NDVI": 0.7618551694906732,
+      "S2_VALID_COUNT": 50.04887582374983,
+      "VEG_PROB": 0.8518558054828085,
+      "end_date": "2022-10-10",
+      "gruppo": "azienda",
+      "nome": "Azienda",
+      "start_date": "2022-04-01",
+      "year": 2022
+    },
+    {
+      "LST_C": 32.81666404839772,
+      "LST_VALID_COUNT": 38.286995771504344,
+      "NBR": 0.5000108877604559,
+      "NBR_RECOVERY": 0.011521907200547778,
+      "NDMI": 0.21681859550661547,
+      "NDVI": 0.7234696618489564,
+      "S2_VALID_COUNT": 47.69458974628005,
+      "VEG_PROB": 0.8500718796325433,
+      "end_date": "2022-10-10",
+      "gruppo": "confronto",
+      "nome": "Contesto circostante (non classificato)",
+      "start_date": "2022-04-01",
+      "year": 2022
+    },
+    {
+      "LST_C": 31.223239610543654,
+      "LST_VALID_COUNT": 29.272677348494614,
+      "NBR": 0.5346196145453057,
+      "NBR_RECOVERY": -0.08357809001291296,
+      "NDMI": 0.23418262594251865,
+      "NDVI": 0.7588167790991466,
+      "S2_VALID_COUNT": 41.73861825386567,
+      "VEG_PROB": 0.8568063417834193,
+      "end_date": "2023-10-10",
+      "gruppo": "azienda",
+      "nome": "Azienda",
+      "start_date": "2023-04-01",
+      "year": 2023
+    },
+    {
+      "LST_C": 31.362811637071893,
+      "LST_VALID_COUNT": 31.26438946573858,
+      "NBR": 0.4904132053902943,
+      "NBR_RECOVERY": -0.20488900406290522,
+      "NDMI": 0.20058162654674935,
+      "NDVI": 0.7237899532219717,
+      "S2_VALID_COUNT": 39.01929868703733,
+      "VEG_PROB": 0.8497779468642672,
+      "end_date": "2023-10-10",
+      "gruppo": "confronto",
+      "nome": "Contesto circostante (non classificato)",
+      "start_date": "2023-04-01",
+      "year": 2023
+    },
+    {
+      "LST_C": 30.223432489075503,
+      "LST_VALID_COUNT": 25.237896799758786,
+      "NBR": 0.5340209344547404,
+      "NBR_RECOVERY": 0,
+      "NDMI": 0.24825529156007906,
+      "NDVI": 0.7663516260331492,
+      "S2_VALID_COUNT": 34.59879614075891,
+      "VEG_PROB": 0.8514986594604526,
+      "end_date": "2024-10-10",
+      "gruppo": "azienda",
+      "nome": "Azienda",
+      "start_date": "2024-04-01",
+      "year": 2024
+    },
+    {
+      "LST_C": 29.804409450532024,
+      "LST_VALID_COUNT": 26.138381110614226,
+      "NBR": 0.4969831168328339,
+      "NBR_RECOVERY": 0,
+      "NDMI": 0.2187850178701973,
+      "NDVI": 0.7304784998792399,
+      "S2_VALID_COUNT": 33.57569068315009,
+      "VEG_PROB": 0.8517289681782698,
+      "end_date": "2024-10-10",
+      "gruppo": "confronto",
+      "nome": "Contesto circostante (non classificato)",
+      "start_date": "2024-04-01",
+      "year": 2024
+    },
+    {
+      "LST_C": 28.901563235459378,
+      "LST_VALID_COUNT": 32.66978937847265,
+      "NBR": 0.5584385968162621,
+      "NBR_RECOVERY": 0.3934848758056316,
+      "NDMI": 0.25887744486266745,
+      "NDVI": 0.7815477913451332,
+      "S2_VALID_COUNT": 65.84414437696515,
+      "VEG_PROB": 0.8580726506505046,
+      "end_date": "2025-10-10",
+      "gruppo": "azienda",
+      "nome": "Azienda",
+      "start_date": "2025-04-01",
+      "year": 2025
+    },
+    {
+      "LST_C": 28.703064868587642,
+      "LST_VALID_COUNT": 33.660956346970934,
+      "NBR": 0.5123281193311628,
+      "NBR_RECOVERY": 0.29920667537951084,
+      "NDMI": 0.22223280397967538,
+      "NDVI": 0.742067541884244,
+      "S2_VALID_COUNT": 61.4561885678836,
+      "VEG_PROB": 0.8544944018757505,
+      "end_date": "2025-10-10",
+      "gruppo": "confronto",
+      "nome": "Contesto circostante (non classificato)",
+      "start_date": "2025-04-01",
+      "year": 2025
+    },
+    {
+      "LST_C": 33.307480727994914,
+      "LST_VALID_COUNT": 47.25908816815261,
+      "NBR": 0.5571225895889148,
+      "NBR_RECOVERY": 0.38029566626855094,
+      "NDMI": 0.2559221892517736,
+      "NDVI": 0.7838952382919371,
+      "S2_VALID_COUNT": 80.19957358831881,
+      "VEG_PROB": 0.8566316741864556,
+      "end_date": "2026-10-10",
+      "gruppo": "azienda",
+      "nome": "Azienda",
+      "start_date": "2026-04-01",
+      "year": 2026
+    },
+    {
+      "LST_C": 33.85587153937098,
+      "LST_VALID_COUNT": 48.32057008800281,
+      "NBR": 0.4900080503150065,
+      "NBR_RECOVERY": 0.14738309000277156,
+      "NDMI": 0.20454579496142983,
+      "NDVI": 0.7249291042992425,
+      "S2_VALID_COUNT": 73.8184721388894,
+      "VEG_PROB": 0.8493426786083584,
+      "end_date": "2026-10-10",
+      "gruppo": "confronto",
+      "nome": "Contesto circostante (non classificato)",
+      "start_date": "2026-04-01",
+      "year": 2026
+    }
+  ],
+  "rain": [
+    {
+      "mm": 330.4181035372594,
+      "year": 2019
+    },
+    {
+      "mm": 318.9019948361947,
+      "year": 2020
+    },
+    {
+      "mm": 187.62858045101166,
+      "year": 2021
+    },
+    {
+      "mm": 297.8904157927427,
+      "year": 2022
+    },
+    {
+      "mm": 245.54486918449402,
+      "year": 2023
+    },
+    {
+      "mm": 244.79976863313095,
+      "year": 2024
+    },
+    {
+      "mm": 270.47068068385124,
+      "year": 2025
+    },
+    {
+      "mm": 176.64873446849492,
+      "year": 2026
+    }
+  ],
+  "errors": [],
+  "comparisonLabel": "Contesto circostante (non classificato)",
+  "bounds": [
+    [
+      [
+        11.401789673386938,
+        42.770081537698495
+      ],
+      [
+        11.42712222760242,
+        42.770081537698495
+      ],
+      [
+        11.42712222760242,
+        42.78720694015884
+      ],
+      [
+        11.401789673386938,
+        42.78720694015884
+      ],
+      [
+        11.401789673386938,
+        42.770081537698495
+      ]
+    ]
+  ],
+  "perimeter": [
+    [
+      [
+        11.411338806,
+        42.780197144
+      ],
+      [
+        11.410050392,
+        42.778209686
+      ],
+      [
+        11.409753799,
+        42.777603149
+      ],
+      [
+        11.411003113,
+        42.777713776
+      ],
+      [
+        11.411452293,
+        42.777896881
+      ],
+      [
+        11.412084579,
+        42.778011322
+      ],
+      [
+        11.412475586,
+        42.777832031
+      ],
+      [
+        11.412908554,
+        42.777378082
+      ],
+      [
+        11.413176537,
+        42.777271271
+      ],
+      [
+        11.413589478,
+        42.777359009
+      ],
+      [
+        11.41375351,
+        42.777259827
+      ],
+      [
+        11.413743019,
+        42.777381897
+      ],
+      [
+        11.413978577,
+        42.777423859
+      ],
+      [
+        11.415517807,
+        42.777187347
+      ],
+      [
+        11.415641785,
+        42.777076721
+      ],
+      [
+        11.415846825,
+        42.777172089
+      ],
+      [
+        11.416303635,
+        42.777107239
+      ],
+      [
+        11.417672157,
+        42.776527405
+      ],
+      [
+        11.418298721,
+        42.776023865
+      ],
+      [
+        11.418268204,
+        42.775928497
+      ],
+      [
+        11.418370247,
+        42.776023865
+      ],
+      [
+        11.418953896,
+        42.776123047
+      ],
+      [
+        11.419011116,
+        42.776481628
+      ],
+      [
+        11.419145584,
+        42.77665329
+      ],
+      [
+        11.419154167,
+        42.777065277
+      ],
+      [
+        11.418806076,
+        42.777488708
+      ],
+      [
+        11.418201447,
+        42.778671265
+      ],
+      [
+        11.417822838,
+        42.77910614
+      ],
+      [
+        11.416882515,
+        42.780590057
+      ],
+      [
+        11.416456223,
+        42.780647278
+      ],
+      [
+        11.416162491,
+        42.780788422
+      ],
+      [
+        11.414289474,
+        42.780799866
+      ],
+      [
+        11.413704872,
+        42.781318665
+      ],
+      [
+        11.413500786,
+        42.781269073
+      ],
+      [
+        11.413290024,
+        42.781360626
+      ],
+      [
+        11.412779808,
+        42.78105545
+      ],
+      [
+        11.412706375,
+        42.780895233
+      ],
+      [
+        11.412409782,
+        42.780693054
+      ],
+      [
+        11.41212368,
+        42.780620575
+      ],
+      [
+        11.411733627,
+        42.780330658
+      ],
+      [
+        11.411338806,
+        42.780197144
+      ]
+    ]
+  ]
+}

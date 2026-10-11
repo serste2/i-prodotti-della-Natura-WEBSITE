@@ -237,6 +237,78 @@ let deposits = [],
   audioCtx = null,
   lastRustleVariant = -1,
   lastAudioCue = {};
+
+/* Original, quiet pentatonic music for the field. */
+let fieldMusicTimer = 0, fieldMusicBus = null, fieldMusicStep = 0, fieldMusicNext = 0;
+let fieldMusicMuted = false;
+try { fieldMusicMuted = localStorage.getItem("inulaMusicMuted") === "1"; } catch {}
+const musicButton = document.querySelector("#fieldMusic");
+const musicLabels = location.pathname.startsWith("/ja") ? ["音楽を消す", "音楽を再生"] :
+  location.pathname.startsWith("/en") ? ["Mute music", "Play music"] : ["Silenzia musica", "Attiva musica"];
+function updateMusicButton() {
+  musicButton.textContent = fieldMusicMuted ? "♪ ×" : "♪";
+  musicButton.setAttribute("aria-label", musicLabels[fieldMusicMuted ? 1 : 0]);
+  musicButton.title = musicLabels[fieldMusicMuted ? 1 : 0];
+  musicButton.setAttribute("aria-pressed", String(!fieldMusicMuted));
+}
+function stopFieldMusic() {
+  clearInterval(fieldMusicTimer); fieldMusicTimer = 0;
+  if (fieldMusicBus && audioCtx) {
+    fieldMusicBus.gain.cancelScheduledValues(audioCtx.currentTime);
+    fieldMusicBus.gain.setTargetAtTime(0, audioCtx.currentTime, .12);
+  }
+}
+function startFieldMusic() {
+  if (fieldMusicMuted || !ecosystem.open || document.hidden || fieldMusicTimer) return;
+  const AudioEngine = window.AudioContext || window.webkitAudioContext;
+  if (!AudioEngine) return;
+  try {
+    audioCtx ||= new AudioEngine();
+    audioCtx.resume().catch(() => stopFieldMusic());
+    if (!fieldMusicBus) {
+      fieldMusicBus = audioCtx.createGain();
+      fieldMusicBus.gain.value = 0;
+      fieldMusicBus.connect(audioCtx.destination);
+    }
+    fieldMusicBus.gain.setTargetAtTime(.055, audioCtx.currentTime, .5);
+    fieldMusicNext = audioCtx.currentTime + .08;
+    const melody = [72, null, 76, 79, null, 74, 76, null, 69, null, 72, 74, null, 67, null, null,
+      72, 76, null, 81, 79, null, 76, null, 74, null, 72, 69, null, 67, null, null];
+    function note(midi, at, duration, level, type) {
+      const voice = audioCtx.createOscillator(), envelope = audioCtx.createGain();
+      voice.type = type;
+      voice.frequency.value = 440 * Math.pow(2, (midi - 69) / 12);
+      envelope.gain.setValueAtTime(.0001, at);
+      envelope.gain.exponentialRampToValueAtTime(level, at + .035);
+      envelope.gain.exponentialRampToValueAtTime(.0001, at + duration);
+      voice.connect(envelope).connect(fieldMusicBus);
+      voice.onended = () => { voice.disconnect(); envelope.disconnect(); };
+      voice.start(at); voice.stop(at + duration + .02);
+    }
+    function schedule() {
+      if (document.hidden || !ecosystem.open || fieldMusicMuted) { stopFieldMusic(); return; }
+      while (fieldMusicNext < audioCtx.currentTime + .6) {
+        const step = fieldMusicStep % melody.length;
+        if (melody[step] !== null) note(melody[step], fieldMusicNext, 1.45, .11, "sine");
+        if (step % 8 === 0) note([48, 53, 57, 55][Math.floor(step / 8)], fieldMusicNext, 3.2, .07, "triangle");
+        fieldMusicNext += .42; fieldMusicStep++;
+      }
+    }
+    schedule(); fieldMusicTimer = setInterval(schedule, 200);
+  } catch { stopFieldMusic(); }
+}
+musicButton.addEventListener("click", () => {
+  fieldMusicMuted = !fieldMusicMuted;
+  try { localStorage.setItem("inulaMusicMuted", fieldMusicMuted ? "1" : "0"); } catch {}
+  updateMusicButton();
+  if (fieldMusicMuted) stopFieldMusic(); else startFieldMusic();
+});
+ecosystem.addEventListener("pointerdown", startFieldMusic);
+ecosystem.addEventListener("keydown", startFieldMusic);
+ecosystem.addEventListener("close", stopFieldMusic);
+document.addEventListener("visibilitychange", () => document.hidden ? stopFieldMusic() : startFieldMusic());
+updateMusicButton();
+
 function playSound(kind, count = 1) {
   const AudioEngine = window.AudioContext || window.webkitAudioContext;
   if (!AudioEngine) return;
@@ -841,6 +913,7 @@ function animateEco(now) {
   cloudAnim = requestAnimationFrame(animateEco);
 }
 function startEcoAnimation() {
+  startFieldMusic();
   if (!cloudAnim) cloudAnim = requestAnimationFrame(animateEco);
 }
 function bagsComplete() {

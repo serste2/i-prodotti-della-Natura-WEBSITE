@@ -36,7 +36,7 @@
       "LANCIO / 01 · 12 € SPEDITA IN ITALIA": "LAUNCH / 01 · €12 DELIVERED IN ITALY", "KIT BOTANICO SECCO + CÍGNULApp": "DRY BOTANICAL KIT + CÍGNULApp",
       "RICHIEDI IL LANCIO ↗": "REQUEST THE LAUNCH ↗", "LANCIO / 02 · OLTRE 1 KG · 56 € SPEDIZIONE INCLUSA": "LAUNCH / 02 · OVER 1 KG · €56 DELIVERY INCLUDED",
       "SUBSTRATO VIVO FRESCO · A BASSA TRASFORMAZIONE": "FRESH LIVING SUBSTRATE · MINIMALLY PROCESSED", "DEI CARBONARI": "DEI CARBONARI",
-      "SCOPRI IL PRODOTTO ↓": "DISCOVER THE PRODUCT ↓", "SEGNALA INTERESSE ↗": "REGISTER INTEREST ↗",
+      "SCOPRI IL PRODOTTO ↓": "DISCOVER THE PRODUCT ↓", "PRENOTA GRATUITAMENTE": "RESERVE FOR FREE",
       "CÍGNULApp · INCLUSA GIÀ IN CÍGNULA MINI": "CÍGNULApp · ALREADY INCLUDED WITH CÍGNULA MINI", "La card di CÍGNULA Mini contiene il QR per accedere a CÍGNULApp.": "The CÍGNULA Mini card includes the QR code to access CÍGNULApp.",
       "INQUADRA": "FRAME", "FOTOGRAFA": "PHOTOGRAPH", "CONFRONTA": "COMPARE", "Apri CÍGNULApp dal QR nella card di CÍGNULA Mini.": "Open CÍGNULApp from the QR code on the CÍGNULA Mini card.",
       "Seleziona il telefono; l’app guida distanza e uso del flash.": "Select your phone; the app guides distance and flash use.", "Registra il punto, ottieni una stima e confronta le osservazioni nel tempo.": "Record the point, obtain an estimate and compare observations over time.",
@@ -44,7 +44,7 @@
       "Progettato per suoli argillosi disturbati": "Designed for disturbed clay soils", "LOTTO": "BATCH", "Origine, matrici, processo e resa registrati": "Origin, materials, process and yield recorded",
       "IL CAMPO": "THE FIELD", "L’INULA": "INULA", "LA BIOMASSA": "BIOMASS", "SOCIETÀ AGRICOLA SEMPLICE": "AGRICULTURAL PARTNERSHIP",
       "RIAPRI IL CAMPO": "REOPEN THE FIELD", "VEDI COSA È CRESCIUTO ↗": "SEE WHAT HAS GROWN ↗", "Il tuo campo continua a crescere.": "Your field keeps growing.",
-      "Modulo dimostrativo: in questa anteprima la richiesta non viene inviata.": "Demo form: this preview does not send your request.", "NOME": "NAME", "MESSAGGIO": "MESSAGE", "NOTA": "NOTE",
+      "NOME": "NAME", "MESSAGGIO": "MESSAGE", "NOTA": "NOTE",
       "INVIA RICHIESTA ↗": "SEND REQUEST ↗", "TORNA SU ↑": "BACK TO TOP ↑", "SITO / STATO INIZIALE": "SITE / INITIAL STATE",
       "IL CAMPO È STATO SEMINATO": "THE FIELD HAS BEEN SOWN", "PRIMO ORDINE.": "FIRST ORDER.", "COPIA CODICE ↗": "COPY CODE ↗", "IL TUO RACCOLTO": "YOUR HARVEST",
       "RACCOLTA COMPLETATA": "HARVEST COMPLETE", "COMPLIMENTI.": "CONGRATULATIONS.", "CAMPO RACCOLTO.": "FIELD HARVESTED.", "SCEGLI UN PRODOTTO DI LANCIO": "CHOOSE A LAUNCH PRODUCT",
@@ -62,8 +62,8 @@
       "SACCO SELEZIONATO": "SELECTED BAG", "distribuito nel campo": "spread across the field", "STUDIO SCIENTIFICO": "SCIENTIFIC STUDY", "CONSULTA IL PAPER ↗": "READ THE PAPER ↗",
       "CLICCA UN SACCO, POI DISTRIBUISCI NEL CAMPO": "CLICK A BAG, THEN SPREAD IT ACROSS THE FIELD", "CLICCA I CONTENITORI DEI SEMI": "CLICK THE SEED CONTAINERS",
       "Scopri gli studi e le connessioni con l’Inula.": "Discover the studies and connections with Inula.", "SEMINA": "SOW", "QUANTITÀ / BRUSH": "AMOUNT / BRUSH",
-      "PREPARA CÍGNULA NEL CATINO ↗": "PREPARE CÍGNULA IN THE BASIN ↗", "INTERESSE / SENZA IMPEGNO": "INTEREST / NO COMMITMENT", "SEGNALA INTERESSE ↗": "REGISTER INTEREST ↗",
-      "Nessun pagamento. Nessun obbligo di acquisto.": "No payment. No purchase obligation.", "ANTEPRIMA DEL MODULO.": "FORM PREVIEW.", "La richiesta non è stata inviata. Il servizio sarà disponibile alla pubblicazione.": "Your request was not sent. The service will be available at launch.",
+      "PREPARA CÍGNULA NEL CATINO ↗": "PREPARE CÍGNULA IN THE BASIN ↗", "PRENOTAZIONE GRATUITA": "FREE RESERVATION", "PRENOTA GRATUITAMENTE": "RESERVE FOR FREE",
+      "Nessun pagamento. Nessun obbligo di acquisto.": "No payment. No purchase obligation.", 
       "AMARANTO": "AMARANTH", "LATTUGA": "LETTUCE", "SPINACI": "SPINACH", "POMODORO": "TOMATO", "POMODORI": "TOMATOES",
       "APRI I SEMI ↗": "OPEN THE SEEDS ↗", "SCOPERTA ✓ · RIAPRI": "DISCOVERED ✓ · REOPEN", "SEMINA IL CAMPO ↗": "SOW THE FIELD ↗",
       "DAL CAMPO": "FROM THE FIELD", "SINISTRO: ANNAFFIA": "LEFT: WATER", "DESTRO: SOLLEVA": "RIGHT: LIFT", "CAMPO PREPARATO": "FIELD PREPARED",
@@ -147,14 +147,14 @@
       "CÍGNULA Mini e INBRUMA dei Carbonari sono i prodotti di lancio. Per la linea in sviluppo puoi segnalare interesse, senza acquisto né impegno.": "CÍGNULA MiniとINBRUMA dei Carbonariが発売製品です。開発中のシリーズには、購入義務なしで関心を登録できます。",
       "LANCIO / 01 · 12 € SPEDITA IN ITALIA": "発売 / 01 · 12ユーロ（イタリア国内送料込）", "KIT BOTANICO SECCO + CÍGNULApp": "乾燥植物キット + CÍGNULApp", "RICHIEDI IL LANCIO ↗": "発売を問い合わせる ↗",
       "LANCIO / 02 · OLTRE 1 KG · 56 € SPEDIZIONE INCLUSA": "発売 / 02 · 1KG超 · 56ユーロ（送料込）", "SUBSTRATO VIVO FRESCO · A BASSA TRASFORMAZIONE": "新鮮な生きた基質 · 低加工",
-      "DEI CARBONARI": "DEI CARBONARI", "SCOPRI IL PRODOTTO ↓": "製品を見る ↓", "SEGNALA INTERESSE ↗": "関心を登録 ↗",
+      "DEI CARBONARI": "DEI CARBONARI", "SCOPRI IL PRODOTTO ↓": "製品を見る ↓", "PRENOTA GRATUITAMENTE": "無料で予約",
       "CÍGNULApp · INCLUSA GIÀ IN CÍGNULA MINI": "CÍGNULApp · CÍGNULA MINIに付属", "La card di CÍGNULA Mini contiene il QR per accedere a CÍGNULApp.": "CÍGNULA MiniのカードにはCÍGNULAppへアクセスするQRコードがあります。",
       "INQUADRA": "画面に収める", "FOTOGRAFA": "撮影する", "CONFRONTA": "比較する", "Apri CÍGNULApp dal QR nella card di CÍGNULA Mini.": "CÍGNULA MiniのカードのQRからCÍGNULAppを開きます。",
       "Seleziona il telefono; l’app guida distanza e uso del flash.": "端末を選ぶと、アプリが距離とフラッシュの使い方を案内します。", "Registra il punto, ottieni una stima e confronta le osservazioni nel tempo.": "地点を記録し、推定値を得て、観察結果を経時比較します。",
       "MATERIA CHE TORNA ALLA TERRA": "土へ戻る素材", "STATO": "状態", "Bassa trasformazione; sminuzzato e asciugato all’aria": "低加工・細断・自然乾燥", "Progettato per suoli argillosi disturbati": "攪乱された粘土質土壌向け",
       "LOTTO": "ロット", "Origine, matrici, processo e resa registrati": "由来、原料、工程、収量を記録", "IL CAMPO": "畑", "L’INULA": "イヌラ", "LA BIOMASSA": "バイオマス",
       "SOCIETÀ AGRICOLA SEMPLICE": "農業法人", "RIAPRI IL CAMPO": "畑をもう一度開く", "VEDI COSA È CRESCIUTO ↗": "育ったものを見る ↗", "Il tuo campo continua a crescere.": "あなたの畑は育ち続けています。",
-      "Modulo dimostrativo: in questa anteprima la richiesta non viene inviata.": "デモフォーム：このプレビューでは送信されません。", "NOME": "お名前", "EMAIL": "メール", "MESSAGGIO": "メッセージ", "NOTA": "備考", "INVIA RICHIESTA ↗": "問い合わせを送る ↗",
+      "NOME": "お名前", "EMAIL": "メール", "MESSAGGIO": "メッセージ", "NOTA": "備考", "INVIA RICHIESTA ↗": "問い合わせを送る ↗",
       "TORNA SU ↑": "ページ上部へ ↑", "SITO / STATO INIZIALE": "サイト / 初期状態", "IL CAMPO È STATO SEMINATO": "畑に種をまきました", "PRIMO ORDINE.": "初回注文。", "COPIA CODICE ↗": "コードをコピー ↗",
       "IL TUO RACCOLTO": "あなたの収穫", "RACCOLTA COMPLETATA": "収穫完了", "COMPLIMENTI.": "おめでとうございます。", "CAMPO RACCOLTO.": "畑の収穫完了。", "SCEGLI UN PRODOTTO DI LANCIO": "発売製品を選ぶ",
       "Premio finale sbloccato": "最終特典を獲得", "PREMIO FINALE SBLOCCATO": "最終特典を獲得", "OMAGGIO MISTERIOSO": "ミステリーギフト", "UN PRODOTTO BIO AZIENDALE": "自社のオーガニック製品",
@@ -170,7 +170,7 @@
       "BRUSH / INBRUMA": "ブラシ / INBRUMA", "SCEGLI E DISTRIBUISCI": "選んで散布", "Trascina nel campo per creare i cumuli": "畑をドラッグして山を作る", "SACCO SELEZIONATO": "選択中の袋", "distribuito nel campo": "畑への散布率",
       "STUDIO SCIENTIFICO": "科学研究", "CONSULTA IL PAPER ↗": "論文を読む ↗", "CLICCA UN SACCO, POI DISTRIBUISCI NEL CAMPO": "袋をクリックし、畑に散布してください", "CLICCA I CONTENITORI DEI SEMI": "種の容器をクリック",
       "Scopri gli studi e le connessioni con l’Inula.": "イヌラとの研究上のつながりを発見。", "SEMINA": "種をまく", "QUANTITÀ / BRUSH": "量 / ブラシ", "PREPARA CÍGNULA NEL CATINO ↗": "たらいでCÍGNULAを準備 ↗",
-      "INTERESSE / SENZA IMPEGNO": "関心登録 / 購入義務なし", "Nessun pagamento. Nessun obbligo di acquisto.": "支払いも購入義務もありません。", "ANTEPRIMA DEL MODULO.": "フォームのプレビュー。", "La richiesta non è stata inviata. Il servizio sarà disponibile alla pubblicazione.": "問い合わせは送信されていません。サービスは公開時に利用できます。",
+      "PRENOTAZIONE GRATUITA": "無料予約", "Nessun pagamento. Nessun obbligo di acquisto.": "支払いも購入義務もありません。", 
       "AMARANTO": "アマランサス", "LATTUGA": "レタス", "SPINACI": "ホウレンソウ", "POMODORO": "トマト", "POMODORI": "トマト", "APRI I SEMI ↗": "種を開く ↗", "SCOPERTA ✓ · RIAPRI": "発見済み ✓ · もう一度開く", "SEMINA IL CAMPO ↗": "畑に種をまく ↗",
       "DAL CAMPO": "畑から", "SINISTRO: ANNAFFIA": "左：水やり", "DESTRO: SOLLEVA": "右：持ち上げる", "CAMPO PREPARATO": "準備済みの畑", "MACERATO DA DISTRIBUIRE": "散布する浸漬液", "INGREDIENTI MESCOLATI": "混合した材料",
       "CÍGNULA / PREPARAZIONE": "CÍGNULA / 準備", "MESCOLA GLI INGREDIENTI": "材料を混ぜる", "CÍGNULA / MACERAZIONE": "CÍGNULA / 浸漬", "IL TEMPO FA IL SUO LAVORO": "時間が働く", "CÍGNULA / ANNAFFIATOIO": "CÍGNULA / じょうろ", "ANNAFFIA TUTTA L’INBRUMA": "INBRUMA全体に水やり",
@@ -216,6 +216,10 @@
     }
   };
 
+  translations.en["Il giorno del ritiro verrà concordato con l’azienda."] = "The collection date will be agreed with the farm.";
+  translations.ja["Il giorno del ritiro verrà concordato con l’azienda."] = "回収日は農園と相談して決定します。";
+  translations.en["Controlla e invia la richiesta nella tua app email."] = "Review and send your request in your email app.";
+  translations.ja["Controlla e invia la richiesta nella tua app email."] = "メールアプリで内容を確認し、送信してください。";
   translations.en["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "Bookings are now open. We collect your olive prunings: fill in the form with no obligation.";
   translations.ja["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "予約受付を開始しました。オリーブの剪定枝を回収します。お申し込みの義務はありませんので、フォームにご記入ください。";
   translations.en["Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari."] = "Pick up the flat spoon in the basin and follow the inner rim with circular movements.";

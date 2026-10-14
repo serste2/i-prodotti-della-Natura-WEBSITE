@@ -2191,3 +2191,8 @@ a {text-underline-offset:.2em;}
   #harvestCombo.show {animation:none;opacity:1;transform:translate(-50%,-50%) rotate(-3deg);}
   .eco-head-actions button,#plantEvidence,#wateringCan,#macerationClock {transition:none;}
 }
+
+/* Topic media remain behind the readable territory facts. */
+#territorio .viewer { background-size:cover; background-position:center; }
+#territorio .viewer aside, #territorio .viewer .demo { z-index:2; }
+#territorio .territoryFacts { background:#f3eddfeF; }

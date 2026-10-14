@@ -1794,7 +1794,12 @@ updateEco();
 (() => {
   const modal = document.querySelector("#pickupDialog");
   const form = document.querySelector("#pickupForm");
-  document.querySelector("#openPickup").onclick = () => modal.showModal();
+  document.querySelector("#openPickup").onclick = () => {
+    form.hidden = false;
+    document.querySelector("#pickupResult").hidden = true;
+    document.querySelector("#pickupStatus").textContent = "";
+    modal.showModal();
+  };
   document.querySelector("#closePickup").onclick = () => modal.close();
   const date = form.elements.date;
   const now = new Date();
@@ -1820,6 +1825,7 @@ updateEco();
       "Note: " + fields.notes.value
     ].join("\n");
     document.querySelector("#pickupSummary").value = summary;
+    form.hidden = true;
     document.querySelector("#pickupResult").hidden = false;
     openRequestEmail("#IONONBRUCIO · Prenotazione gratuita ritiro potature", summary);
     status.textContent = "Controlla e invia la richiesta nella tua app email.";

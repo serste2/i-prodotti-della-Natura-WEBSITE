@@ -1871,3 +1871,21 @@ updateEco();
     catch { summary.focus(); summary.select(); document.querySelector("#pickupStatus").textContent = "Seleziona e copia il riepilogo."; }
   };
 })();
+
+/* Gentle scenario parallax keeps the complete illustration within its panel. */
+(() => {
+  const panel = document.querySelector(".pickup-scenario");
+  if (!panel || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let queued = false;
+  const paint = () => {
+    queued = false;
+    const box = panel.getBoundingClientRect();
+    if (box.bottom < 0 || box.top > innerHeight) return;
+    const progress = Math.max(-1, Math.min(1, (innerHeight / 2 - (box.top + box.height / 2)) / (innerHeight + box.height) * 2));
+    panel.style.setProperty("--scenario-shift", (progress * 24) + "px");
+  };
+  const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(paint); } };
+  addEventListener("scroll", schedule, {passive:true});
+  addEventListener("resize", schedule);
+  schedule();
+})();

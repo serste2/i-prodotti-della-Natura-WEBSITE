@@ -2303,3 +2303,7 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
 
 /* Soft, darkened decorative diorama; campaign copy stays sharp. */
 #iononbrucio .pickup-scenario { filter:blur(5px) brightness(.48);transform:scale(1.025);transform-origin:center; }
+
+/* Keep the campaign sentence on one line where space permits. */
+#iononbrucio .pickup-copy > p:not(.eyebrow) { width:100%;max-width:none;font-size:clamp(11px,1.1vw,18px); }
+@media(min-width:821px) { #iononbrucio .pickup-copy > p:not(.eyebrow) { white-space:nowrap; } }

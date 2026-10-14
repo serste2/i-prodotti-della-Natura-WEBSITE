@@ -79,7 +79,7 @@ const future = [
 document.querySelector("#futureList").innerHTML = future
   .map(
     (p, i) =>
-      `<button data-reserve="${p}"><span>${String(i + 3).padStart(2, "0")}</span><b>${p}</b><em>SEGNALA INTERESSE ↗</em></button>`,
+      `<button data-reserve="${p}"><span>${String(i + 3).padStart(2, "0")}</span><b>${p}</b><em>PRENOTA GRATUITAMENTE</em></button>`,
   )
   .join("");
 const dialog = document.querySelector("#reserve");
@@ -91,14 +91,21 @@ document.addEventListener("click", (e) => {
   }
 });
 document.querySelector("#reserve .x").onclick = () => dialog.close();
-document.querySelectorAll("form").forEach(
-  (f) =>
-    (f.onsubmit = (e) => {
-      e.preventDefault();
-      f.innerHTML =
-        '<p class="success"><b>ANTEPRIMA DEL MODULO.</b><br>La richiesta non è stata inviata. Il servizio sarà disponibile alla pubblicazione.</p>';
-    }),
-);
+function openRequestEmail(subject, message) {
+  location.href = "mailto:sere.stelitano@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(message);
+}
+document.querySelectorAll("form:not(#pickupForm)").forEach(form => {
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const fields = [...form.querySelectorAll("input,textarea")];
+    const subject = form.closest("#reserve") ? "Prenotazione gratuita · " + document.querySelector("#reserveTitle").textContent : "Contatto · i prodotti della Natura";
+    const message = fields.map(field => field.closest("label").firstChild.textContent.trim() + ": " + field.value).join("\n");
+    openRequestEmail(subject, message);
+    let status = form.querySelector(".request-status");
+    if (!status) { status = document.createElement("p"); status.className = "request-status"; status.setAttribute("role","status"); form.append(status); }
+    status.textContent = document.documentElement.lang === "ja" ? "メールアプリで内容を確認し、送信してください。" : document.documentElement.lang === "en" ? "Review and send your request in your email app." : "Controlla e invia la richiesta nella tua app email.";
+  });
+});
 const cartItems = [...document.querySelectorAll("[data-cart-item]")];
 let cartQuantities = { cignula: 0, inbruma: 0 };
 try { cartQuantities = { ...cartQuantities, ...JSON.parse(sessionStorage.getItem("inulaCart") || "{}") }; }
@@ -1801,7 +1808,8 @@ updateEco();
     ].join("\n");
     document.querySelector("#pickupSummary").value = summary;
     document.querySelector("#pickupResult").hidden = false;
-    status.textContent = "Richiesta preparata. Copia il riepilogo per inviarlo all’azienda.";
+    openRequestEmail("#IONONBRUCIO · Prenotazione gratuita ritiro potature", summary);
+    status.textContent = "Controlla e invia la richiesta nella tua app email.";
     document.querySelector("#pickupResult").scrollIntoView({block:"nearest"});
   };
   document.querySelector("#copyPickup").onclick = async () => {

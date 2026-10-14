@@ -2196,3 +2196,35 @@ a {text-underline-offset:.2em;}
 #territorio .viewer { background-size:cover; background-position:center; }
 #territorio .viewer aside, #territorio .viewer .demo { z-index:2; }
 #territorio .territoryFacts { background:#f3eddfeF; }
+
+/* Compact collection form: all fields share a single visible panel. */
+#pickupDialog { width:min(860px,calc(100vw - 28px)); padding:20px 24px; max-height:calc(100dvh - 28px); }
+#pickupDialog > .eyebrow { margin:0 40px 6px 0; }
+#pickupDialog h2 { font-size:clamp(25px,4vw,38px); line-height:1.05; margin:0 32px 16px 0; }
+#pickupForm { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 18px; }
+#pickupForm > label:has([name="name"]) { grid-column:1;grid-row:1; }
+#pickupForm > label:has([name="contact"]) { grid-column:2;grid-row:1; }
+#pickupForm > label:has([name="location"]) { grid-column:1;grid-row:2; }
+#pickupForm > label:has([name="date"]) { grid-column:2;grid-row:2; }
+#pickupForm > .pickup-grid { grid-column:1/-1;grid-row:3; }
+#pickupForm > fieldset { grid-column:1/-1;grid-row:4; }
+#pickupForm > label:has([name="notes"]) { grid-column:1/-1;grid-row:5; }
+#pickupForm > button { grid-column:1/-1;grid-row:6; }
+#pickupForm > .pickup-status { grid-column:1/-1;grid-row:7; }
+#pickupDialog label { margin:0;gap:5px;line-height:1.3; }
+#pickupDialog input,#pickupDialog select { min-height:38px;padding:8px;font-size:16px; }
+#pickupDialog textarea { height:52px;min-height:52px;padding:8px;font-size:16px;resize:none; }
+#pickupDialog fieldset { margin:0;padding:8px 12px;min-width:0; }
+#pickupDialog fieldset small { display:block;margin-top:5px; }
+#pickupDialog .pickup-grid { gap:12px; }
+#pickupDialog .pickup-status { margin:0; }
+#pickupDialog .pickup-status:empty { display:none; }
+#pickupDialog button:not(.x) { min-height:40px;padding:9px 14px; }
+#pickupForm[hidden] { display:none; }
+#pickupResult textarea { height:min(300px,45dvh); }
+#pickupResult p { margin-bottom:0; }
+@media(max-width:480px) {
+  #pickupDialog { padding:16px; }
+  #pickupForm { gap:10px; }
+  #pickupDialog label,#pickupDialog legend,#pickupDialog small { font-size:10px; }
+}

@@ -104,19 +104,33 @@ document.addEventListener("click", (e) => {
   }
 });
 document.querySelector("#reserve .x").onclick = () => dialog.close();
-function openRequestEmail(subject, message) {
-  location.href = "mailto:sere.stelitano@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(message);
+async function sendSiteRequest(subject, message, email = "") {
+  const response = await fetch("https://formsubmit.co/ajax/sere.stelitano@gmail.com", {
+    method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"},
+    body:JSON.stringify({ _subject:subject, _template:"table", name:subject, email, message })
+  });
+  const result = await response.json();
+  if (!response.ok || ![true,"true"].includes(result.success)) throw new Error(result.message || "Request failed");
+  return result;
 }
 document.querySelectorAll("form:not(#pickupForm)").forEach(form => {
-  form.addEventListener("submit", event => {
+  form.addEventListener("submit", async event => {
     event.preventDefault();
     const fields = [...form.querySelectorAll("input,textarea")];
     const subject = form.closest("#reserve") ? "Prenotazione gratuita · " + document.querySelector("#reserveTitle").textContent : "Contatto · i prodotti della Natura";
     const message = fields.map(field => field.closest("label").firstChild.textContent.trim() + ": " + field.value).join("\n");
-    openRequestEmail(subject, message);
+    const button = form.querySelector('button[type="submit"],button:not([type])'), label = button.textContent;
     let status = form.querySelector(".request-status");
     if (!status) { status = document.createElement("p"); status.className = "request-status"; status.setAttribute("role","status"); form.append(status); }
-    status.textContent = document.documentElement.lang === "ja" ? "メールアプリで内容を確認し、送信してください。" : document.documentElement.lang === "en" ? "Review and send your request in your email app." : "Controlla e invia la richiesta nella tua app email.";
+    const lang = document.documentElement.lang;
+    button.disabled = true; status.textContent = "";
+    try {
+      await sendSiteRequest(subject, message, form.querySelector('input[type="email"]')?.value || "");
+      button.textContent = lang === "ja" ? "送信済み ✓" : lang === "en" ? "SENT ✓" : "INVIATA ✓";
+    } catch {
+      status.textContent = lang === "ja" ? "送信できませんでした。もう一度お試しください。" : lang === "en" ? "Unable to send. Please try again." : "Invio non riuscito. Riprova.";
+      button.disabled = false; button.textContent = label;
+    }
   });
 });
 const cartItems = [...document.querySelectorAll("[data-cart-item]")];
@@ -1312,6 +1326,7 @@ function beginSowing() {
       watered: watered.map(a => ({ ...a, x: a.x / w, y: a.y / h, size: a.size / w }))
     }));
     document.querySelector("#reopenField").classList.add("ready");
+    document.querySelector("#reopenField").hidden = false;
     ecosystem.close();
     location.hash = "home";
     document.querySelector("#fieldReturnMessage").hidden = false;
@@ -1798,7 +1813,7 @@ ecosystem.addEventListener("close", () => {
 addEventListener("resize", () => {
   if (ecosystem.open) sizeEco();
 });
-document.querySelector("#reopenField").hidden = false;
+document.querySelector("#reopenField").hidden = !localStorage.getItem("inulaFieldComplete");
 if (localStorage.getItem("inulaFieldComplete"))
   document.querySelector("#reopenField").classList.add("ready");
 updateEco();
@@ -1818,7 +1833,7 @@ updateEco();
   const now = new Date();
   const today = now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
   date.min = today;
-  form.onsubmit = event => {
+  form.onsubmit = async event => {
     event.preventDefault();
     const fields = form.elements;
     const total = ["branches", "trunks", "leaves"].reduce((sum,key) => sum + Number(fields[key].value), 0);
@@ -1840,8 +1855,14 @@ updateEco();
     document.querySelector("#pickupSummary").value = summary;
     form.hidden = true;
     document.querySelector("#pickupResult").hidden = false;
-    openRequestEmail("#IONONBRUCIO · Prenotazione gratuita ritiro potature", summary);
-    status.textContent = "Controlla e invia la richiesta nella tua app email.";
+    try {
+      await sendSiteRequest("#IONONBRUCIO · Prenotazione gratuita ritiro potature", summary, fields.contact.value.includes("@") ? fields.contact.value : "");
+      status.textContent = "Richiesta inviata.";
+    } catch {
+      form.hidden = false;
+      document.querySelector("#pickupResult").hidden = true;
+      status.textContent = "Invio non riuscito. Riprova.";
+    }
     document.querySelector("#pickupResult").scrollIntoView({block:"nearest"});
   };
   document.querySelector("#copyPickup").onclick = async () => {

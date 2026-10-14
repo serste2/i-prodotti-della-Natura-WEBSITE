@@ -220,6 +220,10 @@
   translations.ja["Il giorno del ritiro verrà concordato con l’azienda."] = "回収日は農園と相談して決定します。";
   translations.en["Controlla e invia la richiesta nella tua app email."] = "Review and send your request in your email app.";
   translations.ja["Controlla e invia la richiesta nella tua app email."] = "メールアプリで内容を確認し、送信してください。";
+  translations.en["AGGIUNGI AL CARRELLO +"] = "ADD TO CART +";
+  translations.ja["AGGIUNGI AL CARRELLO +"] = "カートに追加 +";
+  translations.en["AGGIUNTO ✓"] = "ADDED ✓";
+  translations.ja["AGGIUNTO ✓"] = "追加済み ✓";
   translations.en["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "Bookings are now open. We collect your olive prunings: fill in the form with no obligation.";
   translations.ja["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "予約受付を開始しました。オリーブの剪定枝を回収します。お申し込みの義務はありませんので、フォームにご記入ください。";
   translations.en["Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari."] = "Pick up the flat spoon in the basin and follow the inner rim with circular movements.";

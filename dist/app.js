@@ -54,6 +54,18 @@ menu.onclick = () => {
 nav
   .querySelectorAll("a")
   .forEach((a) => (a.onclick = () => nav.classList.remove("open")));
+const territoryViewer = document.querySelector("#territorio .viewer");
+const territoryMedia = [
+  "/assets/cignula-prepare-hands.webp",
+  "/assets/cignula-macerate-person.png",
+  "/assets/inbruma-field-photo.webp",
+  "/assets/gesture-gather.webp"
+];
+function setTerritoryMedia(index) {
+  territoryViewer.style.backgroundImage = 'url("' + territoryMedia[index] + '")';
+}
+territoryMedia.forEach(src => { const image = new Image(); image.src = src; });
+setTerritoryMedia([...document.querySelectorAll(".layers button")].findIndex(button => button.classList.contains("active")));
 document.querySelectorAll(".layers button").forEach(
   (b) =>
     (b.onclick = () => {
@@ -64,6 +76,7 @@ document.querySelectorAll(".layers button").forEach(
       const [t, d, c] = b.dataset.layer.split("|");
       document.querySelector("#layerTitle").textContent = t;
       document.querySelector("#layerText").textContent = d;
+      setTerritoryMedia([...document.querySelectorAll(".layers button")].indexOf(b));
     }),
 );
 const future = [

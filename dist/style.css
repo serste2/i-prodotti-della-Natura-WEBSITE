@@ -2250,3 +2250,22 @@ a {text-underline-offset:.2em;}
 .product .cignula-motto { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:none;margin:0;border:1px solid var(--ink);border-top:0;padding:14px 6px;font:500 clamp(14px,1.65vw,26px)/1.2 "Roboto",sans-serif;text-align:center; }
 .cignula-motto span+span { border-left:1px solid var(--ink); }
 @media(max-width:480px) { .cignula-kit-table th,.cignula-kit-table td { padding:9px;font-size:10px; } }
+
+/* Balanced kit table typography and density. */
+.product .cignula-kit-table { margin-top:18px;font:12px/1.55 "Roboto Mono",monospace; }
+.product .cignula-kit-table th,.product .cignula-kit-table td { padding:14px 16px;font-size:12px;line-height:1.55; }
+.product .cignula-kit-table th { vertical-align:middle;font-weight:700; }
+.product .cignula-kit-table th:first-child { width:60%; }
+.cignula-kit-table th br { display:none; }
+.cignula-kit-table th span+span { margin-left:.5em; }
+.cignula-kit-table td:first-child ul { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px; }
+.cignula-kit-table td:first-child li:first-child { grid-column:1/-1; }
+.cignula-kit-table li+li { margin-top:0; }
+.cignula-kit-table td:last-child li+li { margin-top:8px; }
+.product .cignula-motto { padding:12px 0;font:700 14px/1.55 "Roboto Mono",monospace; }
+.cignula-motto span { padding:0 8px;overflow-wrap:anywhere; }
+@media(max-width:600px) {
+  .product .cignula-kit-table th,.product .cignula-kit-table td { padding:11px;font-size:11px; }
+  .cignula-kit-table td:first-child ul { grid-template-columns:1fr;gap:7px; }
+  .product .cignula-motto { font-size:12px; }
+}

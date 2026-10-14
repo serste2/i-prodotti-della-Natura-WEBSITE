@@ -2228,3 +2228,14 @@ a {text-underline-offset:.2em;}
   #pickupForm { gap:10px; }
   #pickupDialog label,#pickupDialog legend,#pickupDialog small { font-size:10px; }
 }
+
+/* Shared launch row keeps pricing and immediate cart action visible together. */
+.product .product-toolbar { position:absolute;top:12px;left:12px;right:12px;z-index:3;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;gap:8px;padding:0; }
+.product-toolbar > span,.product .product-toolbar > button { display:flex;align-items:center;justify-content:center;min-height:36px;padding:8px;border:2px solid var(--ink);font:700 9px/1.35 "Roboto Mono",monospace; }
+.product-toolbar > span { background:var(--y);color:var(--ink);justify-content:flex-start; }
+.product .product-toolbar > button { margin:0;white-space:nowrap; }
+.product .product-toolbar > button:hover { background:var(--p); }
+@media(max-width:480px) {
+  .product .product-toolbar { top:8px;left:8px;right:8px;gap:6px;grid-template-columns:1fr 1fr; }
+  .product .product-toolbar > button { white-space:normal; }
+}

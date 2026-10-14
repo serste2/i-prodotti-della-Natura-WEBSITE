@@ -173,6 +173,19 @@ document.querySelector("#cartRequest").addEventListener("click", () => {
   if (note) note.value = lines.join("\n");
   dialog.showModal();
 });
+document.querySelectorAll("[data-add-cart]").forEach(button => {
+  button.addEventListener("click", () => {
+    const key = button.dataset.addCart;
+    cartQuantities[key] = Math.min(20, (Number(cartQuantities[key]) || 0) + 1);
+    updateCart();
+    const lang = document.documentElement.lang;
+    button.textContent = lang === "ja" ? "追加済み ✓" : lang === "en" ? "ADDED ✓" : "AGGIUNTO ✓";
+    clearTimeout(button.restoreLabel);
+    button.restoreLabel = setTimeout(() => {
+      button.textContent = lang === "ja" ? "カートに追加 +" : lang === "en" ? "ADD TO CART +" : "AGGIUNGI AL CARRELLO +";
+    }, 1400);
+  });
+});
 updateCart();
 document.querySelectorAll("main section").forEach((section, sectionIndex) => {
   const visitor = document.createElement("span");

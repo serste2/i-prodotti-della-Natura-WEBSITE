@@ -2239,3 +2239,14 @@ a {text-underline-offset:.2em;}
   .product .product-toolbar { top:8px;left:8px;right:8px;gap:6px;grid-template-columns:1fr 1fr; }
   .product .product-toolbar > button { white-space:normal; }
 }
+
+/* Kit contents and user input form one full-width comparison. */
+.cignula-kit-table { width:100%;table-layout:fixed;border-collapse:collapse;margin:22px 0 0;font:11px/1.6 "Roboto Mono",monospace; }
+.cignula-kit-table th,.cignula-kit-table td { border:1px solid var(--ink);padding:12px 14px;text-align:left;vertical-align:top;overflow-wrap:anywhere; }
+.cignula-kit-table th { background:var(--y);font-size:10px;line-height:1.5; }
+.cignula-kit-table th:first-child { width:65%; }
+.cignula-kit-table ul { list-style:none;padding:0;margin:0; }
+.cignula-kit-table li+li { margin-top:7px; }
+.product .cignula-motto { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:none;margin:0;border:1px solid var(--ink);border-top:0;padding:14px 6px;font:500 clamp(14px,1.65vw,26px)/1.2 "Roboto",sans-serif;text-align:center; }
+.cignula-motto span+span { border-left:1px solid var(--ink); }
+@media(max-width:480px) { .cignula-kit-table th,.cignula-kit-table td { padding:9px;font-size:10px; } }

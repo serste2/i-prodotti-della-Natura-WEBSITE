@@ -2307,3 +2307,5 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
 /* Keep the campaign sentence on one line where space permits. */
 #iononbrucio .pickup-copy > p:not(.eyebrow) { width:100%;max-width:none;font-size:clamp(11px,1.1vw,18px); }
 @media(min-width:821px) { #iononbrucio .pickup-copy > p:not(.eyebrow) { white-space:nowrap; } }
+
+.flag-italy { background:linear-gradient(to right,#009246 0 33.333%,#fff 33.333% 66.666%,#ce2b37 66.666% 100%); }

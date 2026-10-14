@@ -8,7 +8,7 @@
       content="I prodotti della Natura — agricoltura rigenerativa, CÍGNULA Mini e INBRUMA dei Carbonari."
     />
     <title>I prodotti della Natura</title>
-    <link rel="stylesheet" href="/style.css?v=20261011-4" />
+    <link rel="stylesheet" href="/style.css?v=20261014-1" />
   </head>
   <body>
     <header>
@@ -347,7 +347,6 @@
           <p id="fieldReturnMessage" hidden>Il tuo campo continua a crescere.</p>
         </div>
         <div class="contact-form">
-          <p class="form-preview-note">Modulo dimostrativo: in questa anteprima la richiesta non viene inviata.</p>
           <form>
             <label>NOME<input required /></label
             ><label>EMAIL<input type="email" required /></label
@@ -498,24 +497,23 @@
       <div id="pickupResult" hidden>
         <label>RIEPILOGO<textarea id="pickupSummary" rows="10" readonly></textarea></label>
         <button id="copyPickup" type="button">COPIA RICHIESTA</button>
-        <p>La richiesta non è stata inviata. Il giorno del ritiro dovrà essere confermato dall’azienda.</p>
+        <p>Il giorno del ritiro verrà concordato con l’azienda.</p>
       </div>
     </dialog>
 
     <dialog id="reserve">
       <button class="x" type="button" aria-label="Chiudi" onclick="this.closest('dialog').close()">×</button>
-      <p class="eyebrow">INTERESSE / SENZA IMPEGNO</p>
+      <p class="eyebrow">PRENOTAZIONE GRATUITA</p>
       <h2 id="reserveTitle"></h2>
-      <p class="form-preview-note">Modulo dimostrativo: in questa anteprima la richiesta non viene inviata.</p>
       <form>
         <label>NOME<input required /></label
         ><label>EMAIL<input type="email" required /></label
         ><label>NOTA<textarea rows="3"></textarea></label
-        ><button>SEGNALA INTERESSE ↗</button>
+        ><button>PRENOTA GRATUITAMENTE</button>
       </form>
       <small>Nessun pagamento. Nessun obbligo di acquisto.</small>
     </dialog>
-    <script src="/i18n.js?v=20261011-4"></script>
-    <script src="/app.js?v=20261011-4"></script>
+    <script src="/i18n.js?v=20261014-1"></script>
+    <script src="/app.js?v=20261014-1"></script>
   </body>
 </html>

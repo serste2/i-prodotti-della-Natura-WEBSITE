@@ -2300,3 +2300,6 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
   #iononbrucio .pickup-copy { min-height:350px;padding-block:40px; }
   #iononbrucio .pickup-scenario { background-size:auto 180%; }
 }
+
+/* Soft, darkened decorative diorama; campaign copy stays sharp. */
+#iononbrucio .pickup-scenario { filter:blur(5px) brightness(.48);transform:scale(1.025);transform-origin:center; }

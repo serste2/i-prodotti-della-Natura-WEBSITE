@@ -2288,3 +2288,5 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
 @media(max-width:820px) {
   #iononbrucio .pickup-copy { min-height:350px;padding-block:70px 48px; }
 }
+
+.pickup-scenario { aspect-ratio:auto;height:calc(100vw * 941 / 1672 + 64px);background-attachment:scroll;background-size:100% auto;background-position:center calc(50% + var(--scenario-shift,0px)); }

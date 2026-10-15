@@ -436,10 +436,15 @@ const formulationSpecies = {
 };
 const fieldFacts = [
   "L’Inula delle Grotte cresce nel nostro campo a Cana, in Maremma.",
-  "CÍGNULA unisce Inula e cisto; nel kit la card conduce a CÍGNULApp tramite QR.",
-  "INBRUMA nasce dalla trasformazione della biomassa raccolta e tracciata in azienda.",
-  "Nel campo convivono Inula, cisto, olivi e altre piante: osserviamo i loro cicli nel tempo.",
-  "Per INBRUMA Aulivi valorizziamo anche le potature degli olivi.",
+  "CÍGNULA contiene 80% Dittrichia viscosa e 20% Cistus salviifolius.",
+  "INBRUMA nasce da biomasse aziendali raccolte, tracciate e trasformate biologicamente.",
+  "La raccolta resta sotto il 2% della biomassa.",
+  "L’azienda comprende 22,6 ettari, circa tre coltivati a Inula e cisto.",
+  "Nell’uliveto convivono circa 73–75 olivi Leccino e Pendolino.",
+  "Il campo si trova a Cana, a circa 420 metri di quota.",
+  "Dieci kit ECHO Soil documentano la variabilità dei suoli aziendali.",
+  "Inula, cisto, olivi, bosco e aree ripariali formano un mosaico vegetale.",
+  "INBRUMA Aulivi valorizza anche le potature degli olivi.",
 ];
 let factIndex = -1, factInterval, canHeld = false;
 const faunaImage = new Image(), cloudImage = new Image();
@@ -1197,7 +1202,10 @@ function pourAt(x, y) {
   watered.push(mark);
   playSound("water");
   pourAnimations.push({ x: px, y: py, spoutX: spout.x, spoutY: spout.y, start: performance.now() });
-  waterRemaining = after;
+  // Once 95% of the prepared mounds have been reached, forgive the final 5%.
+  // This avoids forcing repeated precision clicks on the last tiny uncovered area.
+  const completionAllowance = Math.ceil(waterTotal * .05);
+  waterRemaining = after <= completionAllowance ? 0 : after;
   if (waterRemaining === 0) {
     announcement.textContent =
       "L’annaffiatoio è vuoto. Tutto il macerato è stato distribuito.";
@@ -1249,10 +1257,15 @@ function mixAt(x, y) {
 }
 function showNextFact() {
   const card = document.querySelector("#fieldFact");
-  let next = Math.floor(Math.random() * fieldFacts.length);
-  if (next === factIndex) next = (next + 1) % fieldFacts.length;
+  const next = (factIndex + 1) % fieldFacts.length;
   factIndex = next;
-  card.querySelector("small").textContent = `DAL CAMPO · ${String(next + 1).padStart(2, "0")}`;
+  const art = card.querySelector(".field-card-art");
+  const cardNumber = String(next + 1).padStart(2, "0");
+  art.src = `/assets/field-card-${cardNumber}.webp`;
+  art.hidden = false;
+  card.classList.add("has-card-art");
+  card.style.setProperty("--card-turn", `${[-1.4, .8, -0.5, 1.2][next % 4]}deg`);
+  card.querySelector("small").textContent = `DAL CAMPO · ${cardNumber}`;
   card.querySelector("p").textContent = fieldFacts[next];
   card.classList.add("visible");
 }

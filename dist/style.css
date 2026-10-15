@@ -1086,9 +1086,9 @@ h2 em,
   pointer-events:none;
   opacity:0;
   visibility:hidden;
-  background:rgba(17,24,38,.52);
-  -webkit-backdrop-filter:grayscale(1) saturate(.28) brightness(.46) contrast(1.08);
-  backdrop-filter:grayscale(1) saturate(.28) brightness(.46) contrast(1.08);
+  background:rgba(17,24,38,.30);
+  -webkit-backdrop-filter:grayscale(.82) saturate(.42) brightness(.74) contrast(1.04);
+  backdrop-filter:grayscale(.82) saturate(.42) brightness(.74) contrast(1.04);
 }
 #dayNightOverlay.visible { visibility:visible; }
 .eco-readout,
@@ -2152,8 +2152,14 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
 #fieldFact[data-card="09"] .field-card-copy {width:32%;height:34%;top:50%;}
 #fieldFact[data-card="10"] .field-card-copy {width:52%;height:22%;top:50.5%;}
 #fieldFact.has-card-art p {
+  width:100%;
   max-width:100%;
+  margin:0;
   font:800 clamp(11px,1.05vw,16px)/1.18 "Roboto Mono",monospace;
+  text-align:center;
+  white-space:pre-line;
+  overflow-wrap:normal;
+  word-break:keep-all;
   text-transform:uppercase;
 }
 #fieldCardStack {

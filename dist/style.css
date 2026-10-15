@@ -2123,14 +2123,17 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
 #fieldFact .field-card-copy {position:relative;z-index:1;}
 #fieldFact.has-card-art .field-card-copy {
   position:absolute;
-  left:15%;
-  right:15%;
-  top:34%;
-  bottom:32%;
+  left:50%;
+  right:auto;
+  top:50%;
+  bottom:auto;
+  width:55%;
+  height:29%;
+  transform:translate(-50%,-50%);
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:5%;
+  padding:4%;
   box-sizing:border-box;
   text-align:center;
   color:#fff;
@@ -2139,15 +2142,15 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
     -2px  2px 0 #173c79, 2px  2px 0 #173c79,
     0 3px 8px rgba(0,0,0,.72);
 }
-#fieldFact[data-card="02"] .field-card-copy {left:24%;right:24%;top:30%;bottom:30%;}
-#fieldFact[data-card="03"] .field-card-copy {left:19%;right:19%;top:35%;bottom:34%;}
-#fieldFact[data-card="04"] .field-card-copy {left:18%;right:18%;top:35%;bottom:33%;}
-#fieldFact[data-card="05"] .field-card-copy {left:24%;right:24%;top:34%;bottom:32%;}
-#fieldFact[data-card="06"] .field-card-copy {left:18%;right:18%;top:35%;bottom:34%;}
-#fieldFact[data-card="07"] .field-card-copy {left:25%;right:25%;top:33%;bottom:31%;}
-#fieldFact[data-card="08"] .field-card-copy {left:25%;right:25%;top:34%;bottom:30%;}
-#fieldFact[data-card="09"] .field-card-copy {left:30%;right:30%;top:30%;bottom:29%;}
-#fieldFact[data-card="10"] .field-card-copy {left:21%;right:21%;top:39%;bottom:36%;}
+#fieldFact[data-card="02"] .field-card-copy {width:43%;height:31%;top:50%;}
+#fieldFact[data-card="03"] .field-card-copy {width:58%;height:27%;top:49%;}
+#fieldFact[data-card="04"] .field-card-copy {width:58%;height:28%;top:51%;}
+#fieldFact[data-card="05"] .field-card-copy {width:44%;height:30%;top:50%;}
+#fieldFact[data-card="06"] .field-card-copy {width:58%;height:27%;top:49%;}
+#fieldFact[data-card="07"] .field-card-copy {width:43%;height:32%;top:50.5%;}
+#fieldFact[data-card="08"] .field-card-copy {width:43%;height:31%;top:52%;}
+#fieldFact[data-card="09"] .field-card-copy {width:32%;height:34%;top:50%;}
+#fieldFact[data-card="10"] .field-card-copy {width:52%;height:22%;top:50.5%;}
 #fieldFact.has-card-art p {
   max-width:100%;
   font:800 clamp(11px,1.05vw,16px)/1.18 "Roboto Mono",monospace;
@@ -2387,3 +2390,7 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
 @media(min-width:821px) { #iononbrucio .pickup-copy > p:not(.eyebrow) { white-space:nowrap; } }
 
 .flag-italy { background:linear-gradient(to right,#009246 0 33.333%,#fff 33.333% 66.666%,#ce2b37 66.666% 100%); }
+
+
+/* The card sequence now communicates elapsed maceration time. */
+#macerationClock {display:none !important;}

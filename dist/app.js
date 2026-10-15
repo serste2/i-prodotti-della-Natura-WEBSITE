@@ -1107,9 +1107,9 @@ function updateEco() {
       "Apri i quattro contenitori: ogni seme racconta una connessione con la ricerca sull’Inula.",
     ],
     sowing: [
-      "SEMINA / CAMPO",
-      "ORA SI SEMINA",
-      "La farmer distribuisce i semi sul terreno preparato.",
+      "",
+      "MACERAZIONE: 10 GIORNI",
+      "",
     ],
     future: ["RACCOLTA", "", ""],
   };

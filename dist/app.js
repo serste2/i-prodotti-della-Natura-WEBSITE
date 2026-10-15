@@ -1092,9 +1092,9 @@ function updateEco() {
       "Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari.",
     ],
     macerating: [
-      "CÍGNULA / MACERAZIONE",
-      "IL TEMPO FA IL SUO LAVORO",
-      "5–10 giorni reali, rappresentati qui in 15 secondi.",
+      "",
+      "MACERAZIONE: 10 GIORNI",
+      "",
     ],
     watering: [
       "CÍGNULA / ANNAFFIATOIO",
@@ -1108,7 +1108,7 @@ function updateEco() {
     ],
     sowing: [
       "",
-      "MACERAZIONE: 10 GIORNI",
+      "",
       "",
     ],
     future: ["RACCOLTA", "", ""],

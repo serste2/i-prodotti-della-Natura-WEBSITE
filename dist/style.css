@@ -1329,9 +1329,7 @@ h2 em,
   opacity: 0.35;
   pointer-events: none;
 }
-.eco-sowing .eco-readout {
-  background: var(--y);
-}
+.eco-sowing .eco-readout {display:none;}
 .sr-only {
   position: absolute;
   width: 1px;

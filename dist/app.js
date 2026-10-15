@@ -434,18 +434,44 @@ const formulationSpecies = {
   aulivi: ["spinach"],
   devigna: ["lettuce", "tomato"],
 };
-const fieldFacts = [
-  "L’Inula delle Grotte cresce nel nostro campo a Cana, in Maremma.",
-  "CÍGNULA contiene 80% Dittrichia viscosa e 20% Cistus salviifolius.",
-  "INBRUMA nasce da biomasse aziendali raccolte, tracciate e trasformate biologicamente.",
-  "La raccolta resta sotto il 2% della biomassa.",
-  "L’azienda comprende 22,6 ettari, circa tre coltivati a Inula e cisto.",
-  "Nell’uliveto convivono circa 73–75 olivi Leccino e Pendolino.",
-  "Il campo si trova a Cana, a circa 420 metri di quota.",
-  "Dieci kit ECHO Soil documentano la variabilità dei suoli aziendali.",
-  "Inula, cisto, olivi, bosco e aree ripariali formano un mosaico vegetale.",
-  "INBRUMA Aulivi valorizza anche le potature degli olivi.",
-];
+const fieldFacts = {
+  it: [
+    "INULA RACCOLTA A CANA",
+    "80% INULA · 20% CISTO",
+    "SOLO BIOMASSE AZIENDALI",
+    "RACCOGLIAMO MENO DEL 2%",
+    "22,6 ETTARI DI BIODIVERSITÀ",
+    "75 OLIVI · 2 CULTIVAR",
+    "A 420 METRI, IN MAREMMA",
+    "10 PUNTI ECHO SOIL",
+    "UN MOSAICO DI HABITAT",
+    "LE POTATURE TORNANO AL SUOLO",
+  ],
+  en: [
+    "INULA HARVESTED IN CANA",
+    "80% INULA · 20% CISTUS",
+    "ONLY OUR FARM BIOMASS",
+    "WE HARVEST LESS THAN 2%",
+    "22.6 HECTARES OF BIODIVERSITY",
+    "75 OLIVE TREES · 2 CULTIVARS",
+    "420 METRES ABOVE THE MAREMMA",
+    "10 ECHO SOIL POINTS",
+    "A MOSAIC OF HABITATS",
+    "PRUNINGS RETURN TO THE SOIL",
+  ],
+  ja: [
+    "カーナで採取したイヌラ",
+    "イヌラ80%・シスタス20%",
+    "農園内のバイオマスのみ",
+    "採取量は2%未満",
+    "22.6ヘクタールの生物多様性",
+    "オリーブ75本・2品種",
+    "標高420メートルのマレンマ",
+    "ECHO SOIL 10地点",
+    "生息地のモザイク",
+    "剪定枝を土へ還す",
+  ],
+};
 let factIndex = -1, factInterval, canHeld = false;
 const faunaImage = new Image(), cloudImage = new Image();
 const cropsAtlas = new Image(), biomassAtlas = new Image(), lizardImage = new Image();
@@ -1257,21 +1283,36 @@ function mixAt(x, y) {
 }
 function showNextFact() {
   const card = document.querySelector("#fieldFact");
-  const next = (factIndex + 1) % fieldFacts.length;
-  factIndex = next;
+  const lang = document.documentElement.lang;
+  const facts = fieldFacts[lang] || fieldFacts.it;
   const art = card.querySelector(".field-card-art");
+  const discard = document.querySelector("#fieldDiscard");
+  if (card.classList.contains("visible") && art.getAttribute("src")) {
+    const usedCard = document.createElement("img");
+    usedCard.src = art.getAttribute("src");
+    usedCard.alt = "";
+    const discardIndex = discard.children.length;
+    usedCard.style.setProperty("--discard-x", `${discardIndex * -1.5}px`);
+    usedCard.style.setProperty("--discard-y", `${discardIndex * -1}px`);
+    usedCard.style.setProperty("--discard-turn", `${(discardIndex - 2) * 1.2}deg`);
+    discard.appendChild(usedCard);
+  }
+  const next = (factIndex + 1) % facts.length;
+  factIndex = next;
   const cardNumber = String(next + 1).padStart(2, "0");
   art.src = `/assets/field-card-${cardNumber}.webp`;
   art.hidden = false;
   card.classList.add("has-card-art");
   card.style.setProperty("--card-turn", `${[-1.4, .8, -0.5, 1.2][next % 4]}deg`);
-  card.querySelector("small").textContent = `DAL CAMPO · ${cardNumber}`;
-  card.querySelector("p").textContent = fieldFacts[next];
+  card.querySelector("p").textContent = facts[next];
   card.classList.add("visible");
 }
 function startMaceration() {
   ecoMode = "macerating";
   timerStart = performance.now();
+  factIndex = -1;
+  document.querySelector("#fieldDiscard").replaceChildren();
+  document.querySelector("#fieldFact").classList.remove("visible");
   showNextFact();
   factInterval = setInterval(showNextFact, 3000);
   dayNightOverlay.style.opacity = "0";

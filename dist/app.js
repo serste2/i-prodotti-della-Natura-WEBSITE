@@ -436,28 +436,28 @@ const formulationSpecies = {
 };
 const fieldFacts = {
   it: [
-    "INULA RACCOLTA A CANA",
-    "80% INULA · 20% CISTO",
-    "SOLO BIOMASSE AZIENDALI",
-    "MENO DEL 2% RACCOLTO",
-    "22,6 ETTARI VIVI",
-    "75 OLIVI · 2 CULTIVAR",
-    "CANA · 420 M · MAREMMA",
-    "10 PUNTI ECHO SOIL",
-    "HABITAT A MOSAICO",
-    "POTATURE RESTITUITE AL SUOLO",
+    "INULA\nRACCOLTA A CANA",
+    "80% INULA\n20% CISTO",
+    "SOLO BIOMASSE\nAZIENDALI",
+    "MENO DEL 2%\nRACCOLTO",
+    "22,6 ETTARI\nVIVI",
+    "75 OLIVI\n2 CULTIVAR",
+    "CANA · 420 M\nMAREMMA",
+    "10 PUNTI\nECHO SOIL",
+    "HABITAT\nA MOSAICO",
+    "POTATURE RESTITUITE\nAL SUOLO",
   ],
   en: [
-    "INULA HARVESTED IN CANA",
-    "80% INULA · 20% CISTUS",
-    "ONLY OUR FARM BIOMASS",
-    "LESS THAN 2% HARVESTED",
-    "22.6 LIVING HECTARES",
-    "75 OLIVE TREES · 2 CULTIVARS",
+    "INULA HARVESTED\nIN CANA",
+    "80% INULA\n20% CISTUS",
+    "ONLY OUR FARM\nBIOMASS",
+    "LESS THAN 2%\nHARVESTED",
+    "22.6 LIVING\nHECTARES",
+    "75 OLIVE TREES\n2 CULTIVARS",
     "CANA · 420 M · MAREMMA",
-    "10 ECHO SOIL POINTS",
-    "HABITATS IN A MOSAIC",
-    "PRUNINGS RETURNED TO SOIL",
+    "10 ECHO SOIL\nPOINTS",
+    "HABITATS\nIN A MOSAIC",
+    "PRUNINGS RETURNED\nTO SOIL",
   ],
   ja: [
     "カーナで採取したイヌラ",
@@ -793,17 +793,17 @@ function drawFauna(now, daylight = 1) {
   });
 }
 function drawNocturnalVisitors(now) {
-  if (ecoMode !== "macerating" || macerationNightStrength < .12) return;
+  if (ecoMode !== "macerating" || macerationNightStrength < .04) return;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   let type, nx, ny, width;
-  if ([1,6].includes(macerationDayIndex)) { type=0; nx=.58; ny=.43; width=w*.14; }
-  else if (macerationDayIndex===3) { type=1; nx=.84; ny=.48; width=w*.105; }
-  else if (macerationDayIndex===8) { type=2; nx=.65; ny=.33; width=w*.20; }
+  if ([0,2,5,7].includes(macerationDayIndex)) { type=0; nx=.58; ny=.43; width=w*.17; }
+  else if ([1,3,6,8].includes(macerationDayIndex)) { type=1; nx=.44; ny=.48; width=w*.13; }
+  else if ([4,9].includes(macerationDayIndex)) { type=2; nx=.65; ny=.33; width=w*.20; }
   else return;
   const image = nocturnalSprites[type];
   if (!image.complete || !image.naturalWidth) return;
   const height = width * image.naturalHeight / image.naturalWidth;
-  ex.save(); ex.globalAlpha=Math.min(1,Math.max(0,(macerationNightStrength-.12)/.65));
+  ex.save(); ex.globalAlpha=Math.min(1,Math.max(0,(macerationNightStrength-.04)/.36));
   ex.translate(nx*w, ny*h-height/2);
   if (type === 1) ex.scale(-1, 1);
   ex.drawImage(image,-width/2,-height/2,width,height);

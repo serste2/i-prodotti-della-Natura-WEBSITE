@@ -796,9 +796,9 @@ function drawNocturnalVisitors(now) {
   if (ecoMode !== "macerating" || macerationNightStrength < .04) return;
   const w = ecoCanvas.clientWidth, h = ecoCanvas.clientHeight;
   let type, nx, ny, width;
-  if ([0,2,5,7].includes(macerationDayIndex)) { type=0; nx=.58; ny=.43; width=w*.17; }
-  else if ([1,3,6,8].includes(macerationDayIndex)) { type=1; nx=.44; ny=.48; width=w*.13; }
-  else if ([4,9].includes(macerationDayIndex)) { type=2; nx=.65; ny=.33; width=w*.20; }
+  if (macerationDayIndex === 2) { type=0; nx=.58; ny=.43; width=w*.17; }
+  else if (macerationDayIndex === 5) { type=1; nx=.44; ny=.48; width=w*.075; }
+  else if (macerationDayIndex === 8) { type=2; nx=.65; ny=.33; width=w*.07; }
   else return;
   const image = nocturnalSprites[type];
   if (!image.complete || !image.naturalWidth) return;

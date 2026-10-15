@@ -439,34 +439,34 @@ const fieldFacts = {
     "INULA RACCOLTA A CANA",
     "80% INULA · 20% CISTO",
     "SOLO BIOMASSE AZIENDALI",
-    "RACCOGLIAMO MENO DEL 2%",
-    "22,6 ETTARI DI BIODIVERSITÀ",
+    "MENO DEL 2% RACCOLTO",
+    "22,6 ETTARI VIVI",
     "75 OLIVI · 2 CULTIVAR",
-    "A 420 METRI, IN MAREMMA",
+    "CANA · 420 M · MAREMMA",
     "10 PUNTI ECHO SOIL",
-    "UN MOSAICO DI HABITAT",
-    "LE POTATURE TORNANO AL SUOLO",
+    "HABITAT A MOSAICO",
+    "POTATURE RESTITUITE AL SUOLO",
   ],
   en: [
     "INULA HARVESTED IN CANA",
     "80% INULA · 20% CISTUS",
     "ONLY OUR FARM BIOMASS",
-    "WE HARVEST LESS THAN 2%",
-    "22.6 HECTARES OF BIODIVERSITY",
+    "LESS THAN 2% HARVESTED",
+    "22.6 LIVING HECTARES",
     "75 OLIVE TREES · 2 CULTIVARS",
-    "420 METRES ABOVE THE MAREMMA",
+    "CANA · 420 M · MAREMMA",
     "10 ECHO SOIL POINTS",
-    "A MOSAIC OF HABITATS",
-    "PRUNINGS RETURN TO THE SOIL",
+    "HABITATS IN A MOSAIC",
+    "PRUNINGS RETURNED TO SOIL",
   ],
   ja: [
     "カーナで採取したイヌラ",
     "イヌラ80%・シスタス20%",
     "農園内のバイオマスのみ",
     "採取量は2%未満",
-    "22.6ヘクタールの生物多様性",
+    "生きた22.6ヘクタール",
     "オリーブ75本・2品種",
-    "標高420メートルのマレンマ",
+    "カーナ・標高420 M・マレンマ",
     "ECHO SOIL 10地点",
     "生息地のモザイク",
     "剪定枝を土へ還す",
@@ -1079,7 +1079,7 @@ function updateEco() {
       ? "svuotalo da 100 a 0 sul terreno con INBRUMA"
       : ecoMode === "mixing"
         ? "mescola nel catino fino al 100%"
-        : ecoMode === "brush" ? "distribuito · completa tutti e tre i sacchi" : "INBRUMA, acqua e semi";
+        : ecoMode === "brush" ? "distribuito · completa tutti e tre i sacchi" : "INBRUMA, CÍGNULA e semi";
   const copy = {
     brush: [
       "BRUSH / INBRUMA",
@@ -1286,32 +1286,34 @@ function showNextFact() {
   const lang = document.documentElement.lang;
   const facts = fieldFacts[lang] || fieldFacts.it;
   const art = card.querySelector(".field-card-art");
-  const discard = document.querySelector("#fieldDiscard");
-  if (card.classList.contains("visible") && art.getAttribute("src")) {
-    const usedCard = document.createElement("img");
-    usedCard.src = art.getAttribute("src");
-    usedCard.alt = "";
-    const discardIndex = discard.children.length;
-    usedCard.style.setProperty("--discard-x", `${discardIndex * -1.5}px`);
-    usedCard.style.setProperty("--discard-y", `${discardIndex * -1}px`);
-    usedCard.style.setProperty("--discard-turn", `${(discardIndex - 2) * 1.2}deg`);
-    discard.appendChild(usedCard);
-  }
   const next = (factIndex + 1) % facts.length;
   factIndex = next;
   const cardNumber = String(next + 1).padStart(2, "0");
   art.src = `/assets/field-card-${cardNumber}.webp`;
   art.hidden = false;
   card.classList.add("has-card-art");
+  card.dataset.card = cardNumber;
   card.style.setProperty("--card-turn", `${[-1.4, .8, -0.5, 1.2][next % 4]}deg`);
   card.querySelector("p").textContent = facts[next];
+  const stack = document.querySelector("#fieldCardStack");
+  stack.replaceChildren();
+  for (let index = facts.length - 1; index > next; index -= 1) {
+    const stackedCard = document.createElement("img");
+    const depth = index - next;
+    stackedCard.src = `/assets/field-card-${String(index + 1).padStart(2, "0")}.webp`;
+    stackedCard.alt = "";
+    stackedCard.style.setProperty("--stack-x", `${depth * -2.5}px`);
+    stackedCard.style.setProperty("--stack-y", `${depth * 1.5}px`);
+    stackedCard.style.setProperty("--stack-turn", `${(depth % 2 ? -1 : 1) * Math.min(depth, 4) * .7}deg`);
+    stack.appendChild(stackedCard);
+  }
   card.classList.add("visible");
 }
 function startMaceration() {
   ecoMode = "macerating";
   timerStart = performance.now();
   factIndex = -1;
-  document.querySelector("#fieldDiscard").replaceChildren();
+  document.querySelector("#fieldCardStack").replaceChildren();
   document.querySelector("#fieldFact").classList.remove("visible");
   showNextFact();
   factInterval = setInterval(showNextFact, 3000);

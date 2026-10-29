@@ -2143,16 +2143,16 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
     -2px  2px 0 #173c79, 2px  2px 0 #173c79,
     0 3px 8px rgba(0,0,0,.72);
 }
-#fieldFact[data-card="01"] .field-card-copy {--copy-width:61%;--copy-height:27%;--copy-top:51.5%;}
-#fieldFact[data-card="02"] .field-card-copy {--copy-width:44%;--copy-height:31%;--copy-top:52%;}
-#fieldFact[data-card="03"] .field-card-copy {--copy-width:58%;--copy-height:26%;--copy-top:48.5%;}
-#fieldFact[data-card="04"] .field-card-copy {--copy-width:58%;--copy-height:27%;--copy-top:51.5%;}
-#fieldFact[data-card="05"] .field-card-copy {--copy-width:50%;--copy-height:27%;--copy-top:53.5%;}
-#fieldFact[data-card="06"] .field-card-copy {--copy-width:58%;--copy-height:25%;--copy-top:47%;}
-#fieldFact[data-card="07"] .field-card-copy {--copy-width:47%;--copy-height:27%;--copy-top:53%;}
-#fieldFact[data-card="08"] .field-card-copy {--copy-width:46%;--copy-height:27%;--copy-top:53.5%;}
-#fieldFact[data-card="09"] .field-card-copy {--copy-width:43%;--copy-height:29%;--copy-top:51.5%;}
-#fieldFact[data-card="10"] .field-card-copy {--copy-width:54%;--copy-height:20%;--copy-top:52.5%;}
+#fieldFact[data-card="01"] .field-card-copy {--copy-left:49.86%;--copy-top:47.59%;--copy-width:62%;--copy-height:24%;}
+#fieldFact[data-card="02"] .field-card-copy {--copy-left:50%;--copy-top:48.61%;--copy-width:43%;--copy-height:34%;}
+#fieldFact[data-card="03"] .field-card-copy {--copy-left:50%;--copy-top:45.65%;--copy-width:64%;--copy-height:25%;}
+#fieldFact[data-card="04"] .field-card-copy {--copy-left:49.86%;--copy-top:48.56%;--copy-width:54%;--copy-height:27%;}
+#fieldFact[data-card="05"] .field-card-copy {--copy-left:49.93%;--copy-top:48.47%;--copy-width:51%;--copy-height:26%;}
+#fieldFact[data-card="06"] .field-card-copy {--copy-left:50%;--copy-top:48.8%;--copy-width:64%;--copy-height:25%;}
+#fieldFact[data-card="07"] .field-card-copy {--copy-left:50%;--copy-top:49.35%;--copy-width:50%;--copy-height:26%;}
+#fieldFact[data-card="08"] .field-card-copy {--copy-left:49.93%;--copy-top:47.13%;--copy-width:43%;--copy-height:27%;}
+#fieldFact[data-card="09"] .field-card-copy {--copy-left:49.93%;--copy-top:48.84%;--copy-width:39%;--copy-height:30%;}
+#fieldFact[data-card="10"] .field-card-copy {--copy-left:49.86%;--copy-top:47.18%;--copy-width:56%;--copy-height:21%;}
 #fieldFact.has-card-art p {
   width:100%;
   max-width:100%;

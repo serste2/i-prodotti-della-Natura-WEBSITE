@@ -2123,18 +2123,19 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
 #fieldFact .field-card-copy {position:relative;z-index:1;}
 #fieldFact.has-card-art .field-card-copy {
   position:absolute;
-  left:50%;
+  left:var(--copy-left,50%);
   right:auto;
-  top:50%;
+  top:var(--copy-top,50%);
   bottom:auto;
-  width:55%;
-  height:29%;
+  width:var(--copy-width,55%);
+  height:var(--copy-height,29%);
   transform:translate(-50%,-50%);
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:4%;
+  padding:3.5%;
   box-sizing:border-box;
+  container-type:inline-size;
   text-align:center;
   color:#fff;
   text-shadow:
@@ -2142,21 +2143,23 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
     -2px  2px 0 #173c79, 2px  2px 0 #173c79,
     0 3px 8px rgba(0,0,0,.72);
 }
-#fieldFact[data-card="02"] .field-card-copy {width:43%;height:31%;top:50%;}
-#fieldFact[data-card="03"] .field-card-copy {width:58%;height:27%;top:49%;}
-#fieldFact[data-card="04"] .field-card-copy {width:58%;height:28%;top:51%;}
-#fieldFact[data-card="05"] .field-card-copy {width:44%;height:30%;top:50%;}
-#fieldFact[data-card="06"] .field-card-copy {width:58%;height:27%;top:49%;}
-#fieldFact[data-card="07"] .field-card-copy {width:43%;height:32%;top:50.5%;}
-#fieldFact[data-card="08"] .field-card-copy {width:43%;height:31%;top:52%;}
-#fieldFact[data-card="09"] .field-card-copy {width:32%;height:34%;top:50%;}
-#fieldFact[data-card="10"] .field-card-copy {width:52%;height:22%;top:50.5%;}
+#fieldFact[data-card="01"] .field-card-copy {--copy-width:61%;--copy-height:27%;--copy-top:51.5%;}
+#fieldFact[data-card="02"] .field-card-copy {--copy-width:44%;--copy-height:31%;--copy-top:52%;}
+#fieldFact[data-card="03"] .field-card-copy {--copy-width:58%;--copy-height:26%;--copy-top:48.5%;}
+#fieldFact[data-card="04"] .field-card-copy {--copy-width:58%;--copy-height:27%;--copy-top:51.5%;}
+#fieldFact[data-card="05"] .field-card-copy {--copy-width:50%;--copy-height:27%;--copy-top:53.5%;}
+#fieldFact[data-card="06"] .field-card-copy {--copy-width:58%;--copy-height:25%;--copy-top:47%;}
+#fieldFact[data-card="07"] .field-card-copy {--copy-width:47%;--copy-height:27%;--copy-top:53%;}
+#fieldFact[data-card="08"] .field-card-copy {--copy-width:46%;--copy-height:27%;--copy-top:53.5%;}
+#fieldFact[data-card="09"] .field-card-copy {--copy-width:43%;--copy-height:29%;--copy-top:51.5%;}
+#fieldFact[data-card="10"] .field-card-copy {--copy-width:54%;--copy-height:20%;--copy-top:52.5%;}
 #fieldFact.has-card-art p {
   width:100%;
   max-width:100%;
   margin:0;
-  font:800 clamp(11px,1.05vw,16px)/1.18 "Roboto Mono",monospace;
+  font:800 clamp(8px,5.3cqw,16px)/1.16 "Roboto Mono",monospace;
   text-align:center;
+  text-wrap:balance;
   white-space:pre-line;
   overflow-wrap:normal;
   word-break:keep-all;

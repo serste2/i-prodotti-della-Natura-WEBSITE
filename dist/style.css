@@ -2165,6 +2165,13 @@ body > header .pickup-nav { position:relative; white-space:nowrap; }
   word-break:keep-all;
   text-transform:uppercase;
 }
+:lang(ja) #fieldFact.has-card-art p {
+  font-size:clamp(8px,4.8cqw,14px);
+  line-height:1.3;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  text-transform:none;
+}
 #fieldCardStack {
   position:absolute;
   z-index:3;

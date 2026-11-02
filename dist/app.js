@@ -4,6 +4,7 @@ const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const body = document.body,
   tryButtons = document.querySelectorAll(".try,.tryBig"),
   ecosystem = document.querySelector("#ecosystem");
+const touchGameDevice = matchMedia("(hover: none)");
 const gestureSwitch = document.querySelector(".gesture-switcher");
 if (gestureSwitch && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   let gestureSet = "biomass", gestureTimer = 0, gesturePaused = false;
@@ -34,15 +35,17 @@ if (gestureSwitch && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
 tryButtons.forEach(
   (b) =>
     (b.onclick = () => {
-      sessionStorage.setItem("inulaFieldTried", "1");
-      tryButtons.forEach(button => { button.hidden = true; });
+      if (!touchGameDevice.matches) {
+        sessionStorage.setItem("inulaFieldTried", "1");
+        tryButtons.forEach(button => { button.hidden = true; });
+      }
       resetEco();
       ecosystem.showModal();
       requestAnimationFrame(sizeEco);
       startEcoAnimation();
     }),
 );
-if (sessionStorage.getItem("inulaFieldTried"))
+if (sessionStorage.getItem("inulaFieldTried") && !touchGameDevice.matches)
   tryButtons.forEach(button => { button.hidden = true; });
 const menu = document.querySelector(".menu"),
   nav = document.querySelector("nav");
@@ -1868,6 +1871,9 @@ ecosystem.addEventListener("close", () => {
 });
 addEventListener("resize", () => {
   if (ecosystem.open) sizeEco();
+});
+addEventListener("orientationchange", () => {
+  if (ecosystem.open) requestAnimationFrame(sizeEco);
 });
 document.querySelector("#reopenField").hidden = !localStorage.getItem("inulaFieldComplete");
 if (localStorage.getItem("inulaFieldComplete"))

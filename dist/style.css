@@ -2589,8 +2589,8 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     overflow:hidden;
   }
   #ecosystem {
-    --game-rail-left:clamp(96px,14vw,138px);
-    --game-rail-right:clamp(112px,17vw,174px);
+    --game-rail-left:clamp(112px,15vw,144px);
+    --game-rail-right:clamp(128px,18vw,180px);
     width:100%;
     height:100dvh;
     padding:max(5px,env(safe-area-inset-top)) max(5px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left));
@@ -2637,6 +2637,8 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     align-items:stretch;
     justify-content:flex-start;
     gap:10px;
+    min-width:0;
+    overflow:hidden;
   }
   #ecosystem .eco-head small {
     min-width:0;
@@ -2650,6 +2652,7 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     display:grid;
     grid-template-columns:repeat(2,44px);
     gap:6px;
+    width:100%;
   }
   #ecosystem .eco-head-actions button { border-color:var(--paper); color:var(--paper); }
   #ecosystem .eco-head-actions svg { width:22px; height:22px; }
@@ -2673,10 +2676,11 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     background:var(--ink);
     color:var(--paper);
     scrollbar-width:thin;
+    contain:layout paint;
   }
   #ecosystem .eco-controls[hidden] { display:flex !important; }
   #ecosystem #inbrumaSupplies,
-  #ecosystem #seedDiscovery { width:100%; }
+  #ecosystem #seedDiscovery { width:100%; min-width:0; overflow:hidden; }
   #ecosystem #depositQueue {
     display:grid;
     grid-template-columns:1fr;
@@ -2689,10 +2693,17 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     color:var(--paper);
     border:1px solid transparent;
     border-bottom-color:var(--paper);
+    min-width:0;
+    overflow:hidden;
   }
   #ecosystem #depositQueue button.active { color:var(--ink); background:var(--y); border-color:var(--paper); }
   #ecosystem #depositQueue svg { height:32px; }
-  #ecosystem #depositQueue button span { font-size:8px; line-height:1.15; }
+  #ecosystem #depositQueue button span {
+    min-width:0;
+    font-size:8px;
+    line-height:1.15;
+    overflow-wrap:anywhere;
+  }
   #ecosystem #depositQueue button b { font-size:9px; }
   #ecosystem .supply-invitation,
   #ecosystem .seed-invitation { color:var(--paper); font-size:7px; line-height:1.25; }
@@ -2702,6 +2713,9 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
   #ecosystem .eco-toolbox #water,
   #ecosystem #sowField:not(:disabled) { color:var(--ink); }
   #ecosystem .eco-toolbox .brush-size { font-size:8px; }
+  #ecosystem .eco-toolbox .brush-size,
+  #ecosystem .eco-toolbox button { width:100%; min-width:0; overflow-wrap:anywhere; }
+  #ecosystem .eco-toolbox .brush-size input { width:100%; min-width:0; }
   #ecosystem #seedDiscovery { display:flex; flex-direction:column; gap:6px; }
   #ecosystem #seedContainers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:3px; }
   #ecosystem #seedContainers button { color:var(--paper); }
@@ -2719,15 +2733,40 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     border-color:var(--paper);
     background:var(--ink);
     color:var(--paper);
+    min-width:0;
+    max-height:calc(100dvh - 132px);
+    overflow:hidden;
+    box-sizing:border-box;
   }
   #ecosystem .eco-readout { top:max(116px,calc(env(safe-area-inset-top) + 116px)); }
-  #ecosystem .eco-readout strong { margin:4px 0; font-size:clamp(15px,2.8dvh,21px); line-height:1; }
+  #ecosystem .eco-readout strong {
+    display:block;
+    width:100%;
+    min-width:0;
+    margin:4px 0;
+    font-size:clamp(12px,2.45dvh,17px);
+    line-height:1.02;
+    letter-spacing:-.02em;
+    overflow-wrap:anywhere;
+    hyphens:auto;
+  }
   #ecosystem .eco-readout span,
   #ecosystem .eco-readout small,
   #ecosystem .basin-meter span,
-  #ecosystem .basin-meter small { font-size:7px; line-height:1.3; }
+  #ecosystem .basin-meter small {
+    display:block;
+    width:100%;
+    min-width:0;
+    font-size:7px;
+    line-height:1.3;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    hyphens:auto;
+  }
+  #ecosystem .eco-readout span,
+  #ecosystem .basin-meter span { letter-spacing:.02em; }
   #ecosystem .basin-meter { top:auto; bottom:max(10px,env(safe-area-inset-bottom)); }
-  #ecosystem .basin-meter b { font-size:22px; }
+  #ecosystem .basin-meter b { max-width:100%; font-size:20px; line-height:1; overflow:hidden; }
   #ecosystem .basin-meter i { border-color:var(--paper); }
   #ecosystem #plantButtons {
     position:fixed;
@@ -2741,9 +2780,30 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
   }
   #ecosystem .fruit-count { font-size:7px; }
   #ecosystem .fruit-count svg { width:18px; height:18px; }
+  #ecosystem .fruit-count span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   #ecosystem #fieldFact { width:min(48vw,420px); }
   #ecosystem #plantEvidence { right:calc(var(--game-rail-right) + 8px); width:min(46vw,390px); }
   #ecosystem .eco-toolbox button,
   #ecosystem #sowField,
   #ecosystem #depositQueue button { min-height:44px; }
+}
+
+/* Short Android landscape viewports need a denser HUD, never a smaller scene ratio. */
+@media (orientation:landscape) and (max-height:430px) and (hover:none) {
+  #ecosystem { --game-rail-left:112px; --game-rail-right:128px; }
+  #ecosystem .eco-head { padding:7px 6px; gap:7px; }
+  #ecosystem .eco-head small { font-size:7px; }
+  #ecosystem .eco-head-actions { grid-template-columns:repeat(2,44px); gap:4px; }
+  #ecosystem .eco-readout { top:max(107px,calc(env(safe-area-inset-top) + 107px)); }
+  #ecosystem .eco-readout,
+  #ecosystem .basin-meter { left:max(7px,env(safe-area-inset-left)); width:98px; padding:6px; }
+  #ecosystem .eco-readout strong { font-size:12px; }
+  #ecosystem .eco-readout span,
+  #ecosystem .eco-readout small,
+  #ecosystem .basin-meter span,
+  #ecosystem .basin-meter small { font-size:6.5px; }
+  #ecosystem .basin-meter b { font-size:18px; }
+  #ecosystem .eco-controls { padding:6px; gap:5px; }
+  #ecosystem #depositQueue button { min-height:52px; }
+  #ecosystem #depositQueue svg { height:27px; }
 }

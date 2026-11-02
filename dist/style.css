@@ -45,7 +45,7 @@ header {
 }
 .brand {
   display: block;
-  width: min(190px, 100%);
+  width: 52px;
   text-decoration: none;
 }
 .brand img {
@@ -2018,7 +2018,9 @@ body > header nav { align-items: center; }
 @media (min-width: 821px) {
   body > header { grid-template-columns: auto minmax(0, 1fr) auto; column-gap: clamp(18px, 3vw, 48px); }
   body > header .brand { white-space: nowrap; }
-  body > header nav { gap: clamp(14px, 2.5vw, 38px); }
+  body > header nav { min-width:0; gap: clamp(14px, 2.5vw, 38px); padding-right:8px; }
+  body > header nav .cart-link { flex:0 0 34px; margin-left:4px; }
+  body > header .language-switcher { position:relative; z-index:2; flex:0 0 auto; }
 }
 
 /* #IONONBRUCIO collection */
@@ -2436,6 +2438,7 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     text-align:left;
   }
   body > header .brand {
+    width:48px;
     min-width:0;
     max-width:96px;
     font-size:10px;
@@ -2491,6 +2494,7 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     padding-inline:max(8px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-right));
   }
   body > header .brand {
+    width:52px;
     min-width:0;
     max-width:120px;
     font-size:10px;
@@ -2534,7 +2538,7 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     gap:4px;
     padding-inline:max(6px,env(safe-area-inset-left)) max(6px,env(safe-area-inset-right));
   }
-  body > header .brand { max-width:82px; font-size:9px; }
+  body > header .brand { width:44px; max-width:44px; font-size:9px; }
   body > header .menu { width:54px; min-width:54px; padding-inline:5px; }
   body > header .language-switcher { gap:2px; }
 }

@@ -2655,6 +2655,16 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     width:100%;
   }
   #ecosystem .eco-head-actions button { border-color:var(--paper); color:var(--paper); }
+  #ecosystem .eco-head-actions #fieldMusic,
+  #ecosystem .eco-head-actions .eco-close {
+    background:var(--ink);
+    color:var(--paper);
+  }
+  #ecosystem .eco-head-actions #fieldMusic:active,
+  #ecosystem .eco-head-actions .eco-close:active {
+    background:var(--paper);
+    color:var(--ink);
+  }
   #ecosystem .eco-head-actions svg { width:22px; height:22px; }
   #ecosystem .eco-controls {
     grid-column:3;

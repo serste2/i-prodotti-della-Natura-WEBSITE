@@ -2817,3 +2817,39 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
   #ecosystem #depositQueue button { min-height:52px; }
   #ecosystem #depositQueue svg { height:27px; }
 }
+
+/* The maceration deck is a compact game object on Android landscape, not a desktop card. */
+@media (orientation:landscape) and (max-width:1366px) and (max-height:820px) and (hover:none) {
+  #ecosystem.eco-macerating #fieldFact.has-card-art,
+  #ecosystem #fieldCardStack {
+    left:auto;
+    right:calc(var(--game-rail-right) + 10px);
+    bottom:10px;
+    width:min(120px,16vw,calc(42dvh * 2 / 3));
+    max-width:none;
+    aspect-ratio:2 / 3;
+  }
+  #ecosystem.eco-macerating #fieldFact.has-card-art {
+    padding:0;
+    border-radius:7px;
+    box-shadow:4px 5px 9px rgba(18,18,16,.34),2px 2px 0 rgba(17,45,99,.28);
+  }
+  #ecosystem #fieldCardStack img {
+    border-radius:6px;
+    box-shadow:4px 5px 8px rgba(18,18,16,.3),2px 2px 0 rgba(17,45,99,.24);
+  }
+  #ecosystem #fieldFact.has-card-art p {
+    font-size:clamp(6px,5.1cqw,10px);
+    line-height:1.12;
+    text-shadow:-1px -1px 0 #173c79,1px -1px 0 #173c79,-1px 1px 0 #173c79,1px 1px 0 #173c79,0 2px 4px rgba(0,0,0,.68);
+  }
+}
+
+@media (orientation:landscape) and (max-height:430px) and (hover:none) {
+  #ecosystem.eco-macerating #fieldFact.has-card-art,
+  #ecosystem #fieldCardStack {
+    right:calc(var(--game-rail-right) + 7px);
+    bottom:7px;
+    width:min(104px,14.5vw,calc(38dvh * 2 / 3));
+  }
+}

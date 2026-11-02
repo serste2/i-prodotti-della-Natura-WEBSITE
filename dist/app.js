@@ -140,13 +140,14 @@ const cartItems = [...document.querySelectorAll("[data-cart-item]")];
 let cartQuantities = { cignula: 0, inbruma: 0 };
 try { cartQuantities = { ...cartQuantities, ...JSON.parse(sessionStorage.getItem("inulaCart") || "{}") }; }
 catch { /* Start with an empty cart if an older session value is invalid. */ }
-function savedOrderReward() {
+function savedOrderRewards() {
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem("inulaHarvest") || "null"); } catch { /* no saved harvest */ }
   const gift = localStorage.getItem("inulaMysteryGiftUnlocked") === "1";
-  if (saved?.discount) return { code:`RACCOLTO${saved.discount}`, discount:saved.discount, gift };
-  if (localStorage.getItem("inulaFieldComplete")) return { code:"INULA05", discount:5, gift };
-  return { code:"", discount:0, gift:false };
+  const rewards = [];
+  if (localStorage.getItem("inulaFieldComplete")) rewards.push({ code:"INULA05", discount:5 });
+  if (saved?.discount) rewards.push({ code:`RACCOLTO${saved.discount}`, discount:saved.discount });
+  return { rewards, gift };
 }
 function updateCart() {
   let items = 0, total = 0;
@@ -161,14 +162,15 @@ function updateCart() {
   document.querySelector("#cartCount").classList.toggle("active", items > 0);
   document.querySelector("#cartTotal").textContent = `${total} €`;
   document.querySelector("#cartRequest").disabled = items === 0;
-  const reward = savedOrderReward();
+  const { rewards, gift } = savedOrderRewards();
   const lang = document.documentElement.lang;
-  document.querySelector("#cartDiscount").textContent = reward.code
-    ? lang === "ja" ? `保存済み割引：${reward.discount}% · コード ${reward.code}`
-      : lang === "en" ? `Saved discount: ${reward.discount}% · code ${reward.code}`
-        : `Sconto salvato: ${reward.discount}% · codice ${reward.code}`
+  const rewardList = rewards.map(reward => `${reward.discount}% · ${reward.code}`).join(" + ");
+  document.querySelector("#cartDiscount").textContent = rewards.length
+    ? lang === "ja" ? `保存済み割引：${rewardList}`
+      : lang === "en" ? `Saved discounts: ${rewardList}`
+        : `Sconti salvati: ${rewardList}`
     : lang === "ja" ? "保存済みの割引はありません。" : lang === "en" ? "No saved discount." : "Nessuno sconto salvato.";
-  document.querySelector("#cartMystery").hidden = !reward.gift;
+  document.querySelector("#cartMystery").hidden = !gift;
 }
 cartItems.forEach(item => item.querySelectorAll("[data-qty]").forEach(button => {
   button.addEventListener("click", () => {
@@ -178,13 +180,13 @@ cartItems.forEach(item => item.querySelectorAll("[data-qty]").forEach(button => 
   });
 }));
 document.querySelector("#cartRequest").addEventListener("click", () => {
-  const reward = savedOrderReward();
+  const { rewards, gift } = savedOrderRewards();
   const lang = document.documentElement.lang;
   const lines = [];
   if (cartQuantities.cignula) lines.push(`CÍGNULA Mini × ${cartQuantities.cignula}`);
   if (cartQuantities.inbruma) lines.push(`INBRUMA dei Carbonari × ${cartQuantities.inbruma}`);
-  if (reward.code) lines.push(lang === "ja" ? `割引コード：${reward.code}（${reward.discount}%）` : lang === "en" ? `Discount code: ${reward.code} (${reward.discount}%)` : `Codice sconto: ${reward.code} (${reward.discount}%)`);
-  if (reward.gift) lines.push(lang === "ja" ? "最終特典：ミステリーギフト（自社のオーガニック製品）。割引と併用できます。" : lang === "en" ? "Final reward: mystery gift, an organic farm product, combined with the discount." : "Premio finale: omaggio misterioso, prodotto bio aziendale, cumulabile con lo sconto.");
+  rewards.forEach(reward => lines.push(lang === "ja" ? `割引コード：${reward.code}（${reward.discount}%）` : lang === "en" ? `Discount code: ${reward.code} (${reward.discount}%)` : `Codice sconto: ${reward.code} (${reward.discount}%)`));
+  if (gift) lines.push(lang === "ja" ? "最終特典：ミステリーギフト（自社のオーガニック製品）。割引と併用できます。" : lang === "en" ? "Final reward: mystery gift, an organic farm product, combined with the discount." : "Premio finale: omaggio misterioso, prodotto bio aziendale, cumulabile con lo sconto.");
   document.querySelector("#reserveTitle").textContent = lang === "ja" ? "カート" : lang === "en" ? "YOUR CART" : "IL TUO CARRELLO";
   const note = document.querySelector("#reserve textarea");
   if (note) note.value = lines.join("\n");
@@ -1386,6 +1388,7 @@ function beginSowing() {
     }));
     document.querySelector("#reopenField").classList.add("ready");
     document.querySelector("#reopenField").hidden = false;
+    updateCart();
     ecosystem.close();
     location.hash = "home";
     document.querySelector("#fieldReturnMessage").hidden = false;
@@ -1611,6 +1614,7 @@ function collectPlants(plants, grouped = false) {
     if (!completed) document.querySelector("#harvestReward").showModal();
   }
   localStorage.setItem("inulaHarvest", JSON.stringify({ ids:[...harvestedPlants], discount:harvestDiscount, prizeAt:harvestPrizeAt, completeShown:harvestCompleteShown || completed }));
+  updateCart();
   updateHarvestBins(); paintEco();
   announcement.textContent = `${added.length > 1 ? `${added.length} piante vicine raccolte. ` : ""}Raccolto: ${harvestedPlants.size} piante su ${renderedPlants.length}.`;
   if (completed && !harvestCompleteShown) {

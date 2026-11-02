@@ -2410,3 +2410,225 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
 
 /* The card sequence now communicates elapsed maceration time. */
 #macerationClock {display:none !important;}
+
+/* Mobile alignment pass: desktop geometry remains unchanged. */
+.eco-rotate-notice { display:none; }
+
+@media (max-width:820px) {
+  html,
+  body {
+    width:100%;
+    max-width:100%;
+    overflow-x:clip;
+  }
+
+  body > header {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 60px auto;
+    align-items:center;
+    gap:8px;
+    height:64px;
+    padding-inline:max(8px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-right));
+    text-align:left;
+  }
+  body > header .brand {
+    min-width:0;
+    max-width:96px;
+    font-size:10px;
+    line-height:1.12;
+    overflow-wrap:normal;
+  }
+  body > header .menu {
+    display:grid;
+    place-items:center;
+    width:60px;
+    min-width:60px;
+    height:44px;
+    min-height:44px;
+    padding:0 8px;
+  }
+  body > header .language-switcher { gap:3px; }
+  body > header .language-link {
+    width:44px;
+    height:44px;
+    box-shadow:2px 2px 0 var(--ink);
+  }
+  body > header nav { top:64px; }
+  body > header nav > a:not(.cart-link) {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:44px;
+  }
+  body > header nav .cart-link {
+    width:44px;
+    height:44px;
+  }
+
+  .ink-visitor-0 { left:auto; right:16px; }
+  .ink-visitor-1 { left:8%; }
+  .ink-visitor-2 { left:auto; right:20px; }
+  .ink-visitor { animation-name:visitor-flight-mobile; }
+}
+
+@media (min-width:821px) and (max-width:950px) and (hover:none) {
+  html,
+  body {
+    width:100%;
+    max-width:100%;
+    overflow-x:clip;
+  }
+  body > header {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 60px auto;
+    align-items:center;
+    gap:8px;
+    height:64px;
+    padding-inline:max(8px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-right));
+  }
+  body > header .brand {
+    min-width:0;
+    max-width:120px;
+    font-size:10px;
+    line-height:1.12;
+  }
+  body > header .menu {
+    display:grid;
+    grid-column:2;
+    place-items:center;
+    width:60px;
+    min-width:60px;
+    height:44px;
+    min-height:44px;
+    padding:0 8px;
+  }
+  body > header .language-switcher { grid-column:3; gap:3px; }
+  body > header .language-link { width:44px; height:44px; box-shadow:2px 2px 0 var(--ink); }
+  body > header nav {
+    display:none;
+    position:absolute;
+    inset:64px 0 auto;
+    flex-direction:column;
+    align-items:center;
+    padding:24px;
+    border-bottom:2px solid var(--ink);
+    background:var(--paper);
+  }
+  body > header nav.open { display:flex; }
+  body > header nav > a:not(.cart-link) {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:44px;
+  }
+  body > header nav .cart-link { width:44px; height:44px; }
+}
+
+@media (max-width:380px) {
+  body > header {
+    grid-template-columns:minmax(0,1fr) 54px auto;
+    gap:4px;
+    padding-inline:max(6px,env(safe-area-inset-left)) max(6px,env(safe-area-inset-right));
+  }
+  body > header .brand { max-width:82px; font-size:9px; }
+  body > header .menu { width:54px; min-width:54px; padding-inline:5px; }
+  body > header .language-switcher { gap:2px; }
+}
+
+@keyframes visitor-flight-mobile {
+  to { transform:translate(-10px,-14px) rotate(5deg); }
+}
+
+/* Phones and touch tablets keep the game available, but only in landscape. */
+@media (orientation:portrait) and (max-width:1366px) and (hover:none) {
+  #ecosystem .eco-shell {
+    --mobile-eco-head:54px;
+    position:relative;
+  }
+  #ecosystem .eco-head {
+    position:relative;
+    z-index:31;
+    height:var(--mobile-eco-head);
+  }
+  #ecosystem .eco-rotate-notice {
+    position:absolute;
+    z-index:30;
+    inset:var(--mobile-eco-head) 0 0;
+    display:grid;
+    place-content:center;
+    justify-items:center;
+    gap:12px;
+    padding:24px max(20px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left));
+    border-top:2px solid var(--ink);
+    background-color:var(--paper);
+    background-image:radial-gradient(#1112 .7px,transparent .8px);
+    background-size:5px 5px;
+    color:var(--ink);
+    text-align:center;
+  }
+  .eco-rotate-notice svg { width:72px; height:72px; }
+  .eco-rotate-notice strong { font:700 clamp(18px,5vw,28px)/1.1 "Roboto Mono",monospace; }
+  .eco-rotate-notice span { max-width:32ch; font:12px/1.55 "Roboto Mono",monospace; }
+  #ecosystem .eco-stage,
+  #ecosystem .eco-controls { pointer-events:none; visibility:hidden; }
+}
+
+@media (orientation:portrait) and (max-width:520px) and (hover:none) {
+  #ecosystem .eco-shell { --mobile-eco-head:48px; }
+  #ecosystem .eco-head { padding-inline:12px; }
+  #ecosystem .eco-head small { font-size:9px; }
+  #ecosystem .eco-head-actions { --control-size:44px; gap:6px; }
+}
+
+/* Safe-area-aware, symmetric game frame for Android/iOS landscape play. */
+@media (orientation:landscape) and (max-width:1366px) and (max-height:820px) and (hover:none) {
+  html:has(#ecosystem[open]),
+  body:has(#ecosystem[open]) {
+    width:100%;
+    height:100%;
+    overflow:hidden;
+  }
+  #ecosystem {
+    width:100%;
+    height:100dvh;
+    padding:max(5px,env(safe-area-inset-top)) max(5px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left));
+  }
+  #ecosystem .eco-shell {
+    width:100%;
+    max-width:none;
+    height:100%;
+    max-height:none;
+    grid-template-rows:clamp(48px,8dvh,56px) minmax(0,1fr) clamp(94px,18dvh,118px);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  #ecosystem .eco-head {
+    height:auto;
+    min-height:48px;
+    padding:0 max(12px,env(safe-area-inset-right)) 0 max(12px,env(safe-area-inset-left));
+    gap:12px;
+    align-items:center;
+  }
+  #ecosystem .eco-head small {
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:10px;
+  }
+  #ecosystem .eco-head-actions { --control-size:44px; gap:8px; }
+  #ecosystem .eco-head-actions svg { width:22px; height:22px; }
+  #ecosystem .eco-stage { min-height:0; }
+  #ecosystem .eco-controls {
+    height:auto;
+    min-height:94px;
+    padding:5px max(12px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+    overflow:auto;
+    overscroll-behavior:contain;
+  }
+  #ecosystem .eco-toolbox button,
+  #ecosystem #sowField,
+  #ecosystem #depositQueue button { min-height:44px; }
+  #ecosystem .eco-readout { left:12px; top:12px; }
+  #ecosystem .basin-meter { left:12px; bottom:12px; }
+  #ecosystem #plantButtons { right:12px; bottom:12px; }
+}

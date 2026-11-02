@@ -2820,6 +2820,18 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
 
 /* The maceration deck is a compact game object on Android landscape, not a desktop card. */
 @media (orientation:landscape) and (max-width:1366px) and (max-height:820px) and (hover:none) {
+  #ecosystem,
+  #ecosystem .eco-shell,
+  #ecosystem .eco-stage,
+  #ecosystem #ecoCanvas {
+    -webkit-tap-highlight-color:transparent;
+    -webkit-touch-callout:none;
+    user-select:none;
+  }
+  #ecosystem #ecoCanvas:focus,
+  #ecosystem #ecoCanvas:focus-visible {
+    outline:none;
+  }
   #ecosystem.eco-macerating #fieldFact.has-card-art,
   #ecosystem #fieldCardStack {
     left:auto;

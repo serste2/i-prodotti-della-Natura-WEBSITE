@@ -2873,3 +2873,9 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     width:min(104px,14.5vw,calc(38dvh * 2 / 3));
   }
 }
+
+/* Mobile header logo: constrain both axes so the mark cannot cover page content. */
+@media (max-width: 820px) {
+  body > header .brand { width: 44px; max-width: 44px; height: 48px; max-height: 48px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  body > header .brand img { display: block; width: 100%; max-width: 44px; height: auto; max-height: 44px; object-fit: contain; }
+}

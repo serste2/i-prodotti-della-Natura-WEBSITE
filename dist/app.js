@@ -32,25 +32,20 @@ if (gestureSwitch && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   gestureSwitch.dataset.set = "biomass";
   gestureSwitch.querySelectorAll(".cignula-photo,.cignula-copy").forEach(el => el.setAttribute("aria-hidden", "true"));
 }
-// Persist the first visit across sessions and device layouts until site data is cleared.
-const hasFieldProgress = () => {
-  try {
-    return ["inulaFieldStarted", "inulaFieldComplete", "inulaFieldLayout", "inulaHarvest", "inulaHarvestComplete"]
-      .some(key => Boolean(localStorage.getItem(key)));
-  } catch { return false; }
-};
+// The playable field resets on every page load, on desktop and mobile.
+// Keep the introductory action visible after refresh, regardless of old saved rewards.
+let fieldOpenedThisPage = false;
 function syncFieldEntryPoints() {
-  const returning = hasFieldProgress();
-  tryButtons.forEach(button => { button.hidden = returning; });
+  tryButtons.forEach(button => { button.hidden = fieldOpenedThisPage; });
   const reopen = document.querySelector("#reopenField");
   if (reopen) {
-    reopen.hidden = !returning;
-    reopen.classList.toggle("ready", returning);
+    reopen.hidden = !fieldOpenedThisPage;
+    reopen.classList.toggle("ready", fieldOpenedThisPage);
   }
 }
 tryButtons.forEach(button => {
   button.onclick = () => {
-    try { localStorage.setItem("inulaFieldStarted", "1"); } catch {}
+    fieldOpenedThisPage = true;
     syncFieldEntryPoints();
     resetEco();
     ecosystem.showModal();

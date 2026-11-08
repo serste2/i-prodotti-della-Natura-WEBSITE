@@ -2909,3 +2909,37 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
     object-fit:contain !important;
   }
 }
+
+/* Mobile landscape: preserve desktop card-to-scene proportions and readable copy.
+   Match coarse-pointer phones even when the CSS viewport exceeds 1366px. */
+@media screen and (orientation:landscape) and (max-height:820px) and (pointer:coarse) {
+  #ecosystem.eco-macerating .eco-stage #fieldFact.has-card-art,
+  #ecosystem.eco-macerating .eco-stage #fieldCardStack {
+    left:auto !important;
+    top:auto !important;
+    right:3% !important;
+    bottom:5% !important;
+    width:clamp(120px, 15%, 210px) !important;
+    height:auto !important;
+    max-width:210px !important;
+    max-height:70% !important;
+    aspect-ratio:2 / 3 !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+  }
+  #ecosystem.eco-macerating .eco-stage #fieldFact.has-card-art {
+    transform:rotate(var(--card-turn,0deg)) !important;
+  }
+  #ecosystem.eco-macerating .eco-stage #fieldCardStack { transform:none !important; }
+  #ecosystem.eco-macerating .eco-stage #fieldFact.has-card-art .field-card-art,
+  #ecosystem.eco-macerating .eco-stage #fieldCardStack img {
+    display:block;
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+  }
+  #ecosystem.eco-macerating .eco-stage #fieldFact.has-card-art p {
+    font-size:clamp(9px, 6.5cqw, 13px) !important;
+    line-height:1.12 !important;
+  }
+}

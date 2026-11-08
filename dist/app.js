@@ -501,6 +501,7 @@ function sizeEco() {
   ecoCanvas.height = h * d;
   ex.setTransform(d, 0, 0, d, 0, 0);
   paintEco();
+  if (ecoMode === 'macerating') fitMacerationCardsToFarmer();
 }
 let foregroundLayer = null, foregroundWidth = 0, foregroundHeight = 0;
 function background() {
@@ -1286,6 +1287,27 @@ function mixAt(x, y) {
   updateEco(); paintEco();
   if (mixProgress >= 100) startMaceration();
 }
+function fitMacerationCardsToFarmer() {
+  if (!matchMedia("(orientation: landscape) and (pointer: coarse)").matches) return;
+  if (!seatedFarmerImage.naturalWidth || !ecoCanvas.clientHeight) return;
+  const {farmerX,farmerY,farmerW,farmerH} = seatedLayout();
+  const stageW = ecoCanvas.clientWidth, stageH = ecoCanvas.clientHeight;
+  // Never exceed the seated farmer's actual on-canvas bounding box.
+  const height = Math.min(farmerH * .9, farmerW * 1.5 * .9);
+  const width = height * 2 / 3;
+  const left = Math.max(0, Math.min(stageW-width, farmerX+(farmerW-width)/2));
+  const top = Math.max(0, Math.min(stageH-height, farmerY+(farmerH-height)/2));
+  for (const selector of ["#fieldFact.has-card-art","#fieldCardStack"]) {
+    const el = document.querySelector(selector);
+    if (!el) continue;
+    for (const [prop,val] of Object.entries({
+      position:"absolute",left:left+"px",top:top+"px",right:"auto",
+      bottom:"auto",width:width+"px",height:height+"px",
+      "max-width":width+"px","max-height":height+"px",
+      "aspect-ratio":"2 / 3",padding:"0"
+    })) el.style.setProperty(prop,val,"important");
+  }
+}
 function showNextFact() {
   const card = document.querySelector("#fieldFact");
   const lang = document.documentElement.lang;
@@ -1313,6 +1335,7 @@ function showNextFact() {
     stack.appendChild(stackedCard);
   }
   card.classList.add("visible");
+  fitMacerationCardsToFarmer();
 }
 function startMaceration() {
   ecoMode = "macerating";
@@ -1871,7 +1894,7 @@ ecosystem.addEventListener("close", () => {
   if (!["future", "sowing"].includes(ecoMode)) resetEco();
 });
 [...tomatoSprites, flatSpoonImage, ...pollinatorSprites, ...nocturnalSprites, fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, lizardImage, ...farmerSowingFrames, seatedFarmerImage, stoolImage].forEach((image) => {
-  image.onload = () => ecosystem.open && paintEco();
+  image.onload = () => { if (ecosystem.open) { paintEco(); if (ecoMode === 'macerating') fitMacerationCardsToFarmer(); } };
 });
 addEventListener("resize", () => {
   if (ecosystem.open) sizeEco();

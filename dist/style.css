@@ -2879,3 +2879,33 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
   body > header .brand { width: 44px; max-width: 44px; height: 48px; max-height: 48px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
   body > header .brand img { display: block; width: 100%; max-width: 44px; height: auto; max-height: 44px; object-fit: contain; }
 }
+
+/* 2026-11-08: Android landscape card sizing. Do not rely on hover:none:
+   some mobile Chromium configurations report hover capability inconsistently. */
+@media screen and (orientation:landscape) and (max-height:820px) and (max-width:1366px) {
+  #ecosystem.eco-macerating #fieldFact.has-card-art,
+  #ecosystem #fieldCardStack {
+    box-sizing:border-box !important;
+    position:absolute !important;
+    left:auto !important;
+    top:auto !important;
+    right:clamp(12px, 3vw, 32px) !important;
+    bottom:clamp(8px, 2dvh, 18px) !important;
+    width:min(130px, 16vw, 27dvh) !important;
+    height:auto !important;
+    max-width:130px !important;
+    max-height:42dvh !important;
+    aspect-ratio:2 / 3 !important;
+    padding:0 !important;
+    transform:rotate(var(--card-turn, 0deg)) !important;
+  }
+  #ecosystem #fieldCardStack { transform:none !important; }
+  #ecosystem #fieldCardStack img,
+  #ecosystem #fieldFact .field-card-art {
+    width:100% !important;
+    height:100% !important;
+    max-width:100% !important;
+    max-height:100% !important;
+    object-fit:contain !important;
+  }
+}

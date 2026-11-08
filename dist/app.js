@@ -32,21 +32,33 @@ if (gestureSwitch && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   gestureSwitch.dataset.set = "biomass";
   gestureSwitch.querySelectorAll(".cignula-photo,.cignula-copy").forEach(el => el.setAttribute("aria-hidden", "true"));
 }
-tryButtons.forEach(
-  (b) =>
-    (b.onclick = () => {
-      if (!touchGameDevice.matches) {
-        sessionStorage.setItem("inulaFieldTried", "1");
-        tryButtons.forEach(button => { button.hidden = true; });
-      }
-      resetEco();
-      ecosystem.showModal();
-      requestAnimationFrame(sizeEco);
-      startEcoAnimation();
-    }),
-);
-if (sessionStorage.getItem("inulaFieldTried") && !touchGameDevice.matches)
-  tryButtons.forEach(button => { button.hidden = true; });
+// Persist the first visit across sessions and device layouts until site data is cleared.
+const hasFieldProgress = () => {
+  try {
+    return ["inulaFieldStarted", "inulaFieldComplete", "inulaFieldLayout", "inulaHarvest", "inulaHarvestComplete"]
+      .some(key => Boolean(localStorage.getItem(key)));
+  } catch { return false; }
+};
+function syncFieldEntryPoints() {
+  const returning = hasFieldProgress();
+  tryButtons.forEach(button => { button.hidden = returning; });
+  const reopen = document.querySelector("#reopenField");
+  if (reopen) {
+    reopen.hidden = !returning;
+    reopen.classList.toggle("ready", returning);
+  }
+}
+tryButtons.forEach(button => {
+  button.onclick = () => {
+    try { localStorage.setItem("inulaFieldStarted", "1"); } catch {}
+    syncFieldEntryPoints();
+    resetEco();
+    ecosystem.showModal();
+    requestAnimationFrame(sizeEco);
+    startEcoAnimation();
+  };
+});
+syncFieldEntryPoints();
 const menu = document.querySelector(".menu"),
   nav = document.querySelector("nav");
 menu.onclick = () => {
@@ -1902,9 +1914,7 @@ addEventListener("resize", () => {
 addEventListener("orientationchange", () => {
   if (ecosystem.open) requestAnimationFrame(sizeEco);
 });
-document.querySelector("#reopenField").hidden = !localStorage.getItem("inulaFieldComplete");
-if (localStorage.getItem("inulaFieldComplete"))
-  document.querySelector("#reopenField").classList.add("ready");
+syncFieldEntryPoints();
 updateEco();
 
 /* Olive pruning collection request. No booking is confirmed without dispatch. */

@@ -242,6 +242,17 @@ h2 em {
   font-size: 13px;
   line-height: 1.65;
 }
+.territory-maps-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border: 2px solid var(--ink);
+  background: var(--y);
+  color: var(--ink);
+  font: 700 14px/1.4 "Roboto Mono", monospace;
+}
 .viewer {
   height: min(55vw, 600px);
   min-height: 420px;

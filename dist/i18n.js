@@ -5,6 +5,8 @@
 
   const translations = {
     en: {
+      "VAI AL PAGAMENTO ↗": "CONTINUE TO PAYMENT ↗",
+      "La richiesta d’ordine non comporta un pagamento immediato.": "An order request does not require immediate payment.",
       "MENU": "MENU", "CHIUDI": "CLOSE", "TERRITORIO": "LAND", "METODO": "METHOD", "CONTATTI": "CONTACT",
       "I PRODOTTI DELLA NATURA": "I PRODOTTI DELLA NATURA", "I PRODOTTI": "I PRODOTTI", "DELLA": "DELLA",
       "Azioni principali": "Main actions", "PRODOTTI": "PRODUCTS", "PROVACI SUL CAMPO": "TRY IT IN THE FIELD",
@@ -122,6 +124,8 @@
       "Una ricerca su estratti di Dittrichia viscosa ha esaminato l’attività contro Alternaria su pomodoro.": "Research on Dittrichia viscosa extracts examined activity against Alternaria on tomato."
     },
     ja: {
+      "VAI AL PAGAMENTO ↗": "お支払いへ ↗",
+      "La richiesta d’ordine non comporta un pagamento immediato.": "注文リクエスト時にお支払いは発生しません。",
       "MENU": "メニュー", "CHIUDI": "閉じる", "TERRITORIO": "土地", "METODO": "方法", "SHOP": "製品", "CONTATTI": "お問い合わせ",
       "I PRODOTTI DELLA NATURA": "I PRODOTTI DELLA NATURA", "I PRODOTTI": "I PRODOTTI", "DELLA": "DELLA",
       "Azioni principali": "主な操作", "PRODOTTI": "製品", "PROVACI SUL CAMPO": "畑で試す",

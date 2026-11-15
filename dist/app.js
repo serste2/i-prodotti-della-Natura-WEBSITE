@@ -116,6 +116,7 @@ document.querySelectorAll("form:not(#pickupForm)").forEach(form => {
     }
   });
 });
+const cartCheckout = document.querySelector("#cartCheckout");
 const cartItems = [...document.querySelectorAll("[data-cart-item]")];
 let cartQuantities = { cignula: 0, inbruma: 0 };
 try { cartQuantities = { ...cartQuantities, ...JSON.parse(sessionStorage.getItem("inulaCart") || "{}") }; }
@@ -142,6 +143,7 @@ function updateCart() {
   document.querySelector("#cartCount").classList.toggle("active", items > 0);
   document.querySelector("#cartTotal").textContent = `${total} €`;
   document.querySelector("#cartRequest").disabled = items === 0;
+  cartCheckout.disabled = items === 0;
   const { rewards, gift } = savedOrderRewards();
   const lang = document.documentElement.lang;
   const rewardList = rewards.map(reward => `${reward.discount}% · ${reward.code}`).join(" + ");
@@ -159,6 +161,23 @@ cartItems.forEach(item => item.querySelectorAll("[data-qty]").forEach(button => 
     updateCart();
   });
 }));
+fetch("/api/checkout", { cache: "no-store" }).then(async response => {
+  if (!response.ok) return;
+  const { methods } = await response.json();
+  cartCheckout.hidden = !Object.values(methods).some(Boolean);
+}).catch(() => { /* The order request remains available when checkout is offline. */ });
+cartCheckout.addEventListener("click", () => {
+  const lang = document.documentElement.lang || "it";
+  location.assign(`/checkout.html?lang=${encodeURIComponent(lang)}`);
+});
+window.addEventListener("pageshow", event => {
+  if (event.persisted) {
+    try {
+      cartQuantities = { cignula: 0, inbruma: 0, ...JSON.parse(sessionStorage.getItem("inulaCart") || "{}") };
+    } catch { cartQuantities = { cignula: 0, inbruma: 0 }; }
+    updateCart();
+  }
+});
 document.querySelector("#cartRequest").addEventListener("click", () => {
   const { rewards, gift } = savedOrderRewards();
   const lang = document.documentElement.lang;

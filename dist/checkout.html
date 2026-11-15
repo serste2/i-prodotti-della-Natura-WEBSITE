@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Checkout · i prodotti della Natura</title>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="/checkout.css">
+  <script defer src="/checkout.js"></script>
+</head>
+<body>
+  <header>
+    <a href="/" aria-label="i prodotti della Natura"><img src="/assets/logo-simbolo.png" alt="" width="52" height="40"></a>
+    <a id="back" href="/#cart">← Torna al carrello</a>
+  </header>
+  <main>
+    <h1>Checkout</h1>
+    <p id="test" hidden>Modalità test. Usa dati fittizi. Non ci sono incassi né spedizioni.</p>
+    <section id="summary" aria-labelledby="summary-title" hidden>
+      <h2 id="summary-title">Riepilogo ordine</h2>
+      <ul id="items"></ul>
+      <dl>
+        <dt>Spedizione in Italia</dt><dd>Inclusa</dd>
+        <dt>Totale</dt><dd id="total"></dd>
+      </dl>
+      <p id="rewards" hidden>Per usare gli sconti o l’omaggio del gioco, torna al carrello e scegli «Richiedi questo ordine».</p>
+      <a id="terms" hidden>Condizioni di vendita</a>
+    </section>
+    <div id="methods" aria-label="Metodi di pagamento" hidden>
+      <button type="button" data-provider="stripe" hidden disabled>Paga con carta tramite Stripe</button>
+      <button type="button" data-provider="paypal" hidden disabled>Paga con PayPal</button>
+    </div>
+    <p id="status" role="status">Verifica del carrello…</p>
+    <button type="button" id="check-again" hidden>Verifica il pagamento</button>
+    <noscript>Per consultare il carrello e pagare, attiva JavaScript.</noscript>
+  </main>
+</body>
+</html>

@@ -246,80 +246,11 @@ h2 em {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  margin-bottom: 16px;
   padding: 8px 12px;
   border: 2px solid var(--ink);
   background: var(--y);
   color: var(--ink);
   font: 700 14px/1.4 "Roboto Mono", monospace;
-}
-.viewer {
-  height: min(55vw, 600px);
-  min-height: 420px;
-  position: relative;
-  overflow: hidden;
-  border: 3px solid;
-  background: #d9d1c0;
-}
-.viewer img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(1) contrast(1.15);
-}
-.demo {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: var(--paper);
-  border: 2px solid;
-  padding: 9px;
-  font-size: 9px;
-  font-weight: 700;
-}
-.viewer aside {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 14px 18px;
-  display: flex;
-  flex-direction: column;
-  max-width: 380px;
-}
-.viewer aside b {
-  font: 22px "Archivo Black";
-}
-.viewer aside small {
-  margin-top: 5px;
-}
-.layers {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border: 2px solid;
-  border-top: 0;
-}
-.layers button {
-  border: 0;
-  border-right: 1px solid;
-  background: none;
-  padding: 17px;
-  font-size: 9px;
-  font-weight: 700;
-}
-.layers button:last-child {
-  border: 0;
-}
-.layers .active {
-  background: var(--ink);
-  color: var(--paper);
-}
-.layers i {
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  margin-right: 8px;
 }
 .dark {
   background: var(--ink);
@@ -769,7 +700,6 @@ form button {
   margin-top: 18px;
 }
 .live .hero > img,
-.live .viewer img,
 .live .wide,
 .live .crop img {
   filter: grayscale(0.1) contrast(1.05);
@@ -834,12 +764,6 @@ form button {
   .head h2 {
     margin-bottom: 22px;
   }
-  .viewer {
-    height: 65vh;
-  }
-  .layers {
-    grid-template-columns: 1fr 1fr;
-  }
   .data,
   .launch,
   .detail,
@@ -876,32 +800,6 @@ form button {
     padding: 28px 20px;
   }
 }
-.factual {
-  background: var(--paper) url("/assets/approved-botanical-plate.png")
-    center/cover;
-}
-.territoryFacts {
-  position: absolute;
-  inset: 70px 15% 90px;
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  align-content: center;
-  background: #f3eddfe8;
-  border: 2px solid;
-  padding: clamp(20px, 4vw, 55px);
-  z-index: 1;
-}
-.territoryFacts b {
-  font: clamp(32px, 5vw, 76px)/1 "Archivo Black";
-  border-top: 1px solid;
-  padding: 12px 0;
-}
-.territoryFacts span {
-  font-size: 10px;
-  font-weight: 700;
-  border-top: 1px solid;
-  padding: 18px 0;
-}
 .real-photo-gate {
   min-height: 430px;
   display: grid;
@@ -928,18 +826,6 @@ form button {
   max-width: 600px;
   font-size: 11px;
   line-height: 1.6;
-}
-@media (max-width: 820px) {
-  .territoryFacts {
-    inset: 65px 12px 90px;
-    grid-template-columns: 1fr 1fr;
-  }
-  .territoryFacts b {
-    font-size: 27px;
-  }
-  .territoryFacts span {
-    font-size: 8px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -1016,7 +902,6 @@ h2,
 .steps h3,
 .product h3,
 .future h3,
-.viewer aside b,
 .data article h3,
 .real-photo-gate b {
   font-family: "Roboto", sans-serif;
@@ -2305,11 +2190,6 @@ a {text-underline-offset:.2em;}
   #harvestCombo.show {animation:none;opacity:1;transform:translate(-50%,-50%) rotate(-3deg);}
   .eco-head-actions button,#plantEvidence,#wateringCan,#macerationClock {transition:none;}
 }
-
-/* Topic media remain behind the readable territory facts. */
-#territorio .viewer { background-size:cover; background-position:center; }
-#territorio .viewer aside, #territorio .viewer .demo { z-index:2; }
-#territorio .territoryFacts { background:#f3eddfeF; }
 
 /* Compact collection form: all fields share a single visible panel. */
 #pickupDialog { width:min(860px,calc(100vw - 28px)); padding:20px 24px; max-height:calc(100dvh - 28px); }

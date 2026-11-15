@@ -1646,6 +1646,9 @@ h2 em,
 .quantity-control button:first-child { border-right:2px solid var(--ink); }
 .quantity-control button:last-child { border-left:2px solid var(--ink); }
 .quantity-control output { text-align:center; font:700 20px "Roboto Mono",monospace; }
+#cartCheckout:not([hidden]) { display: block; margin-bottom: 10px; background: var(--y); color: var(--ink); }
+#cartCheckout:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+#cartCheckout:disabled { opacity: 0.55; cursor: default; }
 .cart-summary {
   grid-column:2;
   display:grid;

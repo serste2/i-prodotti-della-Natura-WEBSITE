@@ -12,6 +12,94 @@ async function render(){const rev=++revision,m=data.modes.find(m=>m.band===$('mo
  const rt=$('rain').tBodies[0];rt.replaceChildren();for(const r of data.rain||[])row(rt,[r.year,finite(r.mm)?r.mm.toFixed(1):'n.d.']);$('rainSection').hidden=!data.rain?.length;
  try{const [ia,ib]=await Promise.all([loadImage('imageA',data.images[m.band+'_'+a]),loadImage('imageB',data.images[m.band+'_'+b])]);if(rev!==revision)return;$('imageA').src=ia.src;$('imageB').src=ib.src;$('imageA').style.display=$('imageB').style.display='block';$('empty').style.display='none';$('divider').style.display='block';$('status').textContent='A: '+a+' · B: '+b+' · Finestra 1 aprile–10 ottobre · Dati fino al '+data.through;swipe();}catch(e){if(rev!==revision)return;$('empty').textContent=e.message;$('status').textContent='Mappe non disponibili: '+e.message;$('divider').style.display='none';}}
 function swipe(){const p=$('swipe').value;$('imageA').style.clipPath=`inset(0 ${100-p}% 0 0)`;$('divider').style.left=p+'%';}
-function chart(band){const c=$('chart'),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);const vals=data.years.flatMap(y=>[value(y,band,true),value(y,band,false)]).filter(finite);ctx.font='18px Arial';ctx.fillStyle='#183b28';if(!vals.length){ctx.fillText('Statistiche non esportate',30,70);return;}let min=Math.min(...vals),max=Math.max(...vals);const pad=(max-min||1)*.1;min-=pad;max+=pad;const x=i=>65+i*(w-100)/Math.max(1,data.years.length-1),y=v=>h-55-(v-min)/(max-min)*(h-90);ctx.strokeStyle='#183b2833';for(let j=0;j<5;j++){const v=min+(max-min)*j/4;ctx.beginPath();ctx.moveTo(65,y(v));ctx.lineTo(w-35,y(v));ctx.stroke();ctx.fillText(v.toFixed(2),2,y(v)+5);}data.years.forEach((yr,i)=>ctx.fillText(yr,x(i)-23,h-15));[true,false].forEach((company,j)=>{ctx.strokeStyle=ctx.fillStyle=j?'#8854af':'#186440';ctx.lineWidth=3;ctx.beginPath();let started=false;data.years.forEach((yr,i)=>{const v=value(yr,band,company);if(!finite(v)){started=false;return;}if(started)ctx.lineTo(x(i),y(v));else ctx.moveTo(x(i),y(v));started=true;});ctx.stroke();data.years.forEach((yr,i)=>{const v=value(yr,band,company);if(finite(v)){ctx.beginPath();ctx.arc(x(i),y(v),5,0,Math.PI*2);ctx.fill();}});});}
+function chart(band) {
+  const canvas = $('chart');
+  const ctx = canvas.getContext('2d');
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  if (!width || !height) return;
+
+  ctx.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
+  ctx.clearRect(0, 0, width, height);
+  const styles = getComputedStyle(canvas);
+  ctx.font = '12px "Roboto Mono", monospace';
+  ctx.fillStyle = styles.getPropertyValue('--ink').trim();
+  const values = data.years.flatMap(year => [value(year, band, true), value(year, band, false)]).filter(finite);
+  if (!values.length) {
+    ctx.fillText('Statistiche non esportate', 8, 24);
+    return;
+  }
+
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const padding = (max - min || 1) * 0.1;
+  const lower = min - padding;
+  const upper = max + padding;
+  const left = 48;
+  const right = width - 19;
+  const top = 12;
+  const bottom = height - 22;
+  const x = index => left + index * (right - left) / Math.max(1, data.years.length - 1);
+  const y = amount => bottom - (amount - lower) / (upper - lower) * (bottom - top);
+
+  ctx.strokeStyle = styles.getPropertyValue('--rule').trim();
+  ctx.lineWidth = 1;
+  for (let index = 0; index < 5; index++) {
+    const tick = lower + (upper - lower) * index / 4;
+    const lineY = y(tick);
+    ctx.beginPath();
+    ctx.moveTo(left, lineY);
+    ctx.lineTo(right, lineY);
+    ctx.stroke();
+    ctx.fillText(tick.toFixed(2), 1, lineY + 4);
+  }
+
+  const last = data.years.length - 1;
+  const yearStep = Math.max(1, Math.ceil(last * 42 / (right - left)));
+  ctx.textAlign = 'center';
+  data.years.forEach((year, index) => {
+    if (index === last || (index % yearStep === 0 && last - index >= yearStep)) {
+      ctx.fillText(year, x(index), height - 3);
+    }
+  });
+  ctx.textAlign = 'start';
+
+  for (const company of [true, false]) {
+    const color = styles.getPropertyValue(company ? '--farm-series' : '--context-series').trim();
+    ctx.strokeStyle = ctx.fillStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash(company ? [] : [6, 4]);
+    ctx.beginPath();
+    let connected = false;
+    data.years.forEach((year, index) => {
+      const amount = value(year, band, company);
+      if (!finite(amount)) {
+        connected = false;
+        return;
+      }
+      if (connected) ctx.lineTo(x(index), y(amount));
+      else ctx.moveTo(x(index), y(amount));
+      connected = true;
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+    data.years.forEach((year, index) => {
+      const amount = value(year, band, company);
+      if (finite(amount)) {
+        ctx.beginPath();
+        ctx.arc(x(index), y(amount), 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+  }
+}
 for(const id of ['mode','yearA','yearB'])$(id).addEventListener('change',render);$('swipe').addEventListener('input',swipe);$('swap').onclick=()=>{const a=$('yearA').value;$('yearA').value=$('yearB').value;$('yearB').value=a;render();};$('load').onclick=()=>{try{accept(JSON.parse($('json').value));}catch(e){$('status').textContent=e.message;}};$('file').onchange=async e=>{try{accept(JSON.parse(await e.target.files[0].text()));}catch(err){$('status').textContent=err.message;}};
 fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Archivio in attesa');return r.json();}).then(accept).catch(()=>{$('status').textContent='Pagina pronta · immagini e statistiche in attesa dell’esportazione Earth Engine.';});
+
+function refreshChart() {
+  const band = $('mode').value;
+  if (data && band !== 'RGB') chart(band);
+}
+
+document.fonts.ready.then(refreshChart);
+window.addEventListener('resize', refreshChart);

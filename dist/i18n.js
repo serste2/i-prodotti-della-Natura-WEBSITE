@@ -327,9 +327,6 @@
   document.querySelectorAll(".language-link").forEach((link) => {
     if (link.getAttribute("lang") === locale) link.setAttribute("aria-current", "page");
   });
-  document.querySelectorAll("[data-layer]").forEach((button) => {
-    button.dataset.layer = button.dataset.layer.split("|").map((part, index) => index < 2 ? translate(part) : part).join("|");
-  });
   translateTree(document);
 
   const observer = new MutationObserver((records) => records.forEach((record) => {

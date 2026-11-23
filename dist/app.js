@@ -1070,6 +1070,9 @@ function updateEco() {
           ? Math.round(mixProgress)
           : bagFilled[mix],
     future = ["growing", "future"].includes(ecoMode);
+  // La scheda di avanzamento serve solo durante distribuzione, mescolamento e annaffiatura.
+  // Durante macerazione, semina e crescita non mostrare la card "CAMPO PREPARATO".
+  document.querySelector(".basin-meter").style.display = ["brush", "mixing", "watering"].includes(ecoMode) ? "" : "none";
   document.querySelector("#cignulaAmount").textContent = n + "%";
   document.querySelector(".basin-meter em").style.width = n + "%";
   document.querySelector("#water").disabled = !bagsComplete() || ecoMode !== "brush";

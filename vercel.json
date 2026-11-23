@@ -2,9 +2,53 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/en", "destination": "/index.html" },
-    { "source": "/en/", "destination": "/index.html" },
-    { "source": "/ja", "destination": "/index.html" },
-    { "source": "/ja/", "destination": "/index.html" }
+    {
+      "source": "/en",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/en/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ja",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ja/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/de",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/de/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fr",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/fr/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/hi",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/hi/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/es",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/es/",
+      "destination": "/index.html"
+    }
   ]
 }

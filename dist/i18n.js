@@ -1,7 +1,51 @@
-(() => {
+(async () => {
   const path = location.pathname.replace(/\/+$/, "");
-  const locale = path === "/en" ? "en" : path === "/ja" ? "ja" : "it";
-  if (locale === "it") return;
+  const homeLanguage = path.slice(1);
+  const addedLanguages = ["de", "fr", "hi", "es"];
+  const supported = ["it", "en", "ja", ...addedLanguages];
+  const isHome = path === "" || supported.includes(homeLanguage);
+  const checkout = path === "/checkout.html";
+  let requested = new URLSearchParams(location.search).get("lang");
+  if (checkout && !requested) {
+    try { requested = sessionStorage.getItem("shopCheckoutLocale"); } catch {}
+  }
+  const locale = isHome ? homeLanguage || "it" : requested;
+  const picker = document.querySelector(".language-picker");
+  if (picker) {
+    const selected = picker.querySelector('[hreflang="' + (supported.includes(locale) ? locale : "it") + '"]');
+    selected.setAttribute("aria-current", "page");
+    picker.querySelector("summary .flag").className = selected.querySelector(".flag").className;
+    const label = picker.querySelector(".current-language");
+    label.lang = selected.lang;
+    label.textContent = selected.textContent.trim();
+    picker.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        picker.open = false;
+        picker.querySelector("summary").focus();
+      }
+    });
+    document.addEventListener("click", event => {
+      if (picker.open && !picker.contains(event.target)) picker.open = false;
+    });
+  }
+  if (!supported.includes(locale) || locale === "it") return;
+  const extended = addedLanguages.includes(locale);
+  if (!isHome && !checkout && !extended) return;
+  document.documentElement.lang = locale;
+  const homeURL = "/" + locale + "/";
+  if (extended) {
+    for (const link of document.querySelectorAll("a[href]")) {
+      const url = new URL(link.href);
+      if (url.origin !== location.origin || link.closest(".language-picker")) continue;
+      if (isHome && ["/research/", "/impressum/", "/mappe/"].includes(url.pathname)) {
+        url.searchParams.set("lang", locale);
+        link.href = url.href;
+        if (link.hasAttribute("lang")) link.lang = locale;
+      } else if (!isHome && url.pathname === "/") {
+        link.href = homeURL + url.hash;
+      }
+    }
+  }
 
   const translations = {
     en: {
@@ -266,7 +310,34 @@
   translations.ja["Per giocare, usa lo schermo in orizzontale."] = "ゲームは横向きでプレイしてください。";
   translations.en["Tastiera: usa le frecce per muoverti nel campo e Invio o Spazio per distribuire INBRUMA. Durante il mescolamento premi Spazio. Per annaffiare usa le frecce, Invio per sollevare e Spazio per versare. Nella raccolta usa le frecce per scegliere una pianta e Invio per raccoglierla; Maiusc e Invio per raccogliere un gruppo."] = "Keyboard: use the arrow keys to move around the field and Enter or Space to spread INBRUMA. Press Space to stir. To water, use the arrows, Enter to lift and Space to pour. During harvest, use the arrows to select a plant and Enter to collect it; Shift and Enter collects a group.";
   translations.ja["Tastiera: usa le frecce per muoverti nel campo e Invio o Spazio per distribuire INBRUMA. Durante il mescolamento premi Spazio. Per annaffiare usa le frecce, Invio per sollevare e Spazio per versare. Nella raccolta usa le frecce per scegliere una pianta e Invio per raccoglierla; Maiusc e Invio per raccogliere un gruppo."] = "キーボード：矢印キーで移動し、EnterまたはスペースでINBRUMAを散布します。スペースでかき混ぜます。水やりでは矢印キーで移動し、Enterで持ち上げ、スペースで注ぎます。収穫では矢印キーで植物を選び、Enterで収穫します。ShiftとEnterでまとめて収穫します。";
-  const dict = translations[locale];
+  let dict = translations[locale];
+  if (extended || checkout) {
+    const catalog = extended ? locale : "checkout-" + locale;
+    const response = await fetch("/locales/" + catalog + ".json?v=20261123");
+    if (!response.ok) throw new Error("Missing language catalogue: " + locale);
+    dict = await response.json();
+  }
+  const templatePatterns = Object.keys(dict)
+    .filter(key => key.includes("{0}"))
+    .sort((a, b) => b.length - a.length)
+    .map(key => {
+      const pattern = key.split(/(\{\d+\})/).map(part =>
+        /^\{\d+\}$/.test(part) ? "(.+?)" : part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      ).join("");
+      return [new RegExp("^" + pattern + "$"), dict[key]];
+    });
+  function translateTemplate(value) {
+    for (const [pattern, output] of templatePatterns) {
+      const match = value.match(pattern);
+      if (!match) continue;
+      return output.replace(/\{(\d+)\}/g, (_, n) => {
+        const arg = match[Number(n) + 1];
+        return Object.hasOwn(dict, arg) ? dict[arg] : Object.hasOwn(dict, arg.toUpperCase()) ? dict[arg.toUpperCase()] : arg;
+      });
+    }
+    const withUnit = value.match(/^(-?[\d.]+) (indice|probabilita|frazione)$/);
+    return withUnit ? withUnit[1] + " " + dict[withUnit[2]] : value;
+  }
   const dynamic = (value) => {
     let m;
     if ((m = value.match(/^(\d+) \/ (\d+) schede scoperte$/))) return locale === "ja" ? `${m[2]}件中${m[1]}件のカードを発見` : `${m[1]} / ${m[2]} cards discovered`;
@@ -288,8 +359,10 @@
   const translate = (value) => {
     const normalized = value.replace(/\s+/g, " ").trim();
     if (!normalized) return value;
-    const result = dict[normalized] || dynamic(normalized);
-    return result === normalized ? value : result;
+    const result = Object.hasOwn(dict, normalized) ? dict[normalized]
+      : extended || checkout ? translateTemplate(normalized) : dynamic(normalized);
+    if (result === normalized) return value;
+    return value.match(/^\s*/)[0] + result + value.match(/\s*$/)[0];
   };
 
   const translateTree = (root) => {
@@ -323,15 +396,19 @@
     }));
   };
 
-  document.documentElement.lang = locale;
-  document.title = locale === "ja" ? "i prodotti della natura｜CÍGNULAとINBRUMA" : "i prodotti della natura | CÍGNULA and INBRUMA";
-  document.querySelector('meta[name="description"]')?.setAttribute("content", locale === "ja"
+  window.farmText = translate;
+  if (extended) {
+    document.title = isHome ? "i prodotti della natura" : translate(document.title);
+    const description = document.querySelector('meta[name="description"]');
+    if (description) description.content = translate(description.content);
+  } else if (isHome) {
+    document.title = locale === "ja" ? "i prodotti della natura｜CÍGNULAとINBRUMA" : "i prodotti della natura | CÍGNULA and INBRUMA";
+    document.querySelector('meta[name="description"]')?.setAttribute("content", locale === "ja"
     ? "i prodotti della natura — 再生型農業、CÍGNULA Mini、INBRUMA dei Carbonari。"
     : "i prodotti della natura — regenerative agriculture, CÍGNULA Mini and INBRUMA dei Carbonari.");
-  document.querySelectorAll(".language-link").forEach((link) => {
-    if (link.getAttribute("lang") === locale) link.setAttribute("aria-current", "page");
-  });
+  }
   translateTree(document);
+  document.dispatchEvent(new Event("farm-language-ready"));
 
   const observer = new MutationObserver((records) => records.forEach((record) => {
     if (record.type === "characterData") translateTree(record.target);

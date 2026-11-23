@@ -2921,3 +2921,31 @@ main section > .section-number-rail { position:absolute;inset:0 clamp(20px,5vw,7
   }
   #ecosystem .basin-ready .eco-controls { justify-content: flex-start; }
 }
+
+/* Keep all language names and flags reachable even in the narrow mobile header. */
+.language-picker { position:relative; font:600 13px/1.3 "Roboto",sans-serif; }
+.language-picker summary, .language-options a {
+  display:flex; align-items:center; gap:8px; color:var(--ink); cursor:pointer;
+}
+.language-picker summary {
+  min-height:44px; padding:4px 9px; background:var(--paper);
+  border:2px solid var(--ink); list-style:none;
+}
+.language-picker summary::-webkit-details-marker { display:none; }
+.language-picker summary::after { content:""; width:6px; height:6px; border:solid currentColor; border-width:0 2px 2px 0; transform:rotate(45deg); margin:-3px 2px 0 3px; }
+.language-picker[open] summary::after { transform:rotate(225deg); margin-top:3px; }
+.language-options {
+  position:absolute; top:calc(100% + 5px); right:0; z-index:30; min-width:158px;
+  max-height:calc(100dvh - 76px); overflow:auto; background:var(--paper);
+  border:2px solid var(--ink); box-shadow:3px 3px var(--ink);
+}
+.language-options a { min-height:44px; padding:5px 12px; text-decoration:none; }
+.language-options a:is(:hover,:focus-visible,[aria-current]) { background:var(--y); }
+.language-picker .flag { flex:none; width:27px; height:18px; }
+.flag-de,.flag-fr,.flag-in,.flag-es { background-size:100% 100%; background-repeat:no-repeat; }
+.flag-de { background-image:url("/assets/flag-de.svg"); }
+.flag-fr { background-image:url("/assets/flag-fr.svg"); }
+.flag-in { background-image:url("/assets/flag-in.svg"); }
+.flag-es { background-image:url("/assets/flag-es.png"); }
+:lang(hi) .eco-readout strong, :lang(hi) .eco-readout small,
+:lang(hi) #fieldFact p { line-height:1.35; }

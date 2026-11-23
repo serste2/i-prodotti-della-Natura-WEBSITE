@@ -7,7 +7,7 @@ const search = new URLSearchParams(location.search);
 const provider = search.get('provider');
 const returnId = provider === 'stripe' ? search.get('session_id') : search.get('token');
 const returning = search.has('provider');
-const euro = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' });
+const euro = new Intl.NumberFormat(document.documentElement.lang || 'it-IT', { style: 'currency', currency: 'EUR' });
 const money = cents => euro.format(cents / 100);
 let options;
 let quantities;
@@ -119,7 +119,7 @@ window.addEventListener('pageshow', event => {
   if (event.persisted && !returning && options) setButtons(false);
 });
 const locale = search.get('lang') || sessionStorage.getItem('shopCheckoutLocale');
-if (['en', 'ja'].includes(locale)) {
+if (['en', 'ja', 'de', 'fr', 'hi', 'es'].includes(locale)) {
   sessionStorage.setItem('shopCheckoutLocale', locale);
   document.querySelector('#back').href = `/${locale}/#cart`;
 } else if (search.has('lang')) {

@@ -8,12 +8,19 @@
       content="i prodotti della natura — agricoltura rigenerativa, CÍGNULA Mini e INBRUMA dei Carbonari."
     />
     <title>i prodotti della natura</title>
+    <link rel="alternate" hreflang="it" href="https://iprodottidellanatura.com/" />
+    <link rel="alternate" hreflang="en" href="https://iprodottidellanatura.com/en/" />
+    <link rel="alternate" hreflang="ja" href="https://iprodottidellanatura.com/ja/" />
+    <link rel="alternate" hreflang="de" href="https://iprodottidellanatura.com/de/" />
+    <link rel="alternate" hreflang="fr" href="https://iprodottidellanatura.com/fr/" />
+    <link rel="alternate" hreflang="hi" href="https://iprodottidellanatura.com/hi/" />
+    <link rel="alternate" hreflang="es" href="https://iprodottidellanatura.com/es/" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="/assets/favicon-192.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta property="og:image" content="https://iprodottidellanatura.com/assets/logo-avatar-social.png" />
-    <link rel="stylesheet" href="/style.css?v=20261123-catino" />
+    <link rel="stylesheet" href="/style.css?v=20261123-lingue" />
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -27,13 +34,18 @@
         ><a class="cart-link" href="#cart" aria-label="Carrello"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 5h4l3 15h14l4-11H9M12 26a2 2 0 1 0 0 .1M23 26a2 2 0 1 0 0 .1" /></svg><span id="cartCount">0</span></a>
       </nav>
       <div class="language-switcher" role="navigation" aria-label="Lingue">
-        <a class="language-link" href="/" lang="it" hreflang="it" aria-label="Italiano"><span class="flag flag-italy" aria-hidden="true"></span></a>
-        <a class="language-link" href="/en/" lang="en" hreflang="en" aria-label="English">
-          <span class="flag flag-england" aria-hidden="true"></span>
-        </a>
-        <a class="language-link" href="/ja/" lang="ja" hreflang="ja" aria-label="日本語">
-          <span class="flag flag-japan" aria-hidden="true"></span>
-        </a>
+        <details class="language-picker">
+          <summary title="Lingue"><span class="flag flag-italy" aria-hidden="true"></span><span class="current-language" lang="it">Italiano</span></summary>
+          <div class="language-options">
+            <a href="/" lang="it" hreflang="it"><span class="flag flag-italy" aria-hidden="true"></span>Italiano</a>
+            <a href="/en/" lang="en" hreflang="en"><span class="flag flag-england" aria-hidden="true"></span>English</a>
+            <a href="/ja/" lang="ja" hreflang="ja"><span class="flag flag-japan" aria-hidden="true"></span>日本語</a>
+            <a href="/de/" lang="de" hreflang="de"><span class="flag flag-de" aria-hidden="true"></span>Deutsch</a>
+            <a href="/fr/" lang="fr" hreflang="fr"><span class="flag flag-fr" aria-hidden="true"></span>Français</a>
+            <a href="/hi/" lang="hi" hreflang="hi"><span class="flag flag-in" aria-hidden="true"></span>हिन्दी</a>
+            <a href="/es/" lang="es" hreflang="es"><span class="flag flag-es" aria-hidden="true"></span>Español</a>
+          </div>
+        </details>
       </div>
     </header>
     <main>
@@ -468,7 +480,7 @@
         ><button>PRENOTA GRATUITAMENTE</button>
       </form>
     </dialog>
-    <script src="/i18n.js?v=20261123-catino"></script>
-    <script src="/app.js?v=20261123-catino"></script>
+    <script src="/i18n.js?v=20261123-lingue"></script>
+    <script src="/app.js?v=20261123-lingue"></script>
   </body>
 </html>

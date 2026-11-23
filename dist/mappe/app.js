@@ -26,7 +26,7 @@ function chart(band) {
   ctx.fillStyle = styles.getPropertyValue('--ink').trim();
   const values = data.years.flatMap(year => [value(year, band, true), value(year, band, false)]).filter(finite);
   if (!values.length) {
-    ctx.fillText('Statistiche non esportate', 8, 24);
+    ctx.fillText(window.farmText?.('Statistiche non esportate') || 'Statistiche non esportate', 8, 24);
     return;
   }
 
@@ -103,3 +103,5 @@ function refreshChart() {
 
 document.fonts.ready.then(refreshChart);
 window.addEventListener('resize', refreshChart);
+
+document.addEventListener("farm-language-ready", refreshChart);

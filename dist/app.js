@@ -1,3 +1,4 @@
+const localText = value => window.farmText ? window.farmText(value) : value;
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const body = document.body,
   tryButtons = document.querySelectorAll(".try,.tryBig"),
@@ -188,7 +189,7 @@ document.querySelector("#cartRequest").addEventListener("click", () => {
   if (gift) lines.push(lang === "ja" ? "最終特典：ミステリーギフト（自社のオーガニック製品）。割引と併用できます。" : lang === "en" ? "Final reward: mystery gift, an organic farm product, combined with the discount." : "Premio finale: omaggio misterioso, prodotto bio aziendale, cumulabile con lo sconto.");
   document.querySelector("#reserveTitle").textContent = lang === "ja" ? "カート" : lang === "en" ? "YOUR CART" : "IL TUO CARRELLO";
   const note = document.querySelector("#reserve textarea");
-  if (note) note.value = lines.join("\n");
+  if (note) note.value = lines.map(localText).join("\n");
   dialog.showModal();
 });
 document.querySelectorAll("[data-add-cart]").forEach(button => {
@@ -1908,16 +1909,16 @@ updateEco();
     if (total !== 100) { status.textContent = "Controlla le percentuali: il totale deve essere 100% (ora " + total + "%)."; return; }
     if (date.value < today) { status.textContent = "Scegli oggi o un giorno futuro."; return; }
     const summary = [
-      "#IONONBRUCIO · Richiesta ritiro potature di ulivo",
-      "Nome: " + fields.name.value,
-      "Recapito: " + fields.contact.value,
-      "Luogo del ritiro: " + fields.location.value,
-      "Quantità indicativa: " + fields.quantity.value + " " + fields.unit.value,
-      "Rami: " + fields.branches.value + "%",
-      "Tronchi: " + fields.trunks.value + "%",
-      "Fogliame: " + fields.leaves.value + "%",
-      "Giorno desiderato: " + date.value,
-      "Note: " + fields.notes.value
+      localText("#IONONBRUCIO · Richiesta ritiro potature di ulivo"),
+      localText("Nome") + ": " + fields.name.value,
+      localText("Recapito") + ": " + fields.contact.value,
+      localText("Luogo del ritiro") + ": " + fields.location.value,
+      localText("Quantità indicativa") + ": " + fields.quantity.value + " " + localText(fields.unit.value),
+      localText("Rami") + ": " + fields.branches.value + "%",
+      localText("Tronchi") + ": " + fields.trunks.value + "%",
+      localText("Fogliame") + ": " + fields.leaves.value + "%",
+      localText("Giorno desiderato") + ": " + date.value,
+      localText("Note") + ": " + fields.notes.value
     ].join("\n");
     document.querySelector("#pickupSummary").value = summary;
     form.hidden = true;

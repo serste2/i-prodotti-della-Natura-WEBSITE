@@ -100,7 +100,7 @@ document.querySelectorAll("form:not(#pickupForm)").forEach(form => {
   form.addEventListener("submit", async event => {
     event.preventDefault();
     const fields = [...form.querySelectorAll("input,textarea")];
-    const subject = form.closest("#reserve") ? "Prenotazione gratuita · " + document.querySelector("#reserveTitle").textContent : "Contatto · i prodotti della Natura";
+    const subject = form.closest("#reserve") ? "Prenotazione gratuita · " + document.querySelector("#reserveTitle").textContent : "Contatto · i prodotti della natura";
     const message = fields.map(field => field.closest("label").firstChild.textContent.trim() + ": " + field.value).join("\n");
     const button = form.querySelector('button[type="submit"],button:not([type])'), label = button.textContent;
     let status = form.querySelector(".request-status");

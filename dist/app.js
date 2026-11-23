@@ -1063,31 +1063,8 @@ function bagsComplete() {
   return Object.values(bagFilled).every((value) => value === 100);
 }
 function updateEco() {
-  const n =
-      ecoMode === "watering"
-        ? Math.max(0, Math.ceil(waterRemaining / Math.max(1, waterTotal) * 100))
-        : ecoMode === "mixing"
-          ? Math.round(mixProgress)
-          : bagFilled[mix],
-    future = ["growing", "future"].includes(ecoMode);
-  // La scheda di avanzamento serve solo durante distribuzione, mescolamento e annaffiatura.
-  // Durante macerazione, semina e crescita non mostrare la card "CAMPO PREPARATO".
-  document.querySelector(".basin-meter").style.display = ["brush", "mixing", "watering"].includes(ecoMode) ? "" : "none";
-  document.querySelector("#cignulaAmount").textContent = n + "%";
-  document.querySelector(".basin-meter em").style.width = n + "%";
+  const future = ["growing", "future"].includes(ecoMode);
   document.querySelector("#water").disabled = !bagsComplete() || ecoMode !== "brush";
-  document.querySelector("#basinLabel").textContent =
-    ecoMode === "watering"
-      ? "MACERATO DA DISTRIBUIRE"
-      : ecoMode === "mixing"
-        ? "INGREDIENTI MESCOLATI"
-        : ecoMode === "brush" ? `SACCO ${mixButtons.find(b => b.dataset.mix === mix)?.querySelector("span").textContent ?? "INBRUMA"}` : "CAMPO PREPARATO";
-  document.querySelector("#basinHint").textContent =
-    ecoMode === "watering"
-      ? "svuotalo da 100 a 0 sul terreno con INBRUMA"
-      : ecoMode === "mixing"
-        ? "mescola nel catino fino al 100%"
-        : ecoMode === "brush" ? "distribuito · completa tutti e tre i sacchi" : "INBRUMA, CÍGNULA e semi";
   const copy = {
     brush: [
       "BRUSH / INBRUMA",

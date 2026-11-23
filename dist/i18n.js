@@ -8,7 +8,7 @@
       "VAI AL PAGAMENTO ↗": "CONTINUE TO PAYMENT ↗",
       "La richiesta d’ordine non comporta un pagamento immediato.": "An order request does not require immediate payment.",
       "MENU": "MENU", "CHIUDI": "CLOSE", "TERRITORIO": "LAND", "METODO": "METHOD", "CONTATTI": "CONTACT",
-      "I PRODOTTI DELLA NATURA": "I PRODOTTI DELLA NATURA", "I PRODOTTI": "I PRODOTTI", "DELLA": "DELLA",
+      "i prodotti della natura": "i prodotti della natura", "I PRODOTTI": "I PRODOTTI", "DELLA": "DELLA",
       "Azioni principali": "Main actions", "PRODOTTI": "PRODUCTS", "PROVACI SUL CAMPO": "TRY IT IN THE FIELD",
       "AZIENDA E TERRITORIO · BASELINE 2026": "FARM AND LAND · 2026 BASELINE",
       "Mappe satellitari 2019–2026": "Satellite maps 2019–2026",
@@ -127,7 +127,7 @@
       "VAI AL PAGAMENTO ↗": "お支払いへ ↗",
       "La richiesta d’ordine non comporta un pagamento immediato.": "注文リクエスト時にお支払いは発生しません。",
       "MENU": "メニュー", "CHIUDI": "閉じる", "TERRITORIO": "土地", "METODO": "方法", "SHOP": "製品", "CONTATTI": "お問い合わせ",
-      "I PRODOTTI DELLA NATURA": "I PRODOTTI DELLA NATURA", "I PRODOTTI": "I PRODOTTI", "DELLA": "DELLA",
+      "i prodotti della natura": "i prodotti della natura", "I PRODOTTI": "I PRODOTTI", "DELLA": "DELLA",
       "Azioni principali": "主な操作", "PRODOTTI": "製品", "PROVACI SUL CAMPO": "畑で試す",
       "Mappe satellitari 2019–2026": "衛星地図 2019〜2026年",
       "AZIENDA E TERRITORIO · BASELINE 2026": "農園と土地 · 2026年基準データ", "AMBITI E PAROLE CHIAVE": "分野とキーワード",
@@ -324,10 +324,10 @@
   };
 
   document.documentElement.lang = locale;
-  document.title = locale === "ja" ? "i prodotti della Natura｜CÍGNULAとINBRUMA" : "i prodotti della Natura | CÍGNULA and INBRUMA";
+  document.title = locale === "ja" ? "i prodotti della natura｜CÍGNULAとINBRUMA" : "i prodotti della natura | CÍGNULA and INBRUMA";
   document.querySelector('meta[name="description"]')?.setAttribute("content", locale === "ja"
-    ? "i prodotti della Natura — 再生型農業、CÍGNULA Mini、INBRUMA dei Carbonari。"
-    : "i prodotti della Natura — regenerative agriculture, CÍGNULA Mini and INBRUMA dei Carbonari.");
+    ? "i prodotti della natura — 再生型農業、CÍGNULA Mini、INBRUMA dei Carbonari。"
+    : "i prodotti della natura — regenerative agriculture, CÍGNULA Mini and INBRUMA dei Carbonari.");
   document.querySelectorAll(".language-link").forEach((link) => {
     if (link.getAttribute("lang") === locale) link.setAttribute("aria-current", "page");
   });

@@ -1,1 +1,1 @@
-{"name":"inula-launch-preview","private":true,"type":"module","scripts":{"dev":"node preview-server.mjs","test":"node --test"},"dependencies":{"@vercel/analytics":"^2.0.1"}}
+{"name":"inula-launch-preview","private":true,"type":"module","scripts":{"dev":"node preview-server.mjs","test":"node --test"},"dependencies":{"@vercel/analytics":"^2.0.1","@vercel/speed-insights":"^2.1.0"}}

@@ -65,7 +65,7 @@
       "SACCO SELEZIONATO": "SELECTED BAG", "distribuito nel campo": "spread across the field", "STUDIO SCIENTIFICO": "SCIENTIFIC STUDY", "CONSULTA IL PAPER ↗": "READ THE PAPER ↗",
       "CLICCA UN SACCO, POI DISTRIBUISCI NEL CAMPO": "CLICK A BAG, THEN SPREAD IT ACROSS THE FIELD", "CLICCA I CONTENITORI DEI SEMI": "CLICK THE SEED CONTAINERS",
       "Scopri gli studi e le connessioni con l’Inula.": "Discover the studies and connections with Inula.", "SEMINA": "SOW", "QUANTITÀ / BRUSH": "AMOUNT / BRUSH",
-      "PREPARA CÍGNULA NEL CATINO ↗": "PREPARE CÍGNULA IN THE BASIN ↗", "PRENOTAZIONE GRATUITA": "FREE RESERVATION", "PRENOTA GRATUITAMENTE": "RESERVE FOR FREE",
+      "MESCOLA CÍGNULA NEL CATINO": "MIX CÍGNULA IN THE BASIN", "PRENOTAZIONE GRATUITA": "FREE RESERVATION", "PRENOTA GRATUITAMENTE": "RESERVE FOR FREE",
       "Nessun pagamento. Nessun obbligo di acquisto.": "No payment. No purchase obligation.", 
       "AMARANTO": "AMARANTH", "LATTUGA": "LETTUCE", "SPINACI": "SPINACH", "POMODORO": "TOMATO", "POMODORI": "TOMATOES",
       "APRI I SEMI ↗": "OPEN THE SEEDS ↗", "SCOPERTA ✓ · RIAPRI": "DISCOVERED ✓ · REOPEN", "SEMINA IL CAMPO ↗": "SOW THE FIELD ↗",
@@ -174,7 +174,7 @@
       "IL TUO CAMPO · INBRUMA E CÍGNULA": "あなたの畑 · INBRUMAとCÍGNULA", "MACERAZIONE AEROBICA": "好気性浸漬", "5–10 GIORNI REALI": "実際は5〜10日", "COMPRESSI IN 15 SECONDI": "15秒に短縮",
       "BRUSH / INBRUMA": "ブラシ / INBRUMA", "SCEGLI E DISTRIBUISCI": "選んで散布", "Trascina nel campo per creare i cumuli": "畑をドラッグして山を作る", "SACCO SELEZIONATO": "選択中の袋", "distribuito nel campo": "畑への散布率",
       "STUDIO SCIENTIFICO": "科学研究", "CONSULTA IL PAPER ↗": "論文を読む ↗", "CLICCA UN SACCO, POI DISTRIBUISCI NEL CAMPO": "袋をクリックし、畑に散布してください", "CLICCA I CONTENITORI DEI SEMI": "種の容器をクリック",
-      "Scopri gli studi e le connessioni con l’Inula.": "イヌラとの研究上のつながりを発見。", "SEMINA": "種をまく", "QUANTITÀ / BRUSH": "量 / ブラシ", "PREPARA CÍGNULA NEL CATINO ↗": "たらいでCÍGNULAを準備 ↗",
+      "Scopri gli studi e le connessioni con l’Inula.": "イヌラとの研究上のつながりを発見。", "SEMINA": "種をまく", "QUANTITÀ / BRUSH": "量 / ブラシ", "MESCOLA CÍGNULA NEL CATINO": "たらいでCÍGNULAを混ぜる",
       "PRENOTAZIONE GRATUITA": "無料予約", "Nessun pagamento. Nessun obbligo di acquisto.": "支払いも購入義務もありません。", 
       "AMARANTO": "アマランサス", "LATTUGA": "レタス", "SPINACI": "ホウレンソウ", "POMODORO": "トマト", "POMODORI": "トマト", "APRI I SEMI ↗": "種を開く ↗", "SCOPERTA ✓ · RIAPRI": "発見済み ✓ · もう一度開く", "SEMINA IL CAMPO ↗": "畑に種をまく ↗",
       "DAL CAMPO": "畑から", "SINISTRO: ANNAFFIA": "左：水やり", "DESTRO: SOLLEVA": "右：持ち上げる", "CAMPO PREPARATO": "準備済みの畑", "MACERATO DA DISTRIBUIRE": "散布する浸漬液", "INGREDIENTI MESCOLATI": "混合した材料",
@@ -256,8 +256,8 @@
   translations.ja["e 20%"] = "と20%";
   translations.en["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "Bookings are now open. We collect your olive prunings: fill in the form with no obligation.";
   translations.ja["È aperta la campagna di prenotazioni. Ritiriamo le tue potature: compila il modulo senza impegno."] = "予約受付を開始しました。オリーブの剪定枝を回収します。お申し込みの義務はありませんので、フォームにご記入ください。";
-  translations.en["Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari."] = "Pick up the flat spoon in the basin and follow the inner rim with circular movements.";
-  translations.ja["Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari."] = "たらいの平たいスプーンをつかみ、内側の縁に沿って円を描くように動かしてください。";
+  translations.en["Gira il cucchiaio lungo il bordo interno."] = "Stir along the inner rim with the spoon.";
+  translations.ja["Gira il cucchiaio lungo il bordo interno."] = "スプーンを内側の縁に沿って回してください。";
   translations.en["Controlli del campo"] = "Field controls";
   translations.ja["Controlli del campo"] = "畑の操作";
   translations.en["RUOTA IL DISPOSITIVO"] = "ROTATE YOUR DEVICE";

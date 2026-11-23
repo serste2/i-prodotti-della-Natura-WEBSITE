@@ -13,7 +13,7 @@
     <link rel="apple-touch-icon" sizes="192x192" href="/assets/favicon-192.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta property="og:image" content="https://iprodottidellanatura.com/assets/logo-avatar-social.png" />
-    <link rel="stylesheet" href="/style.css?v=20261115-shop" />
+    <link rel="stylesheet" href="/style.css?v=20261123-catino" />
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -357,48 +357,53 @@
           <strong>RUOTA IL DISPOSITIVO</strong>
           <span>Per giocare, usa lo schermo in orizzontale.</span>
         </div>
-        <div class="eco-stage">
-          <canvas
-            id="ecoCanvas"
-            tabindex="0"
-            aria-describedby="ecoKeyboardHint"
-            aria-label="Paesaggio agricolo interattivo: distribuisci INBRUMA, prepara e applica CÍGNULA"
-          ></canvas
-          ><div id="dayNightOverlay" aria-hidden="true"></div
-          ><img loading="lazy" decoding="async"
-            id="wateringCan"
-            src="/assets/watering-can-ink.png"
-            alt=""
-            draggable="false"
-          />
-          <span id="canPrompt" aria-hidden="true"></span>
-          <div id="harvestBins" aria-label="Contenitori del raccolto" hidden></div>
-          <aside id="fieldFact" aria-live="polite">
-            <img class="field-card-art" alt="" />
-            <div class="field-card-copy"><p></p></div>
-          </aside>
-          <div id="fieldCardStack" aria-hidden="true"></div>
-          <div id="macerationClock" aria-live="polite">
-            <b id="clockValue">10</b>
-            <span>GIORNI</span>
-          </div>
-          <div id="harvestCombo" role="status" aria-live="polite" aria-atomic="true" hidden><small>COMBO!</small><b>+0</b></div>
-          <div id="plantButtons" role="group" aria-live="polite" aria-label="Contatori dei frutti raccolti"></div>
-          <div class="eco-readout">
-            <span id="ecoState">BRUSH / INBRUMA</span
-            ><strong id="ecoPrompt">SCEGLI E DISTRIBUISCI</strong
-            ><small id="ecoHint">Trascina nel campo per creare i cumuli</small>
-          </div>
-          <p id="ecoKeyboardHint" class="sr-only">Tastiera: usa le frecce per muoverti nel campo e Invio o Spazio per distribuire INBRUMA. Durante il mescolamento premi Spazio. Per annaffiare usa le frecce, Invio per sollevare e Spazio per versare. Nella raccolta usa le frecce per scegliere una pianta e Invio per raccoglierla; Maiusc e Invio per raccogliere un gruppo.</p>
-          <div id="ecoAnnouncement" class="sr-only" aria-live="assertive"></div>
-          <aside id="plantEvidence" aria-label="Scheda di ricerca del seme" hidden>
-            <button class="evidenceClose" aria-label="Chiudi scheda">×</button
-            ><small>STUDIO SCIENTIFICO</small>
-            <h3></h3>
-            <p></p>
-            <a target="_blank" rel="noopener noreferrer">CONSULTA IL PAPER ↗</a>
+        <div class="field-frame">
+          <div class="eco-stage">
+            <canvas
+              id="ecoCanvas"
+              tabindex="0"
+              aria-describedby="ecoKeyboardHint"
+              aria-label="Paesaggio agricolo interattivo: distribuisci INBRUMA, prepara e applica CÍGNULA"
+            ></canvas
+            ><div id="dayNightOverlay" aria-hidden="true"></div
+            ><img loading="lazy" decoding="async"
+              id="wateringCan"
+              src="/assets/watering-can-ink.png"
+              alt=""
+              draggable="false"
+            />
+            <span id="canPrompt" aria-hidden="true"></span>
+            <div id="harvestBins" aria-label="Contenitori del raccolto" hidden></div>
+            <aside id="fieldFact" aria-live="polite">
+              <img class="field-card-art" alt="" />
+              <div class="field-card-copy"><p></p></div>
+            </aside>
+            <div id="fieldCardStack" aria-hidden="true"></div>
+            <div id="macerationClock" aria-live="polite">
+              <b id="clockValue">10</b>
+              <span>GIORNI</span>
+            </div>
+            <div id="harvestCombo" role="status" aria-live="polite" aria-atomic="true" hidden><small>COMBO!</small><b>+0</b></div>
+            <div id="plantButtons" role="group" aria-live="polite" aria-label="Contatori dei frutti raccolti"></div>
+            <p id="ecoKeyboardHint" class="sr-only">Tastiera: usa le frecce per muoverti nel campo e Invio o Spazio per distribuire INBRUMA. Durante il mescolamento premi Spazio. Per annaffiare usa le frecce, Invio per sollevare e Spazio per versare. Nella raccolta usa le frecce per scegliere una pianta e Invio per raccoglierla; Maiusc e Invio per raccogliere un gruppo.</p>
+            <div id="ecoAnnouncement" class="sr-only" aria-live="assertive"></div>
+            <aside id="plantEvidence" aria-label="Scheda di ricerca del seme" hidden>
+              <button class="evidenceClose" aria-label="Chiudi scheda">×</button
+              ><small>STUDIO SCIENTIFICO</small>
+              <h3></h3>
+              <p></p>
+              <a target="_blank" rel="noopener noreferrer">CONSULTA IL PAPER ↗</a>
 
-          </aside>
+            </aside>
+          </div>
+          <div class="basin-guide">
+            <button id="water" type="button" hidden disabled>MESCOLA CÍGNULA NEL CATINO</button>
+            <div class="eco-readout">
+              <span id="ecoState">BRUSH / INBRUMA</span
+              ><strong id="ecoPrompt">SCEGLI E DISTRIBUISCI</strong
+              ><small id="ecoHint">Trascina nel campo per creare i cumuli</small>
+            </div>
+          </div>
         </div>
         <div class="eco-controls">
           <section id="inbrumaSupplies" aria-label="Scegli i sacchi di INBRUMA">
@@ -414,7 +419,6 @@
             <label class="brush-size">QUANTITÀ / BRUSH
               <input id="brushSize" type="range" min="12" max="48" value="28" />
             </label>
-            <button id="water" hidden disabled>PREPARA CÍGNULA NEL CATINO ↗</button>
             <button id="resetEco" type="button">RESET</button>
           </div>
         </div>
@@ -464,7 +468,7 @@
         ><button>PRENOTA GRATUITAMENTE</button>
       </form>
     </dialog>
-    <script src="/i18n.js?v=20261115-shop"></script>
-    <script src="/app.js?v=20261123-campo"></script>
+    <script src="/i18n.js?v=20261123-catino"></script>
+    <script src="/app.js?v=20261123-catino"></script>
   </body>
 </html>

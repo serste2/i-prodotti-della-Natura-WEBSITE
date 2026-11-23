@@ -1073,8 +1073,8 @@ function updateEco() {
     ],
     mixing: [
       "CÍGNULA / PREPARAZIONE",
-      "MESCOLA GLI INGREDIENTI",
-      "Afferra il cucchiaio piatto nel catino e segui il bordo interno con movimenti circolari.",
+      "MESCOLA CÍGNULA NEL CATINO",
+      "Gira il cucchiaio lungo il bordo interno.",
     ],
     macerating: [
       "",
@@ -1104,6 +1104,7 @@ function updateEco() {
   document.querySelector("#ecoHint").textContent = c[2];
   const shell = document.querySelector(".eco-shell");
   shell.classList.toggle("eco-future", future);
+  shell.classList.toggle("basin-ready", ecoMode === "brush" && bagsComplete());
   shell.classList.toggle("eco-mixing", ecoMode === "mixing");
   shell.classList.toggle("eco-macerating", ecoMode === "macerating");
   shell.classList.toggle("eco-watering", ecoMode === "watering");
@@ -1875,9 +1876,9 @@ ecosystem.addEventListener("close", () => {
 [...tomatoSprites, flatSpoonImage, ...pollinatorSprites, ...nocturnalSprites, fieldImage, timerImage, sowingImage, faunaImage, cloudImage, cropsAtlas, biomassAtlas, lizardImage, ...farmerSowingFrames, seatedFarmerImage, stoolImage].forEach((image) => {
   image.onload = () => { if (ecosystem.open) { paintEco(); if (ecoMode === 'macerating') fitMacerationCardsToFarmer(); } };
 });
-addEventListener("resize", () => {
+new ResizeObserver(() => {
   if (ecosystem.open) sizeEco();
-});
+}).observe(ecoCanvas);
 addEventListener("orientationchange", () => {
   if (ecosystem.open) requestAnimationFrame(sizeEco);
 });
